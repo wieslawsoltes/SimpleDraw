@@ -81,6 +81,11 @@ namespace SimpleDraw.ViewModels
             return SKRect.Create((float)x, (float)y, (float)width, (float)height);
         }
 
+        private SKRect Expand(SKPoint point, double radius)
+        {
+            return SKRect.Create((float)(point.X - radius), (float)(point.Y - radius), (float)(radius + radius), (float)(radius + radius));
+        }
+
         private ShapeBaseViewModel HitTest(CanvasViewModel canvas, double x, double y)
         {
             foreach (var shape in canvas.Shapes)
