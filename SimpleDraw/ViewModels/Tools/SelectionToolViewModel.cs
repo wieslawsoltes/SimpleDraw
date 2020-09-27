@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using ReactiveUI;
 using SkiaSharp;
 
 namespace SimpleDraw.ViewModels
@@ -8,6 +9,14 @@ namespace SimpleDraw.ViewModels
     {
         private enum State { None, Pressed }
         private State _state = State.None;
+        private double _hitRadius = 6;
+        private ViewModelBase _selected = null;
+
+        public double HitRadius
+        {
+            get => _hitRadius;
+            set => this.RaiseAndSetIfChanged(ref _hitRadius, value);
+        }
 
         public override string Name => "Selection";
 
@@ -83,10 +92,14 @@ namespace SimpleDraw.ViewModels
 
         private SKRect Expand(SKPoint point, double radius)
         {
-            return SKRect.Create((float)(point.X - radius), (float)(point.Y - radius), (float)(radius + radius), (float)(radius + radius));
+            return SKRect.Create(
+                (float)(point.X - radius), 
+                (float)(point.Y - radius), 
+                (float)(radius + radius), 
+                (float)(radius + radius));
         }
 
-        private ShapeBaseViewModel HitTest(CanvasViewModel canvas, double x, double y)
+        private ViewModelBase HitTest(CanvasViewModel canvas, double x, double y)
         {
             foreach (var shape in canvas.Shapes)
             {
@@ -96,10 +109,25 @@ namespace SimpleDraw.ViewModels
                         {
                             var p1 = new SKPoint((float)lineShape.Start.X, (float)lineShape.Start.Y);
                             var p2 = new SKPoint((float)lineShape.End.X, (float)lineShape.End.Y);
+
+                            var containsStart = Expand(p1, _hitRadius).Contains((float)x, (float)y);
+                            if (containsStart)
+                            {
+                                return lineShape.Start;
+                            }
+
+                            var containsEnd = Expand(p2, _hitRadius).Contains((float)x, (float)y);
+                            if (containsEnd)
+                            {
+                                return lineShape.End;
+                            }
+
                             var path = new SKPath() { FillType = SKPathFillType.Winding };
                             path.MoveTo(p1);
                             path.LineTo(p2);
+
                             var bounds = path.ComputeTightBounds();
+
                             var contains = bounds.Contains((float)x, (float)y);
                             if (contains)
                             {
@@ -109,10 +137,28 @@ namespace SimpleDraw.ViewModels
                         break;
                     case RectangleShapeViewModel rectangleShape:
                         {
+                            var tl = new SKPoint((float)rectangleShape.TopLeft.X, (float)rectangleShape.TopLeft.Y);
+                            var br = new SKPoint((float)rectangleShape.BottomRight.X, (float)rectangleShape.BottomRight.Y);
+
+                            var containsTopLeft = Expand(tl, _hitRadius).Contains((float)x, (float)y);
+                            if (containsTopLeft)
+                            {
+                                return rectangleShape.TopLeft;
+                            }
+
+                            var containsBottomRight = Expand(br, _hitRadius).Contains((float)x, (float)y);
+                            if (containsBottomRight)
+                            {
+                                return rectangleShape.BottomRight;
+                            }
+
                             var rect = ToSKRect(rectangleShape);
+
                             var path = new SKPath() { FillType = SKPathFillType.Winding };
                             path.AddRect(rect);
+
                             var bounds = path.ComputeTightBounds();
+
                             var contains = bounds.Contains((float)x, (float)y);
                             if (contains)
                             {
