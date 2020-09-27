@@ -28,6 +28,7 @@ namespace SimpleDraw
                 canvas.Tools = new ObservableCollection<ToolBaseViewModel>()
                 {
                     new NoneToolViewModel(),
+                    new SelectionToolViewModel(),
                     new LineToolViewModel()
                     {
                         Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
@@ -52,7 +53,7 @@ namespace SimpleDraw
                         RadiusY = 4
                     }
                 };
-                canvas.Tool = canvas.Tools[2];
+                canvas.Tool = canvas.Tools[3];
 
                 desktop.MainWindow = new MainWindow
                 {
