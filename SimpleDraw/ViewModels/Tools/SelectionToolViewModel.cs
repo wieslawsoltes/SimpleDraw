@@ -96,7 +96,6 @@ namespace SimpleDraw.ViewModels
                             path.LineTo(p2);
                             var bounds = path.ComputeTightBounds();
                             var contains = bounds.Contains((float)x, (float)y);
-                            //var contains = path.Contains((float)x, (float)y);
                             if (contains)
                             {
                                 return lineShape;
@@ -108,7 +107,8 @@ namespace SimpleDraw.ViewModels
                             var rect = ToSKRect(rectangleShape);
                             var path = new SKPath() { FillType = SKPathFillType.Winding };
                             path.AddRect(rect);
-                            var contains = path.Contains((float)x, (float)y);
+                            var bounds = path.ComputeTightBounds();
+                            var contains = bounds.Contains((float)x, (float)y);
                             if (contains)
                             {
                                 return rectangleShape;
