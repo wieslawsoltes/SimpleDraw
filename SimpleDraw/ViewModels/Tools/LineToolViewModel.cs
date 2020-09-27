@@ -65,17 +65,6 @@ namespace SimpleDraw.ViewModels
 
         public override void Released(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType)
         {
-            switch (_state)
-            {
-                case State.None:
-                    {
-                    }
-                    break;
-                case State.Pressed:
-                    {
-                    }
-                    break;
-            }
         }
 
         public override void Moved(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType)
