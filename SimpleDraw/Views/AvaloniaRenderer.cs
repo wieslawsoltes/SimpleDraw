@@ -154,35 +154,45 @@ namespace SimpleDraw.Views
             return new Rect(x, y, width, height);
         }
 
+        public static void Render(DrawingContext context, LineShapeViewModel lineShape)
+        {
+            if (lineShape.IsStroked)
+            {
+                var p1 = new Point(lineShape.Start.X, lineShape.Start.Y);
+                var p2 = new Point(lineShape.End.X, lineShape.End.Y);
+                var pen = ToPen(lineShape.Pen);
+                context.DrawLine(pen, p1, p2);
+            }
+        }
+
+        public static void Render(DrawingContext context, RectangleShapeViewModel rectangleShape)
+        {
+            if (rectangleShape.IsStroked || rectangleShape.IsFilled)
+            {
+                var rect = ToRect(rectangleShape);
+                var brush = ToBrush(rectangleShape.Brush);
+                var pen = ToPen(rectangleShape.Pen);
+                context.DrawRectangle(
+                    rectangleShape.IsFilled ? brush : default,
+                    rectangleShape.IsStroked ? pen : default(IPen),
+                    rect,
+                    rectangleShape.RadiusX,
+                    rectangleShape.RadiusY);
+            }
+        }
+
         public static void Render(DrawingContext context, ShapeBaseViewModel shape)
         {
             switch (shape)
             {
                 case LineShapeViewModel lineShape:
                     {
-                        if (lineShape.IsStroked)
-                        {
-                            var p1 = new Point(lineShape.Start.X, lineShape.Start.Y);
-                            var p2 = new Point(lineShape.End.X, lineShape.End.Y);
-                            var pen = ToPen(lineShape.Pen);
-                            context.DrawLine(pen, p1, p2);
-                        }
+                        Render(context, lineShape);
                     }
                     break;
                 case RectangleShapeViewModel rectangleShape:
                     {
-                        if (rectangleShape.IsStroked || rectangleShape.IsFilled)
-                        {
-                            var rect = ToRect(rectangleShape);
-                            var brush = ToBrush(rectangleShape.Brush);
-                            var pen = ToPen(rectangleShape.Pen);
-                            context.DrawRectangle(
-                                rectangleShape.IsFilled ? brush : default,
-                                rectangleShape.IsStroked ? pen : default(IPen),
-                                rect,
-                                rectangleShape.RadiusX,
-                                rectangleShape.RadiusY);
-                        }
+                        Render(context, rectangleShape);
                     }
                     break;
                 default:
