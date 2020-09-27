@@ -7,15 +7,15 @@ namespace SimpleDraw.ViewModels
         private BrushViewModel _brush;
         private double _thickness;
         private DashStyleViewModel _dashStyle;
-        private LineCap _lineCap;
-        private LineJoin _lineJoin;
+        private PenLineCap _lineCap;
+        private PenLineJoin _lineJoin;
         private double _miterLimit;
 
         public PenViewModel()
         {
         }
 
-        public PenViewModel(BrushViewModel brush, double thickness = 1, DashStyleViewModel dashStyle = null, LineCap lineCap = LineCap.Flat, LineJoin lineJoin = LineJoin.Miter, double miterLimit = 10)
+        public PenViewModel(BrushViewModel brush, double thickness = 1, DashStyleViewModel dashStyle = null, PenLineCap lineCap = PenLineCap.Flat, PenLineJoin lineJoin = PenLineJoin.Miter, double miterLimit = 10)
         {
             _brush = brush;
             _dashStyle = dashStyle;
@@ -43,13 +43,13 @@ namespace SimpleDraw.ViewModels
             set => this.RaiseAndSetIfChanged(ref _dashStyle, value);
         }
 
-        public LineCap LineCap
+        public PenLineCap LineCap
         {
             get => _lineCap;
             set => this.RaiseAndSetIfChanged(ref _lineCap, value);
         }
 
-        public LineJoin LineJoin
+        public PenLineJoin LineJoin
         {
             get => _lineJoin;
             set => this.RaiseAndSetIfChanged(ref _lineJoin, value);

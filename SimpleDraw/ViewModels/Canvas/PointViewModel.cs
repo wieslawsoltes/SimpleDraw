@@ -2,7 +2,7 @@
 
 namespace SimpleDraw.ViewModels
 {
-    public class PointShapeViewModel : ShapeBaseViewModel
+    public class PointViewModel : ViewModelBase
     {
         private double _x;
         private double _y;
@@ -19,11 +19,11 @@ namespace SimpleDraw.ViewModels
             set => this.RaiseAndSetIfChanged(ref _y, value);
         }
 
-        public PointShapeViewModel()
+        public PointViewModel()
         {
         }
 
-        public PointShapeViewModel(double x, double y)
+        public PointViewModel(double x, double y)
         {
             _x = x;
             _y = y;

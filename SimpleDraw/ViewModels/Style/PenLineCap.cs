@@ -1,6 +1,6 @@
 ﻿namespace SimpleDraw.ViewModels
 {
-    public enum LineCap
+    public enum PenLineCap
     {
         Flat = 0,
         Round = 1,

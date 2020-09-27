@@ -1,6 +1,6 @@
 ﻿namespace SimpleDraw.ViewModels
 {
-    public enum LineJoin
+    public enum PenLineJoin
     {
         Bevel = 0,
         Miter = 1,

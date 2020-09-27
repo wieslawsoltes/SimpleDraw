@@ -4,20 +4,20 @@ namespace SimpleDraw.ViewModels
 {
     public class RectangleShapeViewModel : ShapeBaseViewModel
     {
-        private PointShapeViewModel _topLeft;
-        private PointShapeViewModel _bottomRight;
+        private PointViewModel _topLeft;
+        private PointViewModel _bottomRight;
         private bool _isStroked;
         private bool _isFilled;
         private double _radiusX;
         private double _radiusY;
 
-        public PointShapeViewModel TopLeft
+        public PointViewModel TopLeft
         {
             get => _topLeft;
             set => this.RaiseAndSetIfChanged(ref _topLeft, value);
         }
 
-        public PointShapeViewModel BottomRight
+        public PointViewModel BottomRight
         {
             get => _bottomRight;
             set => this.RaiseAndSetIfChanged(ref _bottomRight, value);

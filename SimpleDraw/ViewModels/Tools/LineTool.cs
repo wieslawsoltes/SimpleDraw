@@ -34,8 +34,8 @@ namespace SimpleDraw.ViewModels
                         {
                             _line = new LineShapeViewModel()
                             {
-                                Start = new PointShapeViewModel(x, y),
-                                End = new PointShapeViewModel(x, y),
+                                Start = new PointViewModel(x, y),
+                                End = new PointViewModel(x, y),
                                 IsStroked = _isStroked,
                                 Pen = _pen
                             };

@@ -62,8 +62,8 @@ namespace SimpleDraw.ViewModels
                         {
                             _rectangle = new RectangleShapeViewModel()
                             {
-                                TopLeft = new PointShapeViewModel(x, y),
-                                BottomRight = new PointShapeViewModel(x, y),
+                                TopLeft = new PointViewModel(x, y),
+                                BottomRight = new PointViewModel(x, y),
                                 IsStroked = _isStroked,
                                 IsFilled = _isFilled,
                                 RadiusX = _radiusX,

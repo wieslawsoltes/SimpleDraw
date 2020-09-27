@@ -4,17 +4,17 @@ namespace SimpleDraw.ViewModels
 {
     public class LineShapeViewModel : ShapeBaseViewModel
     {
-        private PointShapeViewModel _start;
-        private PointShapeViewModel _end;
+        private PointViewModel _start;
+        private PointViewModel _end;
         private bool _isStroked;
 
-        public PointShapeViewModel Start
+        public PointViewModel Start
         {
             get => _start;
             set => this.RaiseAndSetIfChanged(ref _start, value);
         }
 
-        public PointShapeViewModel End
+        public PointViewModel End
         {
             get => _end;
             set => this.RaiseAndSetIfChanged(ref _end, value);

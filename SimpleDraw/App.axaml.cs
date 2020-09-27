@@ -35,7 +35,16 @@ namespace SimpleDraw
                     },
                     new RectangleTool()
                     {
-                        Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
+                        //Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
+                        Brush = new LinearGradientBrushViewModel(
+                            new ObservableCollection<GradientStopViewModel>()
+                            {
+                                new GradientStopViewModel(0, new ColorViewModel(255, 0, 0, 0)),
+                                new GradientStopViewModel(100, new ColorViewModel(255, 255, 255, 255)),
+                            },
+                            GradientSpreadMethod.Pad,
+                            new RelativePointViewModel(0, 0, ViewModels.RelativeUnit.Relative),
+                            new RelativePointViewModel(100, 100, ViewModels.RelativeUnit.Relative)),
                         Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
                         IsStroked = true,
                         IsFilled = true,
