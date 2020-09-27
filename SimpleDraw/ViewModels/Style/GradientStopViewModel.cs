@@ -4,14 +4,8 @@ namespace SimpleDraw.ViewModels
 {
     public class GradientStopViewModel : ViewModelBase
     {
-        private double _offset;
         private ColorViewModel _color;
-
-        public double Offset
-        {
-            get => _offset;
-            set => this.RaiseAndSetIfChanged(ref _offset, value);
-        }
+        private double _offset;
 
         public ColorViewModel Color
         {
@@ -19,14 +13,20 @@ namespace SimpleDraw.ViewModels
             set => this.RaiseAndSetIfChanged(ref _color, value);
         }
 
+        public double Offset
+        {
+            get => _offset;
+            set => this.RaiseAndSetIfChanged(ref _offset, value);
+        }
+
         public GradientStopViewModel()
         {
         }
 
-        public GradientStopViewModel(double offset, ColorViewModel color)
+        public GradientStopViewModel(ColorViewModel color, double offset)
         {
-            _offset = offset;
             _color = color;
+            _offset = offset;
         }
     }
 }
