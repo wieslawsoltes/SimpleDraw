@@ -1,6 +1,6 @@
 ﻿namespace SimpleDraw.ViewModels
 {
-    public abstract class ToolBase : ViewModelBase
+    public abstract class ToolBaseViewModel : ViewModelBase
     {
         public abstract string Name { get; }
         public abstract void Pressed(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType);

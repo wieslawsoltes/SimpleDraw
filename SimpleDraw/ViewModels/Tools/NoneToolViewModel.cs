@@ -1,6 +1,6 @@
 ﻿namespace SimpleDraw.ViewModels
 {
-    public class NoneTool : ToolBase
+    public class NoneToolViewModel : ToolBaseViewModel
     {
         public override string Name => "None";
 

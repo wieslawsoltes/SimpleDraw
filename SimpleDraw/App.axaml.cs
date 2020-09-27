@@ -25,15 +25,15 @@ namespace SimpleDraw
                     Shapes = new ObservableCollection<ShapeBaseViewModel>()
                 };
 
-                canvas.Tools = new ObservableCollection<ToolBase>()
+                canvas.Tools = new ObservableCollection<ToolBaseViewModel>()
                 {
-                    new NoneTool(),
-                    new LineTool()
+                    new NoneToolViewModel(),
+                    new LineToolViewModel()
                     {
                         Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
                         IsStroked = true
                     },
-                    new RectangleTool()
+                    new RectangleToolViewModel()
                     {
                         Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
                         //Brush = new LinearGradientBrushViewModel(

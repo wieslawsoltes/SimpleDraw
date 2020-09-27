@@ -8,8 +8,8 @@ namespace SimpleDraw.ViewModels
         private double _width;
         private double _height;
         private ObservableCollection<ShapeBaseViewModel> _shapes;
-        private ToolBase _tool;
-        private ObservableCollection<ToolBase> _tools;
+        private ToolBaseViewModel _tool;
+        private ObservableCollection<ToolBaseViewModel> _tools;
 
         public double Width
         {
@@ -29,13 +29,13 @@ namespace SimpleDraw.ViewModels
             set => this.RaiseAndSetIfChanged(ref _shapes, value);
         }
 
-        public ToolBase Tool
+        public ToolBaseViewModel Tool
         {
             get => _tool;
             set => this.RaiseAndSetIfChanged(ref _tool, value);
         }
 
-        public ObservableCollection<ToolBase> Tools
+        public ObservableCollection<ToolBaseViewModel> Tools
         {
             get => _tools;
             set => this.RaiseAndSetIfChanged(ref _tools, value);
