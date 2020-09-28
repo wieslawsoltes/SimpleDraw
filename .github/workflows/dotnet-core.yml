@@ -7,9 +7,13 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
 
-    runs-on: ubuntu-latest
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    name: Build ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v2
@@ -19,5 +23,14 @@ jobs:
         dotnet-version: 3.1.301
     - name: Install dependencies
       run: dotnet restore
-    - name: Build
+    - name: Build Solution
       run: dotnet build --configuration Release --no-restore
+    - name: Publish AvaloniaSample
+      if: github.event_name != 'pull_request' && matrix.os == 'windows-latest'
+      run: dotnet publish ./SimpleDraw/SimpleDraw.csproj -c Release -f netcoreapp3.1 -r win7-x64 /p:PublishTrimmed=True /p:PublishSingleFile=False /p:PublishReadyToRun=True -o ./artifacts/SimpleDraw-win7-x64
+    - name: Artifacts SimpleDraw
+      if: github.event_name != 'pull_request' && matrix.os == 'windows-latest'
+      uses: actions/upload-artifact@master
+      with:
+        name: SimpleDraw-win7-x64
+        path: ./artifacts/SimpleDraw-win7-x64
