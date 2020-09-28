@@ -37,7 +37,9 @@ namespace SimpleDraw
                     new LineToolViewModel()
                     {
                         Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
-                        IsStroked = true
+                        IsStroked = true,
+                        HitRadius = 6,
+                        TryToConnect = true
                     },
                     new RectangleToolViewModel()
                     {
@@ -55,7 +57,9 @@ namespace SimpleDraw
                         IsStroked = true,
                         IsFilled = true,
                         RadiusX = 4,
-                        RadiusY = 4
+                        RadiusY = 4,
+                        HitRadius = 6,
+                        TryToConnect = true
                     }
                 };
                 canvas.Tool = canvas.Tools[3];
