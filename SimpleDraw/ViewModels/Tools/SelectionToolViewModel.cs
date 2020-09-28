@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
@@ -13,6 +12,7 @@ namespace SimpleDraw.ViewModels
         private double _pressedY = double.NaN;
         private double _previousX = double.NaN;
         private double _previousY = double.NaN;
+        private RectangleShapeViewModel _rectangle;
 
         public double HitRadius
         {
@@ -21,6 +21,21 @@ namespace SimpleDraw.ViewModels
         }
 
         public override string Name => "Selection";
+
+        public SelectionToolViewModel()
+        {
+            _rectangle = new RectangleShapeViewModel()
+            {
+                TopLeft = new PointViewModel(0, 0),
+                BottomRight = new PointViewModel(0, 0),
+                IsStroked = true,
+                IsFilled = true,
+                RadiusX = 0,
+                RadiusY = 0,
+                Brush = new SolidColorBrushViewModel(new ColorViewModel(80, 0, 0, 255)),
+                Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(160, 0, 0, 255)), 2)
+            };
+        }
 
         public override void Pressed(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
@@ -65,6 +80,11 @@ namespace SimpleDraw.ViewModels
                             {
                                 canvas.Selected.Clear();
                             }
+                            canvas.Decorators.Add(_rectangle);
+                            _rectangle.TopLeft.X = x;
+                            _rectangle.TopLeft.Y = y;
+                            _rectangle.BottomRight.X = x;
+                            _rectangle.BottomRight.Y = y;
                             _pressedX = x;
                             _pressedY = y;
                             _state = State.Pressed;
@@ -104,11 +124,14 @@ namespace SimpleDraw.ViewModels
                     break;
                 case State.Pressed:
                     {
+                        canvas.Decorators.Remove(_rectangle);
+
                         var rect = HitTest.ToSKRect(_pressedX, _pressedY, x, y);
                         if (keyModifiers.HasFlag(ToolKeyModifiers.Control))
                         {
-                            foreach (var shape in canvas.Items)
+                            for (int i = canvas.Items.Count - 1; i >= 0; i--)
                             {
+                                var shape = canvas.Items[i];
                                 var result = HitTest.Intersects(shape, rect);
                                 if (result != null)
                                 {
@@ -127,8 +150,9 @@ namespace SimpleDraw.ViewModels
                         {
                             canvas.Selected.Clear();
 
-                            foreach (var shape in canvas.Items)
+                            for (int i = canvas.Items.Count - 1; i >= 0; i--)
                             {
+                                var shape = canvas.Items[i];
                                 var result = HitTest.Intersects(shape, rect);
                                 if (result != null)
                                 {
@@ -195,7 +219,8 @@ namespace SimpleDraw.ViewModels
                     break;
                 case State.Pressed:
                     {
-                        // TODO:
+                        _rectangle.BottomRight.X = x;
+                        _rectangle.BottomRight.Y = y;
                     }
                     break;
             }
