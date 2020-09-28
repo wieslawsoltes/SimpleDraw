@@ -1,10 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Newtonsoft.Json;
 using SimpleDraw.ViewModels;
 using SimpleDraw.Views;
 
@@ -27,11 +26,13 @@ namespace SimpleDraw
                 {
                     var json = File.ReadAllText("canvas.json");
 
-                    canvas = JsonSerializer.Deserialize<CanvasViewModel>(json, new JsonSerializerOptions()
+                    canvas = JsonConvert.DeserializeObject<CanvasViewModel>(json, new JsonSerializerSettings()
                     {
-                        WriteIndented = true,
-                        ReferenceHandler = ReferenceHandler.Preserve,
-                        ReadCommentHandling = JsonCommentHandling.Skip
+                        Formatting = Formatting.Indented,
+                        TypeNameHandling = TypeNameHandling.Objects,
+                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                        NullValueHandling = NullValueHandling.Ignore,
                     });
                 }
 
@@ -91,11 +92,13 @@ namespace SimpleDraw
 
                 desktop.Exit += (sender, e) =>
                 {
-                    var json = JsonSerializer.Serialize(canvas, new JsonSerializerOptions()
+                    var json = JsonConvert.SerializeObject(canvas, new JsonSerializerSettings()
                     {
-                        WriteIndented = true,
-                        ReferenceHandler = ReferenceHandler.Preserve,
-                        ReadCommentHandling = JsonCommentHandling.Skip
+                        Formatting = Formatting.Indented,
+                        TypeNameHandling = TypeNameHandling.Objects,
+                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                        NullValueHandling = NullValueHandling.Ignore,
                     });
 
                     File.WriteAllText("canvas.json", json);
