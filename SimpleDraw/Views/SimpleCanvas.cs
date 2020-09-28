@@ -59,13 +59,15 @@ namespace SimpleDraw.Views
         {
             base.OnPointerPressed(e);
 
-            if (DataContext is CanvasViewModel canvas)
+            if (!(DataContext is CanvasViewModel canvas))
             {
-                var point = e.GetCurrentPoint(this);
-                var type = point.Properties.PointerUpdateKind;
-                canvas.Tool?.Pressed(canvas, point.Position.X, point.Position.Y, ToToolPointerType(type), ToToolKeyModifiers(e.KeyModifiers));
-                InvalidateVisual();
+                return;
             }
+
+            var point = e.GetCurrentPoint(this);
+            var type = point.Properties.PointerUpdateKind;
+            canvas.Tool?.Pressed(canvas, point.Position.X, point.Position.Y, ToToolPointerType(type), ToToolKeyModifiers(e.KeyModifiers));
+            InvalidateVisual();
         }
 
         protected override void OnPointerReleased(PointerReleasedEventArgs e)
