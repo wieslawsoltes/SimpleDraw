@@ -49,6 +49,12 @@ namespace SimpleDraw.Views
             return result;
         }
 
+        public SimpleCanvas()
+        {
+            Focusable = true;
+            Focus();
+        }
+
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             base.OnPointerPressed(e);
