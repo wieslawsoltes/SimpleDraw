@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
@@ -104,7 +105,7 @@ namespace SimpleDraw.Views
             InvalidateVisual();
         }
 
-        protected override void OnKeyDown(KeyEventArgs e)
+        protected override async void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
             
@@ -115,12 +116,16 @@ namespace SimpleDraw.Views
 
             switch (e.Key)
             {
-                case Key.X:
+                case Key.A:
                     {
                         if (e.KeyModifiers == KeyModifiers.Control)
                         {
-                            Cut(canvas);
-                            InvalidateVisual();
+                            canvas.Selected.Clear();
+
+                            foreach (var item in canvas.Items)
+                            {
+                                canvas.Selected.Add(item);
+                            }
                         }
                     }
                     break;
@@ -132,11 +137,87 @@ namespace SimpleDraw.Views
                         }
                     }
                     break;
+                case Key.L:
+                    {
+                        if (e.KeyModifiers == KeyModifiers.None)
+                        {
+                            SetTool<LineToolViewModel>(canvas);
+                        }
+                    }
+                    break;
+                case Key.N:
+                    {
+                        if (e.KeyModifiers == KeyModifiers.None)
+                        {
+                            SetTool<NoneToolViewModel>(canvas);
+                        }
+                    }
+                    break;
+                case Key.O:
+                    {
+                        if (e.KeyModifiers == KeyModifiers.Control)
+                        {
+                            var dlg = new OpenFileDialog() { Title = "Open" };
+                            dlg.Filters.Add(new FileDialogFilter() { Name = "Json", Extensions = { "json" } });
+                            dlg.Filters.Add(new FileDialogFilter() { Name = "All", Extensions = { "*" } });
+                            var window = this.VisualRoot as Window;
+                            var result = await dlg.ShowAsync(window);
+                            if (result != null)
+                            {
+                                var path = result.FirstOrDefault();
+                                if (path != null)
+                                {
+                                    window.DataContext = App.Open(path);
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case Key.R:
+                    {
+                        if (e.KeyModifiers == KeyModifiers.None)
+                        {
+                            SetTool<RectangleToolViewModel>(canvas);
+                        }
+                    }
+                    break;
+                case Key.S:
+                    {
+                        if (e.KeyModifiers == KeyModifiers.None)
+                        {
+                            SetTool<SelectionToolViewModel>(canvas);
+                        }
+
+                        if (e.KeyModifiers == KeyModifiers.Control)
+                        {
+                            var dlg = new SaveFileDialog() { Title = "Save" };
+                            dlg.Filters.Add(new FileDialogFilter() { Name = "Json", Extensions = { "json" } });
+                            dlg.Filters.Add(new FileDialogFilter() { Name = "All", Extensions = { "*" } });
+                            dlg.InitialFileName = "canvas";
+                            dlg.DefaultExtension = "json";
+                            var window = this.VisualRoot as Window;
+                            var path = await dlg.ShowAsync(window);
+                            if (path != null)
+                            {
+                                App.Save(path, canvas);
+                            }
+                        }
+                    }
+                    break;
                 case Key.V:
                     {
                         if (e.KeyModifiers == KeyModifiers.Control)
                         {
                             Paste(canvas);
+                            InvalidateVisual();
+                        }
+                    }
+                    break;
+                case Key.X:
+                    {
+                        if (e.KeyModifiers == KeyModifiers.Control)
+                        {
+                            Cut(canvas);
                             InvalidateVisual();
                         }
                     }
@@ -155,51 +236,6 @@ namespace SimpleDraw.Views
                         if (e.KeyModifiers == KeyModifiers.None)
                         {
                             canvas.Selected.Clear();
-                        }
-                    }
-                    break;
-                case Key.A:
-                    {
-                        if (e.KeyModifiers == KeyModifiers.Control)
-                        {
-                            canvas.Selected.Clear();
-
-                            foreach (var item in canvas.Items)
-                            {
-                                canvas.Selected.Add(item);
-                            }
-                        }
-                    }
-                    break;
-                case Key.N:
-                    {
-                        if (e.KeyModifiers == KeyModifiers.None)
-                        {
-                            SetTool<NoneToolViewModel>(canvas);
-                        }
-                    }
-                    break;
-                case Key.S:
-                    {
-                        if (e.KeyModifiers == KeyModifiers.None)
-                        {
-                            SetTool<SelectionToolViewModel>(canvas);
-                        }
-                    }
-                    break;
-                case Key.L:
-                    {
-                        if (e.KeyModifiers == KeyModifiers.None)
-                        {
-                            SetTool<LineToolViewModel>(canvas);
-                        }
-                    }
-                    break;
-                case Key.R:
-                    {
-                        if (e.KeyModifiers == KeyModifiers.None)
-                        {
-                            SetTool<RectangleToolViewModel>(canvas);
                         }
                     }
                     break;
