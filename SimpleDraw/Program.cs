@@ -17,11 +17,11 @@ namespace SimpleDraw
             {
                 if (args[0] == "--vnc")
                 {
-                     BuildAvaloniaApp().StartWithHeadlessVncPlatform(null, 5901, args, ShutdownMode.OnMainWindowClose);
+                    BuildAvaloniaApp().StartWithHeadlessVncPlatform(null, 5901, args, ShutdownMode.OnMainWindowClose);
                 }
                 else if (args[0] == "--headless")
                 {
-                     BuildAvaloniaApp().UseHeadless(true).StartWithClassicDesktopLifetime(args);
+                    BuildAvaloniaApp().UseHeadless(true).StartWithClassicDesktopLifetime(args);
                 }
             }
             else
