@@ -200,9 +200,9 @@ namespace SimpleDraw.Views
             }
         }
 
-        public static void Render(DrawingContext context, CanvasViewModel canvas)
+        public static void Render(DrawingContext context, ObservableCollection<ViewModelBase> items)
         {
-            foreach (var item in canvas.Items)
+            foreach (var item in items)
             {
                 switch (item)
                 {
@@ -218,6 +218,12 @@ namespace SimpleDraw.Views
                         break;
                 }
             }
+        }
+
+        public static void Render(DrawingContext context, CanvasViewModel canvas)
+        {
+            Render(context, canvas.Items);
+            Render(context, canvas.Decorators);
         }
     }
 }
