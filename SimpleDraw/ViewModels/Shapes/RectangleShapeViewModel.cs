@@ -59,8 +59,8 @@ namespace SimpleDraw.ViewModels
             {
                 Brush = _brush?.Copy(shared),
                 Pen = _pen?.Copy(shared),
-                TopLeft = _topLeft,
-                BottomRight = _bottomRight,
+                TopLeft = _topLeft?.Copy(shared),
+                BottomRight = _bottomRight?.Copy(shared),
                 IsStroked = _isStroked,
                 IsFilled = _isFilled,
                 RadiusX = _radiusX,
