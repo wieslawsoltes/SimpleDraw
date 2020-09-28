@@ -10,6 +10,8 @@ namespace SimpleDraw.ViewModels
         private RectangleShapeViewModel _rectangle;
         private BrushViewModel _brush;
         private PenViewModel _pen;
+        private double _hitRadius;
+        private bool _tryToConnect;
         private bool _isStroked;
         private bool _isFilled;
         private double _radiusX;
@@ -51,6 +53,18 @@ namespace SimpleDraw.ViewModels
             set => this.RaiseAndSetIfChanged(ref _radiusY, value);
         }
 
+        public double HitRadius
+        {
+            get => _hitRadius;
+            set => this.RaiseAndSetIfChanged(ref _hitRadius, value);
+        }
+
+        public bool TryToConnect
+        {
+            get => _tryToConnect;
+            set => this.RaiseAndSetIfChanged(ref _tryToConnect, value);
+        }
+
         public override string Name => "Rectangle";
 
         public override void Pressed(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
@@ -61,18 +75,30 @@ namespace SimpleDraw.ViewModels
                     {
                         if (pointerType == ToolPointerType.Left)
                         {
+                            var shared = new Dictionary<ViewModelBase, ViewModelBase>();
+                            var topLeft = default(PointViewModel);
+
+                            if (_tryToConnect)
+                            {
+                                var result = HitTest.Contains(canvas.Items, x, y, _hitRadius);
+                                if (result is PointViewModel point)
+                                {
+                                    topLeft = point;
+                                }
+                            }
+
                             _rectangle = new RectangleShapeViewModel()
                             {
-                                TopLeft = new PointViewModel(x, y),
+                                TopLeft = topLeft ?? new PointViewModel(x, y),
                                 BottomRight = new PointViewModel(x, y),
                                 IsStroked = _isStroked,
                                 IsFilled = _isFilled,
                                 RadiusX = _radiusX,
                                 RadiusY = _radiusY,
-                                Brush = _brush,
-                                Pen = _pen
+                                Brush = _brush.Copy(shared),
+                                Pen = _pen.Copy(shared)
                             };
-                            canvas.Items.Add(_rectangle);
+                            canvas.Decorators.Add(_rectangle);
                             _state = State.Pressed;
                         }
                     }
@@ -81,13 +107,32 @@ namespace SimpleDraw.ViewModels
                     {
                         if (pointerType == ToolPointerType.Left)
                         {
+                            var bottomRight = default(PointViewModel);
+
+                            if (_tryToConnect)
+                            {
+                                var result = HitTest.Contains(canvas.Items, x, y, _hitRadius);
+                                if (result is PointViewModel point)
+                                {
+                                    bottomRight = point;
+                                }
+                            }
+
+                            if (bottomRight != null)
+                            {
+                                _rectangle.BottomRight = bottomRight;
+                            }
+
+                            canvas.Decorators.Remove(_rectangle);
+                            canvas.Items.Add(_rectangle);
+
                             _rectangle = null;
                             _state = State.None;
                         }
 
                         if (pointerType == ToolPointerType.Right)
                         {
-                            canvas.Items.Remove(_rectangle);
+                            canvas.Decorators.Remove(_rectangle);
                             _rectangle = null;
                             _state = State.None;
                         }
