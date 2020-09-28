@@ -27,7 +27,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     - name: Publish AvaloniaSample
       if: github.event_name != 'pull_request' && matrix.os == 'windows-latest'
-      run: dotnet publish ./SimpleDraw/SimpleDraw.csproj -c Release -f netcoreapp3.1 -r win7-x64 /p:PublishTrimmed=True /p:PublishSingleFile=False /p:PublishReadyToRun=True -o ./artifacts/SimpleDraw-win7-x64
+      run: dotnet publish ./SimpleDraw/SimpleDraw.csproj -c Release -f netcoreapp3.1 -r win7-x64 -o ./artifacts/SimpleDraw-win7-x64
     - name: Artifacts SimpleDraw
       if: github.event_name != 'pull_request' && matrix.os == 'windows-latest'
       uses: actions/upload-artifact@master
