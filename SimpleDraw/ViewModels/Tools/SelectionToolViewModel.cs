@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections.ObjectModel;
 using ReactiveUI;
 using SkiaSharp;
 
@@ -10,7 +10,7 @@ namespace SimpleDraw.ViewModels
         private enum State { None, Selected, Pressed }
         private State _state = State.None;
         private double _hitRadius = 6;
-        private ViewModelBase _selected = null;
+        private ObservableCollection<ViewModelBase> _selected = new ObservableCollection<ViewModelBase>();
         private double _previousX = double.NaN;
         private double _previousY = double.NaN;
 
@@ -20,7 +20,7 @@ namespace SimpleDraw.ViewModels
             set => this.RaiseAndSetIfChanged(ref _hitRadius, value);
         }
 
-        public ViewModelBase Selected
+        public ObservableCollection<ViewModelBase> Selected
         {
             get => _selected;
             set => this.RaiseAndSetIfChanged(ref _selected, value);
@@ -28,54 +28,64 @@ namespace SimpleDraw.ViewModels
 
         public override string Name => "Selection";
 
-        public override void Pressed(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType)
+        public override void Pressed(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
             switch (_state)
             {
                 case State.None:
                     {
-                        var result = HitTest(canvas, x, y);
+                        var result = Contains(canvas, x, y);
                         if (result != null)
                         {
-                            Selected = result;
-                            _previousX = x;
-                            _previousY = y;
-                            _state = State.Selected;
-                        }
-                    }
-                    break;
-                case State.Selected:
-                    {
-                        var result = HitTest(canvas, x, y);
-                        if (result != null)
-                        {
-                            Selected = result;
+                            if (keyModifiers.HasFlag(ToolKeyModifiers.Control))
+                            {
+                                if (_selected.Contains(result))
+                                {
+                                    _selected.Remove(result);
+                                }
+                                else
+                                {
+                                    _selected.Add(result);
+                                }
+                            }
+                            else
+                            {
+                                if (!_selected.Contains(result))
+                                {
+                                    _selected.Clear();
+                                    _selected.Add(result);
+                                }
+                            }
                             _previousX = x;
                             _previousY = y;
                             _state = State.Selected;
                         }
                         else
                         {
-                            Selected = null;
+                            _selected.Clear();
                             _state = State.None;
                         }
                     }
                     break;
+                case State.Selected:
+                    {
+                        _state = State.None;
+                    }
+                    break;
                 case State.Pressed:
                     {
-                        // TODO:
+                        _state = State.None;
                     }
                     break;
             }
         }
 
-        public override void Released(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType)
+        public override void Released(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
             switch (_state)
             {
                 case State.None:
                     {
-                        // TODO:
                     }
                     break;
                 case State.Selected:
@@ -91,7 +101,7 @@ namespace SimpleDraw.ViewModels
             }
         }
 
-        public override void Moved(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType)
+        public override void Moved(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
             switch (_state)
             {
@@ -104,30 +114,33 @@ namespace SimpleDraw.ViewModels
                         double deltaX = x - _previousX;
                         double deltaY = y - _previousY;
 
-                        switch (_selected)
+                        foreach (var item in _selected)
                         {
-                            case PointViewModel point:
-                                {
-                                    point.X += deltaX;
-                                    point.Y += deltaY;
-                                }
-                                break;
-                            case LineShapeViewModel lineShape:
-                                {
-                                    lineShape.Start.X += deltaX;
-                                    lineShape.Start.Y += deltaY;
-                                    lineShape.End.X += deltaX;
-                                    lineShape.End.Y += deltaY;
-                                }
-                                break;
-                            case RectangleShapeViewModel rectangleShape:
-                                {
-                                    rectangleShape.TopLeft.X += deltaX;
-                                    rectangleShape.TopLeft.Y += deltaY;
-                                    rectangleShape.BottomRight.X += deltaX;
-                                    rectangleShape.BottomRight.Y += deltaY;
-                                }
-                                break;
+                            switch (item)
+                            {
+                                case PointViewModel point:
+                                    {
+                                        point.X += deltaX;
+                                        point.Y += deltaY;
+                                    }
+                                    break;
+                                case LineShapeViewModel lineShape:
+                                    {
+                                        lineShape.Start.X += deltaX;
+                                        lineShape.Start.Y += deltaY;
+                                        lineShape.End.X += deltaX;
+                                        lineShape.End.Y += deltaY;
+                                    }
+                                    break;
+                                case RectangleShapeViewModel rectangleShape:
+                                    {
+                                        rectangleShape.TopLeft.X += deltaX;
+                                        rectangleShape.TopLeft.Y += deltaY;
+                                        rectangleShape.BottomRight.X += deltaX;
+                                        rectangleShape.BottomRight.Y += deltaY;
+                                    }
+                                    break;
+                            }
                         }
 
                         _previousX = x;
@@ -154,13 +167,13 @@ namespace SimpleDraw.ViewModels
         private SKRect Expand(SKPoint point, double radius)
         {
             return SKRect.Create(
-                (float)(point.X - radius), 
-                (float)(point.Y - radius), 
-                (float)(radius + radius), 
+                (float)(point.X - radius),
+                (float)(point.Y - radius),
+                (float)(radius + radius),
                 (float)(radius + radius));
         }
 
-        private ViewModelBase HitTest(CanvasViewModel canvas, double x, double y)
+        private ViewModelBase Contains(CanvasViewModel canvas, double x, double y)
         {
             foreach (var shape in canvas.Shapes)
             {

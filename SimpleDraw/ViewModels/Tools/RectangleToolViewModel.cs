@@ -52,7 +52,7 @@ namespace SimpleDraw.ViewModels
 
         public override string Name => "Rectangle";
 
-        public override void Pressed(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType)
+        public override void Pressed(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
             switch (_state)
             {
@@ -95,7 +95,7 @@ namespace SimpleDraw.ViewModels
             }
         }
 
-        public override void Released(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType)
+        public override void Released(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
             switch (_state)
             {
@@ -110,7 +110,7 @@ namespace SimpleDraw.ViewModels
             }
         }
 
-        public override void Moved(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType)
+        public override void Moved(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
             switch (_state)
             {

@@ -22,6 +22,33 @@ namespace SimpleDraw.Views
             }
         }
 
+        public ToolKeyModifiers ToToolKeyModifiers(KeyModifiers keyModifiers)
+        {
+            var result = ToolKeyModifiers.None;
+
+            if (keyModifiers.HasFlag(KeyModifiers.Alt))
+            {
+                result |= ToolKeyModifiers.Alt;
+            }
+
+            if (keyModifiers.HasFlag(KeyModifiers.Control))
+            {
+                result |= ToolKeyModifiers.Control;
+            }
+
+            if (keyModifiers.HasFlag(KeyModifiers.Shift))
+            {
+                result |= ToolKeyModifiers.Shift;
+            }
+
+            if (keyModifiers.HasFlag(KeyModifiers.Meta))
+            {
+                result |= ToolKeyModifiers.Meta;
+            }
+
+            return result;
+        }
+
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             base.OnPointerPressed(e);
@@ -30,7 +57,7 @@ namespace SimpleDraw.Views
             {
                 var point = e.GetCurrentPoint(this);
                 var type = point.Properties.PointerUpdateKind;
-                canvas.Tool?.Pressed(canvas, point.Position.X, point.Position.Y, ToToolPointerType(type));
+                canvas.Tool?.Pressed(canvas, point.Position.X, point.Position.Y, ToToolPointerType(type), ToToolKeyModifiers(e.KeyModifiers));
                 InvalidateVisual();
             }
         }
@@ -43,7 +70,7 @@ namespace SimpleDraw.Views
             {
                 var point = e.GetCurrentPoint(this);
                 var type = point.Properties.PointerUpdateKind;
-                canvas.Tool?.Released(canvas, point.Position.X, point.Position.Y, ToToolPointerType(type));
+                canvas.Tool?.Released(canvas, point.Position.X, point.Position.Y, ToToolPointerType(type), ToToolKeyModifiers(e.KeyModifiers));
                 InvalidateVisual();
             }
         }
@@ -56,7 +83,7 @@ namespace SimpleDraw.Views
             {
                 var point = e.GetCurrentPoint(this);
                 var type = point.Properties.PointerUpdateKind;
-                canvas.Tool?.Moved(canvas, point.Position.X, point.Position.Y, ToToolPointerType(type));
+                canvas.Tool?.Moved(canvas, point.Position.X, point.Position.Y, ToToolPointerType(type), ToToolKeyModifiers(e.KeyModifiers));
                 InvalidateVisual();
             }
         }
