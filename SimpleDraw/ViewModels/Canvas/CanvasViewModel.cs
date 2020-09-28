@@ -10,6 +10,7 @@ namespace SimpleDraw.ViewModels
         private double _height;
         private ObservableCollection<ViewModelBase> _items;
         private ObservableCollection<ViewModelBase> _selected;
+        private ObservableCollection<ViewModelBase> _decorators;
         private ToolBaseViewModel _tool;
         private ObservableCollection<ToolBaseViewModel> _tools;
 
@@ -35,6 +36,12 @@ namespace SimpleDraw.ViewModels
         {
             get => _selected;
             set => this.RaiseAndSetIfChanged(ref _selected, value);
+        }
+
+        public ObservableCollection<ViewModelBase> Decorators
+        {
+            get => _decorators;
+            set => this.RaiseAndSetIfChanged(ref _decorators, value);
         }
 
         public ToolBaseViewModel Tool
@@ -70,6 +77,13 @@ namespace SimpleDraw.ViewModels
                 selected.Add(item.Clone(shared));
             }
 
+            var decorators = new ObservableCollection<ViewModelBase>();
+
+            foreach (var item in _decorators)
+            {
+                decorators.Add(item.Clone(shared));
+            }
+
             var tools = new ObservableCollection<ToolBaseViewModel>();
 
             foreach (var item in _tools)
@@ -83,6 +97,7 @@ namespace SimpleDraw.ViewModels
                 Height = _height,
                 Items = items,
                 Selected = selected,
+                Decorators = decorators,
                 Tool = _tool?.Copy(shared),
                 Tools = tools
             };
