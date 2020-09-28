@@ -1,4 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -18,55 +21,84 @@ namespace SimpleDraw
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                var canvas = new CanvasViewModel()
-                {
-                    Width = 840,
-                    Height = 600,
-                    Items = new ObservableCollection<ViewModelBase>(),
-                    Selected = new ObservableCollection<ViewModelBase>(),
-                    Decorators = new ObservableCollection<ViewModelBase>()
-                };
+                var canvas = default(CanvasViewModel);
 
-                canvas.Tools = new ObservableCollection<ToolBaseViewModel>()
+                if (File.Exists("canvas.json"))
                 {
-                    new NoneToolViewModel(),
-                    new SelectionToolViewModel()
+                    var json = File.ReadAllText("canvas.json");
+
+                    canvas = JsonSerializer.Deserialize<CanvasViewModel>(json, new JsonSerializerOptions()
                     {
-                        HitRadius = 6
-                    },
-                    new LineToolViewModel()
+                        WriteIndented = true,
+                        ReferenceHandler = ReferenceHandler.Preserve,
+                        ReadCommentHandling = JsonCommentHandling.Skip
+                    });
+                }
+
+                if (canvas == null)
+                {
+                    canvas = new CanvasViewModel()
                     {
-                        Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
-                        IsStroked = true,
-                        HitRadius = 6,
-                        TryToConnect = true
-                    },
-                    new RectangleToolViewModel()
+                        Width = 840,
+                        Height = 600,
+                        Items = new ObservableCollection<ViewModelBase>(),
+                        Selected = new ObservableCollection<ViewModelBase>(),
+                        Decorators = new ObservableCollection<ViewModelBase>()
+                    };
+
+                    canvas.Tools = new ObservableCollection<ToolBaseViewModel>()
                     {
-                        Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
-                        //Brush = new LinearGradientBrushViewModel(
-                        //    new ObservableCollection<GradientStopViewModel>()
-                        //    {
-                        //        new GradientStopViewModel(new ColorViewModel(255, 0, 0, 0), 0),
-                        //        new GradientStopViewModel(new ColorViewModel(255, 255, 255, 255), 1),
-                        //    },
-                        //    GradientSpreadMethod.Pad,
-                        //    new RelativePointViewModel(0, 0, ViewModels.RelativeUnit.Relative),
-                        //    new RelativePointViewModel(1, 1, ViewModels.RelativeUnit.Relative)),
-                        Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
-                        IsStroked = true,
-                        IsFilled = true,
-                        RadiusX = 4,
-                        RadiusY = 4,
-                        HitRadius = 6,
-                        TryToConnect = true
-                    }
-                };
-                canvas.Tool = canvas.Tools[3];
+                        new NoneToolViewModel(),
+                        new SelectionToolViewModel()
+                        {
+                            HitRadius = 6
+                        },
+                        new LineToolViewModel()
+                        {
+                            Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
+                            IsStroked = true,
+                            HitRadius = 6,
+                            TryToConnect = true
+                        },
+                        new RectangleToolViewModel()
+                        {
+                            Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
+                            //Brush = new LinearGradientBrushViewModel(
+                            //    new ObservableCollection<GradientStopViewModel>()
+                            //    {
+                            //        new GradientStopViewModel(new ColorViewModel(255, 0, 0, 0), 0),
+                            //        new GradientStopViewModel(new ColorViewModel(255, 255, 255, 255), 1),
+                            //    },
+                            //    GradientSpreadMethod.Pad,
+                            //    new RelativePointViewModel(0, 0, ViewModels.RelativeUnit.Relative),
+                            //    new RelativePointViewModel(1, 1, ViewModels.RelativeUnit.Relative)),
+                            Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
+                            IsStroked = true,
+                            IsFilled = true,
+                            RadiusX = 4,
+                            RadiusY = 4,
+                            HitRadius = 6,
+                            TryToConnect = true
+                        }
+                    };
+                    canvas.Tool = canvas.Tools[3];
+                }
 
                 desktop.MainWindow = new MainWindow
                 {
                     DataContext = canvas
+                };
+
+                desktop.Exit += (sender, e) =>
+                {
+                    var json = JsonSerializer.Serialize(canvas, new JsonSerializerOptions()
+                    {
+                        WriteIndented = true,
+                        ReferenceHandler = ReferenceHandler.Preserve,
+                        ReadCommentHandling = JsonCommentHandling.Skip
+                    });
+
+                    File.WriteAllText("canvas.json", json);
                 };
             }
 
