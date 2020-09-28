@@ -11,6 +11,40 @@ namespace SimpleDraw
 {
     public class App : Application
     {
+        public static CanvasViewModel Open(string path)
+        {
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            var json = File.ReadAllText(path);
+
+            var canvas = JsonConvert.DeserializeObject<CanvasViewModel>(json, new JsonSerializerSettings()
+            {
+                Formatting = Formatting.Indented,
+                TypeNameHandling = TypeNameHandling.Objects,
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                NullValueHandling = NullValueHandling.Ignore,
+            });
+
+            return canvas;
+        }
+
+        public static void Save(string path, CanvasViewModel canvas)
+        {
+            var json = JsonConvert.SerializeObject(canvas, new JsonSerializerSettings()
+            {
+                Formatting = Formatting.Indented,
+                TypeNameHandling = TypeNameHandling.Objects,
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                NullValueHandling = NullValueHandling.Ignore,
+            });
+
+            File.WriteAllText(path, json);
+        }
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -22,19 +56,7 @@ namespace SimpleDraw
             {
                 var canvas = default(CanvasViewModel);
 
-                if (File.Exists("canvas.json"))
-                {
-                    var json = File.ReadAllText("canvas.json");
-
-                    canvas = JsonConvert.DeserializeObject<CanvasViewModel>(json, new JsonSerializerSettings()
-                    {
-                        Formatting = Formatting.Indented,
-                        TypeNameHandling = TypeNameHandling.Objects,
-                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-                        NullValueHandling = NullValueHandling.Ignore,
-                    });
-                }
+                canvas = Open("canvas.json");
 
                 if (canvas == null)
                 {
@@ -92,16 +114,7 @@ namespace SimpleDraw
 
                 desktop.Exit += (sender, e) =>
                 {
-                    var json = JsonConvert.SerializeObject(canvas, new JsonSerializerSettings()
-                    {
-                        Formatting = Formatting.Indented,
-                        TypeNameHandling = TypeNameHandling.Objects,
-                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-                        NullValueHandling = NullValueHandling.Ignore,
-                    });
-
-                    File.WriteAllText("canvas.json", json);
+                    Save("canvas.json", desktop.MainWindow.DataContext as CanvasViewModel);
                 };
             }
 
