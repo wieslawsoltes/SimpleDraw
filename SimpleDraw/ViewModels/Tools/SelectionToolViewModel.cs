@@ -7,8 +7,8 @@ namespace SimpleDraw.ViewModels
     {
         private enum State { None, Selected, Pressed }
         private State _state = State.None;
-        private double _hitRadius = 6;
-        private ObservableCollection<ViewModelBase> _selected = new ObservableCollection<ViewModelBase>();
+        private double _hitRadius;
+        private ObservableCollection<ViewModelBase> _selected;
         private double _pressedX = double.NaN;
         private double _pressedY = double.NaN;
         private double _previousX = double.NaN;
@@ -30,6 +30,11 @@ namespace SimpleDraw.ViewModels
 
         public override void Pressed(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
+            if (_selected == null)
+            {
+                return;
+            }
+
             switch (_state)
             {
                 case State.None:
@@ -87,6 +92,11 @@ namespace SimpleDraw.ViewModels
 
         public override void Released(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
+            if (_selected == null)
+            {
+                return;
+            }
+
             switch (_state)
             {
                 case State.None:
@@ -140,6 +150,11 @@ namespace SimpleDraw.ViewModels
 
         public override void Moved(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
+            if (_selected == null)
+            {
+                return;
+            }
+
             switch (_state)
             {
                 case State.None:
