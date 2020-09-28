@@ -18,14 +18,12 @@ namespace SimpleDraw
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                var selected = new ObservableCollection<ViewModelBase>();
-
                 var canvas = new CanvasViewModel()
                 {
                     Width = 840,
                     Height = 600,
                     Items = new ObservableCollection<ViewModelBase>(),
-                    Selected = selected
+                    Selected = new ObservableCollection<ViewModelBase>()
                 };
 
                 canvas.Tools = new ObservableCollection<ToolBaseViewModel>()
@@ -33,8 +31,7 @@ namespace SimpleDraw
                     new NoneToolViewModel(),
                     new SelectionToolViewModel()
                     {
-                        HitRadius = 6,
-                        Selected = selected
+                        HitRadius = 6
                     },
                     new LineToolViewModel()
                     {
