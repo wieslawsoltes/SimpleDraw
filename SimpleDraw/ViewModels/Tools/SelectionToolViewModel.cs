@@ -9,7 +9,6 @@ namespace SimpleDraw.ViewModels
         private enum State { None, Selected, Pressed }
         private State _state = State.None;
         private double _hitRadius;
-        private ObservableCollection<ViewModelBase> _selected;
         private double _pressedX = double.NaN;
         private double _pressedY = double.NaN;
         private double _previousX = double.NaN;
@@ -21,17 +20,11 @@ namespace SimpleDraw.ViewModels
             set => this.RaiseAndSetIfChanged(ref _hitRadius, value);
         }
 
-        public ObservableCollection<ViewModelBase> Selected
-        {
-            get => _selected;
-            set => this.RaiseAndSetIfChanged(ref _selected, value);
-        }
-
         public override string Name => "Selection";
 
         public override void Pressed(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
-            if (_selected == null)
+            if (canvas.Selected == null)
             {
                 return;
             }
@@ -45,21 +38,21 @@ namespace SimpleDraw.ViewModels
                         {
                             if (keyModifiers.HasFlag(ToolKeyModifiers.Control))
                             {
-                                if (_selected.Contains(result))
+                                if (canvas.Selected.Contains(result))
                                 {
-                                    _selected.Remove(result);
+                                    canvas.Selected.Remove(result);
                                 }
                                 else
                                 {
-                                    _selected.Add(result);
+                                    canvas.Selected.Add(result);
                                 }
                             }
                             else
                             {
-                                if (!_selected.Contains(result))
+                                if (!canvas.Selected.Contains(result))
                                 {
-                                    _selected.Clear();
-                                    _selected.Add(result);
+                                    canvas.Selected.Clear();
+                                    canvas.Selected.Add(result);
                                 }
                             }
                             _previousX = x;
@@ -70,7 +63,7 @@ namespace SimpleDraw.ViewModels
                         {
                             if (!keyModifiers.HasFlag(ToolKeyModifiers.Control))
                             {
-                                _selected.Clear();
+                                canvas.Selected.Clear();
                             }
                             _pressedX = x;
                             _pressedY = y;
@@ -93,7 +86,7 @@ namespace SimpleDraw.ViewModels
 
         public override void Released(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
-            if (_selected == null)
+            if (canvas.Selected == null)
             {
                 return;
             }
@@ -119,27 +112,27 @@ namespace SimpleDraw.ViewModels
                                 var result = HitTest.Intersects(shape, rect);
                                 if (result != null)
                                 {
-                                    if (_selected.Contains(result))
+                                    if (canvas.Selected.Contains(result))
                                     {
-                                        _selected.Remove(result);
+                                        canvas.Selected.Remove(result);
                                     }
                                     else
                                     {
-                                        _selected.Add(result);
+                                        canvas.Selected.Add(result);
                                     }
                                 }
                             }
                         }
                         else
                         {
-                            _selected.Clear();
+                            canvas.Selected.Clear();
 
                             foreach (var shape in canvas.Items)
                             {
                                 var result = HitTest.Intersects(shape, rect);
                                 if (result != null)
                                 {
-                                    _selected.Add(result);
+                                    canvas.Selected.Add(result);
                                 }
                             }
                         }
@@ -151,7 +144,7 @@ namespace SimpleDraw.ViewModels
 
         public override void Moved(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
-            if (_selected == null)
+            if (canvas.Selected == null)
             {
                 return;
             }
@@ -167,7 +160,7 @@ namespace SimpleDraw.ViewModels
                         double deltaX = x - _previousX;
                         double deltaY = y - _previousY;
 
-                        foreach (var item in _selected)
+                        foreach (var item in canvas.Selected)
                         {
                             switch (item)
                             {
@@ -215,17 +208,9 @@ namespace SimpleDraw.ViewModels
                 return value as SelectionToolViewModel;
             }
 
-            var selected = new ObservableCollection<ViewModelBase>();
-
-            foreach (var item in _selected)
-            {
-                selected.Add(item.Clone(shared));
-            }
-
             var copy = new SelectionToolViewModel()
             {
-                HitRadius = _hitRadius,
-                Selected = selected
+                HitRadius = _hitRadius
             };
 
             shared[this] = copy;
