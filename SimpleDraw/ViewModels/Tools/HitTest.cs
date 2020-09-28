@@ -140,9 +140,9 @@ namespace SimpleDraw.ViewModels
 
         public static ViewModelBase Contains(IList<ViewModelBase> items, double x, double y, double hitRadius)
         {
-            foreach (var item in items)
+            for (int i = items.Count - 1; i >= 0; i--)
             {
-                var result = Contains(item, x, y, hitRadius);
+                var result = Contains(items[i], x, y, hitRadius);
                 if (result != null)
                 {
                     return result;
