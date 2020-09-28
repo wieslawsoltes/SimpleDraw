@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using SkiaSharp;
 
 namespace SimpleDraw.ViewModels
@@ -139,7 +138,7 @@ namespace SimpleDraw.ViewModels
             return null;
         }
 
-        public static ViewModelBase Contains(ObservableCollection<ViewModelBase> items, double x, double y, double hitRadius)
+        public static ViewModelBase Contains(IList<ViewModelBase> items, double x, double y, double hitRadius)
         {
             foreach (var item in items)
             {
