@@ -11,7 +11,33 @@
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/SimpleDraw/bin/Debug/netcoreapp3.1/SimpleDraw.dll",
-            "args": [],
+            "args": [ ],
+            "cwd": "${workspaceFolder}/SimpleDraw",
+            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": ".NET Core Launch (headless)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/SimpleDraw/bin/Debug/netcoreapp3.1/SimpleDraw.dll",
+            "args": [ "--headless" ],
+            "cwd": "${workspaceFolder}/SimpleDraw",
+            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": ".NET Core Launch (vnc)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/SimpleDraw/bin/Debug/netcoreapp3.1/SimpleDraw.dll",
+            "args": [ "--vnc" ],
             "cwd": "${workspaceFolder}/SimpleDraw",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
