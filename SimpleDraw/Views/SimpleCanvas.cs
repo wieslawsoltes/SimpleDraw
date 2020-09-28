@@ -127,8 +127,6 @@ namespace SimpleDraw.Views
                             {
                                 _copy.Add(item.Clone(shared));
                             }
-
-                            InvalidateVisual();
                         }
                     }
                     break;
@@ -138,9 +136,13 @@ namespace SimpleDraw.Views
                         {
                             var shared = new Dictionary<ViewModelBase, ViewModelBase>();
 
+                            canvas.Selected.Clear();
+
                             foreach (var item in _copy)
                             {
-                                canvas.Items.Add(item.Clone(shared));
+                                var clone = item.Clone(shared);
+                                canvas.Items.Add(clone);
+                                canvas.Selected.Add(clone);
                             }
 
                             InvalidateVisual();
