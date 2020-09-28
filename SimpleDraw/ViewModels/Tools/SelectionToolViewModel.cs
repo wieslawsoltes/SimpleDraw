@@ -7,14 +7,23 @@ namespace SimpleDraw.ViewModels
 {
     public class SelectionToolViewModel : ToolBaseViewModel
     {
-        private enum State { None, Pressed }
+        private enum State { None, Selected, Pressed }
         private State _state = State.None;
         private double _hitRadius = 6;
+        private ViewModelBase _selected = null;
+        private double _previousX = double.NaN;
+        private double _previousY = double.NaN;
 
         public double HitRadius
         {
             get => _hitRadius;
             set => this.RaiseAndSetIfChanged(ref _hitRadius, value);
+        }
+
+        public ViewModelBase Selected
+        {
+            get => _selected;
+            set => this.RaiseAndSetIfChanged(ref _selected, value);
         }
 
         public override string Name => "Selection";
@@ -28,8 +37,27 @@ namespace SimpleDraw.ViewModels
                         var result = HitTest(canvas, x, y);
                         if (result != null)
                         {
-                            // TODO:
-                            Debug.WriteLine($"{result}");
+                            Selected = result;
+                            _previousX = x;
+                            _previousY = y;
+                            _state = State.Selected;
+                        }
+                    }
+                    break;
+                case State.Selected:
+                    {
+                        var result = HitTest(canvas, x, y);
+                        if (result != null)
+                        {
+                            Selected = result;
+                            _previousX = x;
+                            _previousY = y;
+                            _state = State.Selected;
+                        }
+                        else
+                        {
+                            Selected = null;
+                            _state = State.None;
                         }
                     }
                     break;
@@ -50,6 +78,11 @@ namespace SimpleDraw.ViewModels
                         // TODO:
                     }
                     break;
+                case State.Selected:
+                    {
+                        _state = State.None;
+                    }
+                    break;
                 case State.Pressed:
                     {
                         // TODO:
@@ -64,12 +97,41 @@ namespace SimpleDraw.ViewModels
             {
                 case State.None:
                     {
-                        var result = HitTest(canvas, x, y);
-                        if (result != null)
+                    }
+                    break;
+                case State.Selected:
+                    {
+                        double deltaX = x - _previousX;
+                        double deltaY = y - _previousY;
+
+                        switch (_selected)
                         {
-                            // TODO:
-                            Debug.WriteLine($"{result}");
+                            case PointViewModel point:
+                                {
+                                    point.X += deltaX;
+                                    point.Y += deltaY;
+                                }
+                                break;
+                            case LineShapeViewModel lineShape:
+                                {
+                                    lineShape.Start.X += deltaX;
+                                    lineShape.Start.Y += deltaY;
+                                    lineShape.End.X += deltaX;
+                                    lineShape.End.Y += deltaY;
+                                }
+                                break;
+                            case RectangleShapeViewModel rectangleShape:
+                                {
+                                    rectangleShape.TopLeft.X += deltaX;
+                                    rectangleShape.TopLeft.Y += deltaY;
+                                    rectangleShape.BottomRight.X += deltaX;
+                                    rectangleShape.BottomRight.Y += deltaY;
+                                }
+                                break;
                         }
+
+                        _previousX = x;
+                        _previousY = y;
                     }
                     break;
                 case State.Pressed:
