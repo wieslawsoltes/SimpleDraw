@@ -9,6 +9,8 @@ namespace SimpleDraw.ViewModels
         private State _state = State.None;
         private double _hitRadius = 6;
         private ObservableCollection<ViewModelBase> _selected = new ObservableCollection<ViewModelBase>();
+        private double _pressedX = double.NaN;
+        private double _pressedY = double.NaN;
         private double _previousX = double.NaN;
         private double _previousY = double.NaN;
 
