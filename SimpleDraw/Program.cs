@@ -36,6 +36,7 @@ namespace SimpleDraw
                 .UsePlatformDetect()
                 .LogToDebug()
                 .UseManagedSystemDialogs()
+                .UseSkia()
                 .UseReactiveUI();
     }
 }
