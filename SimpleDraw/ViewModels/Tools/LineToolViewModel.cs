@@ -10,6 +10,8 @@ namespace SimpleDraw.ViewModels
         private LineShapeViewModel _line = null;
         private PenViewModel _pen;
         private bool _isStroked;
+        private double _hitRadius;
+        private bool _tryToConnect;
 
         public PenViewModel Pen
         {
@@ -23,6 +25,18 @@ namespace SimpleDraw.ViewModels
             set => this.RaiseAndSetIfChanged(ref _isStroked, value);
         }
 
+        public double HitRadius
+        {
+            get => _hitRadius;
+            set => this.RaiseAndSetIfChanged(ref _hitRadius, value);
+        }
+
+        public bool TryToConnect
+        {
+            get => _tryToConnect;
+            set => this.RaiseAndSetIfChanged(ref _tryToConnect, value);
+        }
+
         public override string Name => "Line";
 
         public override void Pressed(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
@@ -33,14 +47,26 @@ namespace SimpleDraw.ViewModels
                     {
                         if (pointerType == ToolPointerType.Left)
                         {
+                            var shared = new Dictionary<ViewModelBase, ViewModelBase>();
+                            var start = default(PointViewModel);
+
+                            if (_tryToConnect)
+                            {
+                                var result = HitTest.Contains(canvas.Items, x, y, _hitRadius);
+                                if (result is PointViewModel point)
+                                {
+                                    start = point;
+                                }
+                            }
+
                             _line = new LineShapeViewModel()
                             {
-                                Start = new PointViewModel(x, y),
+                                Start = start ?? new PointViewModel(x, y),
                                 End = new PointViewModel(x, y),
                                 IsStroked = _isStroked,
-                                Pen = _pen
+                                Pen = _pen.Copy(shared)
                             };
-                            canvas.Items.Add(_line);
+                            canvas.Decorators.Add(_line);
                             _state = State.Pressed;
                         }
                     }
@@ -49,13 +75,32 @@ namespace SimpleDraw.ViewModels
                     {
                         if (pointerType == ToolPointerType.Left)
                         {
+                            var end = default(PointViewModel);
+
+                            if (_tryToConnect)
+                            {
+                                var result = HitTest.Contains(canvas.Items, x, y, _hitRadius);
+                                if (result is PointViewModel point)
+                                {
+                                    end = point;
+                                }
+                            }
+
+                            if (end != null)
+                            {
+                                _line.End = end;
+                            }
+
+                            canvas.Decorators.Remove(_line);
+                            canvas.Items.Add(_line);
+
                             _line = null;
                             _state = State.None;
                         }
 
                         if (pointerType == ToolPointerType.Right)
                         {
-                            canvas.Items.Remove(_line);
+                            canvas.Decorators.Remove(_line);
                             _line = null;
                             _state = State.None;
                         }
