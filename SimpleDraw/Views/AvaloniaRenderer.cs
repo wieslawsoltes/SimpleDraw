@@ -202,9 +202,21 @@ namespace SimpleDraw.Views
 
         public static void Render(DrawingContext context, CanvasViewModel canvas)
         {
-            foreach (var shape in canvas.Shapes)
+            foreach (var item in canvas.Items)
             {
-                Render(context, shape);
+                switch (item)
+                {
+                    case PointViewModel point:
+                        {
+                            // TODO:
+                        }
+                        break;
+                    case ShapeBaseViewModel shape:
+                        {
+                            Render(context, shape);
+                        }
+                        break;
+                }
             }
         }
     }

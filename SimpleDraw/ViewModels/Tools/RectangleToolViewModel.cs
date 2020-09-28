@@ -71,7 +71,7 @@ namespace SimpleDraw.ViewModels
                                 Brush = _brush,
                                 Pen = _pen
                             };
-                            canvas.Shapes.Add(_rectangle);
+                            canvas.Items.Add(_rectangle);
                             _state = State.Pressed;
                         }
                     }
@@ -86,7 +86,7 @@ namespace SimpleDraw.ViewModels
 
                         if (pointerType == ToolPointerType.Right)
                         {
-                            canvas.Shapes.Remove(_rectangle);
+                            canvas.Items.Remove(_rectangle);
                             _rectangle = null;
                             _state = State.None;
                         }

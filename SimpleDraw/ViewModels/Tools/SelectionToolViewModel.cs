@@ -34,7 +34,7 @@ namespace SimpleDraw.ViewModels
             {
                 case State.None:
                     {
-                        var result = HitTest.Contains(canvas, x, y, _hitRadius);
+                        var result = HitTest.Contains(canvas.Items, x, y, _hitRadius);
                         if (result != null)
                         {
                             if (keyModifiers.HasFlag(ToolKeyModifiers.Control))
@@ -103,7 +103,7 @@ namespace SimpleDraw.ViewModels
                         var rect = HitTest.ToSKRect(_pressedX, _pressedY, x, y);
                         if (keyModifiers.HasFlag(ToolKeyModifiers.Control))
                         {
-                            foreach (var shape in canvas.Shapes)
+                            foreach (var shape in canvas.Items)
                             {
                                 var result = HitTest.Intersects(shape, rect);
                                 if (result != null)
@@ -123,7 +123,7 @@ namespace SimpleDraw.ViewModels
                         {
                             _selected.Clear();
 
-                            foreach (var shape in canvas.Shapes)
+                            foreach (var shape in canvas.Items)
                             {
                                 var result = HitTest.Intersects(shape, rect);
                                 if (result != null)

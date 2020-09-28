@@ -39,7 +39,7 @@ namespace SimpleDraw.ViewModels
                                 IsStroked = _isStroked,
                                 Pen = _pen
                             };
-                            canvas.Shapes.Add(_line);
+                            canvas.Items.Add(_line);
                             _state = State.Pressed;
                         }
                     }
@@ -54,7 +54,7 @@ namespace SimpleDraw.ViewModels
 
                         if (pointerType == ToolPointerType.Right)
                         {
-                            canvas.Shapes.Remove(_line);
+                            canvas.Items.Remove(_line);
                             _line = null;
                             _state = State.None;
                         }
