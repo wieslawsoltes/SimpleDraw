@@ -28,7 +28,11 @@ namespace SimpleDraw
                 canvas.Tools = new ObservableCollection<ToolBaseViewModel>()
                 {
                     new NoneToolViewModel(),
-                    new SelectionToolViewModel(),
+                    new SelectionToolViewModel()
+                    {
+                        HitRadius = 6,
+                        Selected  = new ObservableCollection<ViewModelBase>()
+                    },
                     new LineToolViewModel()
                     {
                         Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
