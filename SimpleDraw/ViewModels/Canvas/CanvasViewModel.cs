@@ -83,7 +83,7 @@ namespace SimpleDraw.ViewModels
                 Height = _height,
                 Items = items,
                 Selected = selected,
-                Tool = _tool.Copy(shared),
+                Tool = _tool?.Copy(shared),
                 Tools = tools
             };
 

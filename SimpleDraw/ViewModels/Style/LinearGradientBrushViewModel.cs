@@ -51,8 +51,8 @@ namespace SimpleDraw.ViewModels
             {
                 GradientStops = gradientStops,
                 SpreadMethod = _spreadMethod,
-                StartPoint = _startPoint.Copy(shared),
-                EndPoint = _endPoint.Copy(shared)
+                StartPoint = _startPoint?.Copy(shared),
+                EndPoint = _endPoint?.Copy(shared)
             };
 
             shared[this] = copy;

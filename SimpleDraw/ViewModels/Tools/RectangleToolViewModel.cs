@@ -140,8 +140,8 @@ namespace SimpleDraw.ViewModels
 
             var copy = new RectangleToolViewModel()
             {
-                Brush = _brush.Copy(shared),
-                Pen = _pen.Copy(shared),
+                Brush = _brush?.Copy(shared),
+                Pen = _pen?.Copy(shared),
                 IsStroked = _isStroked,
                 IsFilled = _isFilled,
                 RadiusX = _radiusX,

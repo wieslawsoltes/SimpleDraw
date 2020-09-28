@@ -57,8 +57,8 @@ namespace SimpleDraw.ViewModels
 
             var copy = new RectangleShapeViewModel()
             {
-                Brush = _brush.Copy(shared),
-                Pen = _pen.Copy(shared),
+                Brush = _brush?.Copy(shared),
+                Pen = _pen?.Copy(shared),
                 TopLeft = _topLeft,
                 BottomRight = _bottomRight,
                 IsStroked = _isStroked,

@@ -31,7 +31,7 @@ namespace SimpleDraw.ViewModels
 
             var copy = new SolidColorBrushViewModel()
             {
-                Color = _color.Copy(shared)
+                Color = _color?.Copy(shared)
             };
 
             shared[this] = copy;

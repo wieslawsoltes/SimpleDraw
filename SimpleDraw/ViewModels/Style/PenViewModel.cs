@@ -71,9 +71,9 @@ namespace SimpleDraw.ViewModels
 
             var copy = new PenViewModel()
             {
-                Brush = _brush.Copy(shared),
+                Brush = _brush?.Copy(shared),
                 Thickness = _thickness,
-                DashStyle = _dashStyle.Copy(shared),
+                DashStyle = _dashStyle?.Copy(shared),
                 LineCap = _lineCap,
                 LineJoin = _lineJoin,
                 MiterLimit = _miterLimit

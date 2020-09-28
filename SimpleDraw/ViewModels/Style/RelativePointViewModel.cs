@@ -45,7 +45,7 @@ namespace SimpleDraw.ViewModels
 
             var copy = new RelativePointViewModel()
             {
-                Point = _point.Copy(shared),
+                Point = _point?.Copy(shared),
                 Unit = _unit
             };
 

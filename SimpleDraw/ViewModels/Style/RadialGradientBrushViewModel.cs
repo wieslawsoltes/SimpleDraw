@@ -59,8 +59,8 @@ namespace SimpleDraw.ViewModels
             {
                 GradientStops = gradientStops,
                 SpreadMethod = _spreadMethod,
-                Center = _center.Copy(shared),
-                GradientOrigin = _gradientOrigin.Copy(shared),
+                Center = _center?.Copy(shared),
+                GradientOrigin = _gradientOrigin?.Copy(shared),
                 Radius = _radius
             };
 

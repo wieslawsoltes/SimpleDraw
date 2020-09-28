@@ -36,8 +36,8 @@ namespace SimpleDraw.ViewModels
 
             var copy = new LineShapeViewModel()
             {
-                Brush = _brush.Copy(shared),
-                Pen = _pen.Copy(shared),
+                Brush = _brush?.Copy(shared),
+                Pen = _pen?.Copy(shared),
                 Start = _start,
                 End = _end,
                 IsStroked = _isStroked

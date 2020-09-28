@@ -39,7 +39,7 @@ namespace SimpleDraw.ViewModels
 
             var copy = new GradientStopViewModel()
             {
-                Color = _color.Copy(shared),
+                Color = _color?.Copy(shared),
                 Offset = _offset
             };
 

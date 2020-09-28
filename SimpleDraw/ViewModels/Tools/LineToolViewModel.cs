@@ -97,7 +97,7 @@ namespace SimpleDraw.ViewModels
 
             var copy = new LineToolViewModel()
             {
-                Pen = _pen.Copy(shared),
+                Pen = _pen?.Copy(shared),
                 IsStroked = _isStroked
             };
 
