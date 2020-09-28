@@ -1,19 +1,23 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
+    [DataContract(IsReference = true)]
     public class GradientStopViewModel : ViewModelBase
     {
         private ColorViewModel _color;
         private double _offset;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public ColorViewModel Color
         {
             get => _color;
             set => this.RaiseAndSetIfChanged(ref _color, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public double Offset
         {
             get => _offset;

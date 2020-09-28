@@ -1,19 +1,23 @@
 ﻿using System.Collections.ObjectModel;
+using System.Runtime.Serialization;
 using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
+    [DataContract(IsReference = true)]
     public abstract class GradientBrushViewModel : BrushViewModel
     {
         protected ObservableCollection<GradientStopViewModel> _gradientStops;
         protected GradientSpreadMethod _spreadMethod;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public ObservableCollection<GradientStopViewModel> GradientStops
         {
             get => _gradientStops;
             set => this.RaiseAndSetIfChanged(ref _gradientStops, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public GradientSpreadMethod SpreadMethod
         {
             get => _spreadMethod;

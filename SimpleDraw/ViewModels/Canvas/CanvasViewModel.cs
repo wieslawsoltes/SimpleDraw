@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Runtime.Serialization;
 using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
+    [DataContract(IsReference = true)]
     public class CanvasViewModel : ViewModelBase
     {
         private double _width;
@@ -14,42 +16,49 @@ namespace SimpleDraw.ViewModels
         private ToolBaseViewModel _tool;
         private ObservableCollection<ToolBaseViewModel> _tools;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public double Width
         {
             get => _width;
             set => this.RaiseAndSetIfChanged(ref _width, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public double Height
         {
             get => _height;
             set => this.RaiseAndSetIfChanged(ref _height, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public ObservableCollection<ViewModelBase> Items
         {
             get => _items;
             set => this.RaiseAndSetIfChanged(ref _items, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public ObservableCollection<ViewModelBase> Selected
         {
             get => _selected;
             set => this.RaiseAndSetIfChanged(ref _selected, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public ObservableCollection<ViewModelBase> Decorators
         {
             get => _decorators;
             set => this.RaiseAndSetIfChanged(ref _decorators, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public ToolBaseViewModel Tool
         {
             get => _tool;
             set => this.RaiseAndSetIfChanged(ref _tool, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public ObservableCollection<ToolBaseViewModel> Tools
         {
             get => _tools;

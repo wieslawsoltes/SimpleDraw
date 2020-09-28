@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
+    [DataContract(IsReference = true)]
     public class ColorViewModel : ViewModelBase
     {
         private byte _a;
@@ -10,24 +12,28 @@ namespace SimpleDraw.ViewModels
         private byte _g;
         private byte _b;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public byte A
         {
             get => _a;
             set => this.RaiseAndSetIfChanged(ref _a, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public byte R
         {
             get => _r;
             set => this.RaiseAndSetIfChanged(ref _r, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public byte G
         {
             get => _g;
             set => this.RaiseAndSetIfChanged(ref _g, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public byte B
         {
             get => _b;

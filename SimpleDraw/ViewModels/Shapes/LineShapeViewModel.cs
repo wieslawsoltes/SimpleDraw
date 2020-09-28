@@ -1,26 +1,31 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
+    [DataContract(IsReference = true)]
     public class LineShapeViewModel : ShapeBaseViewModel
     {
         private PointViewModel _start;
         private PointViewModel _end;
         private bool _isStroked;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public PointViewModel Start
         {
             get => _start;
             set => this.RaiseAndSetIfChanged(ref _start, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public PointViewModel End
         {
             get => _end;
             set => this.RaiseAndSetIfChanged(ref _end, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public bool IsStroked
         {
             get => _isStroked;

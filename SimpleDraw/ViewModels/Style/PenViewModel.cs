@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
+    [DataContract(IsReference = true)]
     public class PenViewModel : ViewModelBase
     {
         private BrushViewModel _brush;
@@ -12,36 +14,42 @@ namespace SimpleDraw.ViewModels
         private PenLineJoin _lineJoin;
         private double _miterLimit;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public BrushViewModel Brush
         {
             get => _brush;
             set => this.RaiseAndSetIfChanged(ref _brush, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public double Thickness
         {
             get => _thickness;
             set => this.RaiseAndSetIfChanged(ref _thickness, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public DashStyleViewModel DashStyle
         {
             get => _dashStyle;
             set => this.RaiseAndSetIfChanged(ref _dashStyle, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public PenLineCap LineCap
         {
             get => _lineCap;
             set => this.RaiseAndSetIfChanged(ref _lineCap, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public PenLineJoin LineJoin
         {
             get => _lineJoin;
             set => this.RaiseAndSetIfChanged(ref _lineJoin, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public double MiterLimit
         {
             get => _miterLimit;

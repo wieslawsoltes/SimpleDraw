@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
+    [DataContract(IsReference = true)]
     public class SelectionToolViewModel : ToolBaseViewModel
     {
         private enum State { None, Selected, Pressed }
@@ -14,12 +16,14 @@ namespace SimpleDraw.ViewModels
         private double _previousY = double.NaN;
         private RectangleShapeViewModel _rectangle;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public double HitRadius
         {
             get => _hitRadius;
             set => this.RaiseAndSetIfChanged(ref _hitRadius, value);
         }
 
+        [IgnoreDataMember]
         public override string Name => "Selection";
 
         public SelectionToolViewModel()

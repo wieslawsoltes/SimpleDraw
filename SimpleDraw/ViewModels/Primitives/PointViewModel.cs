@@ -1,19 +1,23 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
+    [DataContract(IsReference = true)]
     public class PointViewModel : ViewModelBase
     {
         private double _x;
         private double _y;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public double X
         {
             get => _x;
             set => this.RaiseAndSetIfChanged(ref _x, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public double Y
         {
             get => _y;

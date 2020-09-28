@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
+    [DataContract(IsReference = true)]
     public class SolidColorBrushViewModel : BrushViewModel
     {
         private ColorViewModel _color;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public ColorViewModel Color
         {
             get => _color;

@@ -1,27 +1,32 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Runtime.Serialization;
 using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
+    [DataContract(IsReference = true)]
     public class RadialGradientBrushViewModel : GradientBrushViewModel
     {
         private RelativePointViewModel _center;
         private RelativePointViewModel _gradientOrigin;
         private double _radius;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public RelativePointViewModel Center
         {
             get => _center;
             set => this.RaiseAndSetIfChanged(ref _center, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public RelativePointViewModel GradientOrigin
         {
             get => _gradientOrigin;
             set => this.RaiseAndSetIfChanged(ref _gradientOrigin, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public double Radius
         {
             get => _radius;

@@ -1,20 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Runtime.Serialization;
 using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
+    [DataContract(IsReference = true)]
     public class DashStyleViewModel : ViewModelBase
     {
         private ObservableCollection<double> _dashes;
         private double _offset;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public ObservableCollection<double> Dashes
         {
             get => _dashes;
             set => this.RaiseAndSetIfChanged(ref _dashes, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public double Offset
         {
             get => _offset;

@@ -1,19 +1,23 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
+    [DataContract(IsReference = true)]
     public class RelativePointViewModel : ViewModelBase
     {
         private PointViewModel _point;
         private RelativeUnit _unit;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public PointViewModel Point
         {
             get => _point;
             set => this.RaiseAndSetIfChanged(ref _point, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public RelativeUnit Unit
         {
             get => _unit;

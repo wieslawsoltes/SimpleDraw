@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
+    [DataContract(IsReference = true)]
     public class LineToolViewModel : ToolBaseViewModel
     {
         private enum State { None, Pressed }
@@ -13,30 +15,35 @@ namespace SimpleDraw.ViewModels
         private double _hitRadius;
         private bool _tryToConnect;
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public PenViewModel Pen
         {
             get => _pen;
             set => this.RaiseAndSetIfChanged(ref _pen, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public bool IsStroked
         {
             get => _isStroked;
             set => this.RaiseAndSetIfChanged(ref _isStroked, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public double HitRadius
         {
             get => _hitRadius;
             set => this.RaiseAndSetIfChanged(ref _hitRadius, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public bool TryToConnect
         {
             get => _tryToConnect;
             set => this.RaiseAndSetIfChanged(ref _tryToConnect, value);
         }
 
+        [IgnoreDataMember]
         public override string Name => "Line";
 
         public override void Pressed(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
