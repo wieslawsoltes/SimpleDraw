@@ -5,16 +5,39 @@ namespace SimpleDraw.ViewModels
 {
     internal static class HitTest
     {
-        private static SKRect ToSKRect(RectangleShapeViewModel rectangleShape)
+        public static SKRect ToSKRect(double x1, double y1, double x2, double y2)
         {
-            var x = Math.Min(rectangleShape.TopLeft.X, rectangleShape.BottomRight.X);
-            var y = Math.Min(rectangleShape.TopLeft.Y, rectangleShape.BottomRight.Y);
-            var width = Math.Abs(rectangleShape.TopLeft.X - rectangleShape.BottomRight.X);
-            var height = Math.Abs(rectangleShape.TopLeft.Y - rectangleShape.BottomRight.Y);
+            var x = Math.Min(x1, x2);
+            var y = Math.Min(y1, y2);
+            var width = Math.Abs(x1 - x2);
+            var height = Math.Abs(y1 - y2);
             return SKRect.Create((float)x, (float)y, (float)width, (float)height);
         }
 
-        private static SKRect Expand(SKPoint point, double radius)
+        public static SKRect ToSKRect(PointViewModel p1, PointViewModel p2)
+        {
+            return ToSKRect(p1.X, p1.Y, p2.X, p2.Y);
+        }
+
+        public static SKRect ToSKRect(LineShapeViewModel lineShape)
+        {
+            return ToSKRect(
+                lineShape.Start.X,
+                lineShape.Start.Y,
+                lineShape.End.X,
+                lineShape.End.Y);
+        }
+
+        public static SKRect ToSKRect(RectangleShapeViewModel rectangleShape)
+        {
+            return ToSKRect(
+                rectangleShape.TopLeft.X,
+                rectangleShape.TopLeft.Y,
+                rectangleShape.BottomRight.X,
+                rectangleShape.BottomRight.Y);
+        }
+
+        public static SKRect Expand(SKPoint point, double radius)
         {
             return SKRect.Create(
                 (float)(point.X - radius),
@@ -23,48 +46,65 @@ namespace SimpleDraw.ViewModels
                 (float)(radius + radius));
         }
 
-        public static ViewModelBase Contains(CanvasViewModel canvas, double x, double y, double hitRadius)
+        public static SKRect GetBounds(LineShapeViewModel lineShape)
         {
-            foreach (var shape in canvas.Shapes)
-            {
-                var result = Contains(x, y, hitRadius, shape);
-                if (result != null)
-                {
-                    return result;
-                }
-            }
+            var path = new SKPath() { FillType = SKPathFillType.Winding };
+            path.MoveTo(new SKPoint((float)lineShape.Start.X, (float)lineShape.Start.Y));
+            path.LineTo(new SKPoint((float)lineShape.End.X, (float)lineShape.End.Y));
+            var bounds = path.ComputeTightBounds();
+            return bounds;
+        }
 
+        public static SKRect GetBounds(RectangleShapeViewModel rectangleShape)
+        {
+            var rect = ToSKRect(rectangleShape);
+            var path = new SKPath() { FillType = SKPathFillType.Winding };
+            path.AddRect(rect);
+            var bounds = path.ComputeTightBounds();
+            return bounds;
+        }
+
+        public static ViewModelBase Contains(PointViewModel point, double x, double y, double hitRadius)
+        {
+            var rect = Expand(new SKPoint((float)point.X, (float)point.Y), hitRadius);
+            var result = rect.Contains((float)x, (float)y);
+            if (result)
+            {
+                return point;
+            }
             return null;
         }
 
-        private static ViewModelBase Contains(double x, double y, double hitRadius, ShapeBaseViewModel shape)
+        public static ViewModelBase Contains(ViewModelBase item, double x, double y, double hitRadius)
         {
-            switch (shape)
+            switch (item)
             {
+                case PointViewModel point:
+                    {
+                        var result = Contains(point, x, y, hitRadius);
+                        if (result != null)
+                        {
+                            return result;
+                        }
+                    }
+                    break;
                 case LineShapeViewModel lineShape:
                     {
-                        var p1 = new SKPoint((float)lineShape.Start.X, (float)lineShape.Start.Y);
-                        var p2 = new SKPoint((float)lineShape.End.X, (float)lineShape.End.Y);
-
-                        var containsStart = Expand(p1, hitRadius).Contains((float)x, (float)y);
-                        if (containsStart)
+                        var resultStart = Contains(lineShape.Start, x, y, hitRadius);
+                        if (resultStart != null)
                         {
-                            return lineShape.Start;
+                            return resultStart;
                         }
 
-                        var containsEnd = Expand(p2, hitRadius).Contains((float)x, (float)y);
-                        if (containsEnd)
+                        var resultEnd = Contains(lineShape.End, x, y, hitRadius);
+                        if (resultEnd != null)
                         {
-                            return lineShape.End;
+                            return resultEnd;
                         }
 
-                        var path = new SKPath() { FillType = SKPathFillType.Winding };
-                        path.MoveTo(p1);
-                        path.LineTo(p2);
-                        var bounds = path.ComputeTightBounds();
-
-                        var contains = bounds.Contains((float)x, (float)y);
-                        if (contains)
+                        var bounds = GetBounds(lineShape);
+                        var result = bounds.Contains((float)x, (float)y);
+                        if (result)
                         {
                             return lineShape;
                         }
@@ -72,28 +112,82 @@ namespace SimpleDraw.ViewModels
                     break;
                 case RectangleShapeViewModel rectangleShape:
                     {
-                        var tl = new SKPoint((float)rectangleShape.TopLeft.X, (float)rectangleShape.TopLeft.Y);
-                        var br = new SKPoint((float)rectangleShape.BottomRight.X, (float)rectangleShape.BottomRight.Y);
-
-                        var containsTopLeft = Expand(tl, hitRadius).Contains((float)x, (float)y);
-                        if (containsTopLeft)
+                        var resultTopLeft = Contains(rectangleShape.TopLeft, x, y, hitRadius);
+                        if (resultTopLeft != null)
                         {
-                            return rectangleShape.TopLeft;
+                            return resultTopLeft;
                         }
 
-                        var containsBottomRight = Expand(br, hitRadius).Contains((float)x, (float)y);
-                        if (containsBottomRight)
+                        var resultBottomRight = Contains(rectangleShape.BottomRight, x, y, hitRadius);
+                        if (resultBottomRight != null)
                         {
-                            return rectangleShape.BottomRight;
+                            return resultBottomRight;
                         }
 
-                        var rect = ToSKRect(rectangleShape);
-                        var path = new SKPath() { FillType = SKPathFillType.Winding };
-                        path.AddRect(rect);
-                        var bounds = path.ComputeTightBounds();
+                        var bounds = GetBounds(rectangleShape);
+                        var result = bounds.Contains((float)x, (float)y);
+                        if (result)
+                        {
+                            return rectangleShape;
+                        }
+                    }
+                    break;
+            }
 
-                        var contains = bounds.Contains((float)x, (float)y);
-                        if (contains)
+            return null;
+        }
+
+        public static ViewModelBase Contains(CanvasViewModel canvas, double x, double y, double hitRadius)
+        {
+            foreach (var shape in canvas.Shapes)
+            {
+                var result = Contains(shape, x, y, hitRadius);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+            return null;
+        }
+
+        public static ViewModelBase Intersects(PointViewModel point, SKRect rect)
+        {
+            var result = rect.Contains(new SKPoint((float)point.X, (float)point.Y));
+            if (result)
+            {
+                return point;
+            }
+            return null;
+        }
+
+        public static ViewModelBase Intersects(ViewModelBase shape, SKRect rect)
+        {
+            switch (shape)
+            {
+                case PointViewModel point:
+                    {
+                        var result = Intersects(point, rect);
+                        if (result != null)
+                        {
+                            return result;
+                        }
+                    }
+                    break;
+                case LineShapeViewModel lineShape:
+                    {
+                        var bounds = GetBounds(lineShape);
+                        var result = rect.IntersectsWith(bounds);
+                        if (result)
+                        {
+                            return lineShape;
+                        }
+                    }
+                    break;
+                case RectangleShapeViewModel rectangleShape:
+                    {
+                        var bounds = GetBounds(rectangleShape);
+                        var result = rect.IntersectsWith(bounds);
+                        if (result)
                         {
                             return rectangleShape;
                         }
