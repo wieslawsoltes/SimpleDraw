@@ -38,8 +38,8 @@ namespace SimpleDraw.ViewModels
             {
                 Brush = _brush?.Copy(shared),
                 Pen = _pen?.Copy(shared),
-                Start = _start,
-                End = _end,
+                Start = _start?.Copy(shared),
+                End = _end?.Copy(shared),
                 IsStroked = _isStroked
             };
 
