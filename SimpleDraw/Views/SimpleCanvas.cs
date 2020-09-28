@@ -7,7 +7,7 @@ namespace SimpleDraw.Views
 {
     public class SimpleCanvas : Canvas
     {
-        public ToolPointerType ToToolPointerType(PointerUpdateKind pointerUpdateKind)
+        private ToolPointerType ToToolPointerType(PointerUpdateKind pointerUpdateKind)
         {
             switch (pointerUpdateKind)
             {
@@ -22,7 +22,7 @@ namespace SimpleDraw.Views
             }
         }
 
-        public ToolKeyModifiers ToToolKeyModifiers(KeyModifiers keyModifiers)
+        private ToolKeyModifiers ToToolKeyModifiers(KeyModifiers keyModifiers)
         {
             var result = ToolKeyModifiers.None;
 
