@@ -62,8 +62,13 @@ namespace SimpleDraw.ViewModels
                         }
                         else
                         {
-                            _selected.Clear();
-                            _state = State.None;
+                            if (!keyModifiers.HasFlag(ToolKeyModifiers.Control))
+                            {
+                                _selected.Clear();
+                            }
+                            _pressedX = x;
+                            _pressedY = y;
+                            _state = State.Pressed;
                         }
                     }
                     break;
@@ -95,7 +100,39 @@ namespace SimpleDraw.ViewModels
                     break;
                 case State.Pressed:
                     {
-                        // TODO:
+                        var rect = HitTest.ToSKRect(_pressedX, _pressedY, x, y);
+                        if (keyModifiers.HasFlag(ToolKeyModifiers.Control))
+                        {
+                            foreach (var shape in canvas.Shapes)
+                            {
+                                var result = HitTest.Intersects(shape, rect);
+                                if (result != null)
+                                {
+                                    if (_selected.Contains(result))
+                                    {
+                                        _selected.Remove(result);
+                                    }
+                                    else
+                                    {
+                                        _selected.Add(result);
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            _selected.Clear();
+
+                            foreach (var shape in canvas.Shapes)
+                            {
+                                var result = HitTest.Intersects(shape, rect);
+                                if (result != null)
+                                {
+                                    _selected.Add(result);
+                                }
+                            }
+                        }
+                        _state = State.None;
                     }
                     break;
             }
