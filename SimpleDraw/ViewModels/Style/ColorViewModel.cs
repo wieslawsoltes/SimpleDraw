@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using System.Collections.Generic;
+using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
@@ -43,6 +44,30 @@ namespace SimpleDraw.ViewModels
             _r = r;
             _g = g;
             _b = b;
+        }
+
+        public ColorViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        {
+            if (shared.TryGetValue(this, out var value))
+            {
+                return value as ColorViewModel;
+            }
+
+            var copy = new ColorViewModel()
+            {
+                A = _a,
+                R = _r,
+                G = _g,
+                B = _b
+            };
+
+            shared[this] = copy;
+            return copy;
+        }
+
+        public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
+        {
+            return Copy(shared);
         }
     }
 }

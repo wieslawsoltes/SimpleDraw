@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
@@ -46,6 +47,53 @@ namespace SimpleDraw.ViewModels
         {
             get => _tools;
             set => this.RaiseAndSetIfChanged(ref _tools, value);
+        }
+
+        public CanvasViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        {
+            if (shared.TryGetValue(this, out var value))
+            {
+                return value as CanvasViewModel;
+            }
+
+            var items = new ObservableCollection<ViewModelBase>();
+            
+            foreach (var item in _items)
+            {
+                items.Add(item.Clone(shared));
+            }
+
+            var selected = new ObservableCollection<ViewModelBase>();
+
+            foreach (var item in _selected)
+            {
+                selected.Add(item.Clone(shared));
+            }
+
+            var tools = new ObservableCollection<ToolBaseViewModel>();
+
+            foreach (var item in _tools)
+            {
+                tools.Add(item.Copy(shared));
+            }
+
+            var copy = new CanvasViewModel()
+            {
+                Width = _width,
+                Height = _height,
+                Items = items,
+                Selected = selected,
+                Tool = _tool.Copy(shared),
+                Tools = tools
+            };
+
+            shared[this] = copy;
+            return copy;
+        }
+
+        public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
+        {
+            return Copy(shared);
         }
     }
 }

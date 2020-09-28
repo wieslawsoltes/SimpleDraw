@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using System.Collections.Generic;
+using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
@@ -45,6 +46,34 @@ namespace SimpleDraw.ViewModels
         {
             get => _radiusY;
             set => this.RaiseAndSetIfChanged(ref _radiusY, value);
+        }
+
+        public override ShapeBaseViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        {
+            if (shared.TryGetValue(this, out var value))
+            {
+                return value as RectangleShapeViewModel;
+            }
+
+            var copy = new RectangleShapeViewModel()
+            {
+                Brush = _brush.Copy(shared),
+                Pen = _pen.Copy(shared),
+                TopLeft = _topLeft,
+                BottomRight = _bottomRight,
+                IsStroked = _isStroked,
+                IsFilled = _isFilled,
+                RadiusX = _radiusX,
+                RadiusY = _radiusY
+            };
+
+            shared[this] = copy;
+            return copy;
+        }
+
+        public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
+        {
+            return Copy(shared);
         }
     }
 }

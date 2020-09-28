@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
-    public class ViewModelBase : ReactiveObject
+    public abstract class ViewModelBase : ReactiveObject
     {
+        public abstract ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared);
     }
 }

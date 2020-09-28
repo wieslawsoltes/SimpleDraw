@@ -5,8 +5,8 @@ namespace SimpleDraw.ViewModels
 {
     public abstract class GradientBrushViewModel : BrushViewModel
     {
-        private ObservableCollection<GradientStopViewModel> _gradientStops;
-        private GradientSpreadMethod _spreadMethod;
+        protected ObservableCollection<GradientStopViewModel> _gradientStops;
+        protected GradientSpreadMethod _spreadMethod;
 
         public ObservableCollection<GradientStopViewModel> GradientStops
         {

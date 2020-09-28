@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using System.Collections.Generic;
+using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
@@ -10,20 +11,6 @@ namespace SimpleDraw.ViewModels
         private PenLineCap _lineCap;
         private PenLineJoin _lineJoin;
         private double _miterLimit;
-
-        public PenViewModel()
-        {
-        }
-
-        public PenViewModel(BrushViewModel brush, double thickness = 1, DashStyleViewModel dashStyle = null, PenLineCap lineCap = PenLineCap.Flat, PenLineJoin lineJoin = PenLineJoin.Miter, double miterLimit = 10)
-        {
-            _brush = brush;
-            _dashStyle = dashStyle;
-            _lineCap = lineCap;
-            _lineJoin = lineJoin;
-            _miterLimit = miterLimit;
-            _thickness = thickness;
-        }
 
         public BrushViewModel Brush
         {
@@ -59,6 +46,46 @@ namespace SimpleDraw.ViewModels
         {
             get => _miterLimit;
             set => this.RaiseAndSetIfChanged(ref _miterLimit, value);
+        }
+
+        public PenViewModel()
+        {
+        }
+
+        public PenViewModel(BrushViewModel brush, double thickness = 1, DashStyleViewModel dashStyle = null, PenLineCap lineCap = PenLineCap.Flat, PenLineJoin lineJoin = PenLineJoin.Miter, double miterLimit = 10)
+        {
+            _brush = brush;
+            _dashStyle = dashStyle;
+            _lineCap = lineCap;
+            _lineJoin = lineJoin;
+            _miterLimit = miterLimit;
+            _thickness = thickness;
+        }
+
+        public PenViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        {
+            if (shared.TryGetValue(this, out var value))
+            {
+                return value as PenViewModel;
+            }
+
+            var copy = new PenViewModel()
+            {
+                Brush = _brush.Copy(shared),
+                Thickness = _thickness,
+                DashStyle = _dashStyle.Copy(shared),
+                LineCap = _lineCap,
+                LineJoin = _lineJoin,
+                MiterLimit = _miterLimit
+            };
+
+            shared[this] = copy;
+            return copy;
+        }
+
+        public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
+        {
+            return Copy(shared);
         }
     }
 }

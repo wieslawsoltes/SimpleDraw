@@ -1,4 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
 using SimpleDraw.ViewModels;
@@ -7,6 +9,8 @@ namespace SimpleDraw.Views
 {
     public class SimpleCanvas : Canvas
     {
+        private ObservableCollection<ViewModelBase> _copy = new ObservableCollection<ViewModelBase>();
+
         private ToolPointerType ToToolPointerType(PointerUpdateKind pointerUpdateKind)
         {
             switch (pointerUpdateKind)
@@ -115,7 +119,15 @@ namespace SimpleDraw.Views
                     {
                         if (e.KeyModifiers == KeyModifiers.Control)
                         {
-                            // TODO:
+                            var shared = new Dictionary<ViewModelBase, ViewModelBase>();
+
+                            _copy.Clear();
+
+                            foreach (var item in canvas.Selected)
+                            {
+                                _copy.Add(item.Clone(shared));
+                            }
+
                             InvalidateVisual();
                         }
                     }
@@ -124,7 +136,13 @@ namespace SimpleDraw.Views
                     {
                         if (e.KeyModifiers == KeyModifiers.Control)
                         {
-                            // TODO:
+                            var shared = new Dictionary<ViewModelBase, ViewModelBase>();
+
+                            foreach (var item in _copy)
+                            {
+                                canvas.Items.Add(item.Clone(shared));
+                            }
+
                             InvalidateVisual();
                         }
                     }
@@ -133,7 +151,22 @@ namespace SimpleDraw.Views
                     {
                         if (e.KeyModifiers == KeyModifiers.Control)
                         {
-                            // TODO:
+                            var shared = new Dictionary<ViewModelBase, ViewModelBase>();
+
+                            _copy.Clear();
+
+                            foreach (var item in canvas.Selected)
+                            {
+                                _copy.Add(item.Clone(shared));
+                            }
+
+                            foreach (var item in canvas.Selected)
+                            {
+                                canvas.Items.Remove(item);
+                            }
+
+                            canvas.Selected.Clear();
+
                             InvalidateVisual();
                         }
                     }
@@ -146,7 +179,9 @@ namespace SimpleDraw.Views
                             {
                                 canvas.Items.Remove(item);
                             }
+
                             canvas.Selected.Clear();
+
                             InvalidateVisual();
                         }
                     }

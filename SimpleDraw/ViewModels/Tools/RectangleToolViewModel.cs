@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using System.Collections.Generic;
+using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
@@ -128,6 +129,32 @@ namespace SimpleDraw.ViewModels
                     }
                     break;
             }
+        }
+
+        public override ToolBaseViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        {
+            if (shared.TryGetValue(this, out var value))
+            {
+                return value as RectangleToolViewModel;
+            }
+
+            var copy = new RectangleToolViewModel()
+            {
+                Brush = _brush.Copy(shared),
+                Pen = _pen.Copy(shared),
+                IsStroked = _isStroked,
+                IsFilled = _isFilled,
+                RadiusX = _radiusX,
+                RadiusY = _radiusY
+            };
+
+            shared[this] = copy;
+            return copy;
+        }
+
+        public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
+        {
+            return Copy(shared);
         }
     }
 }

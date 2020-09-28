@@ -1,11 +1,12 @@
-﻿using ReactiveUI;
+﻿using System.Collections.Generic;
+using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
     public abstract class ShapeBaseViewModel : ViewModelBase
     {
-        private BrushViewModel _brush;
-        private PenViewModel _pen;
+        protected BrushViewModel _brush;
+        protected PenViewModel _pen;
 
         public BrushViewModel Brush
         {
@@ -18,5 +19,7 @@ namespace SimpleDraw.ViewModels
             get => _pen;
             set => this.RaiseAndSetIfChanged(ref _pen, value);
         }
+
+        public abstract ShapeBaseViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared);
     }
 }

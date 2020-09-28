@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using System.Collections.Generic;
+using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
@@ -24,6 +25,31 @@ namespace SimpleDraw.ViewModels
         {
             get => _isStroked;
             set => this.RaiseAndSetIfChanged(ref _isStroked, value);
+        }
+
+        public override ShapeBaseViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        {
+            if (shared.TryGetValue(this, out var value))
+            {
+                return value as LineShapeViewModel;
+            }
+
+            var copy = new LineShapeViewModel()
+            {
+                Brush = _brush.Copy(shared),
+                Pen = _pen.Copy(shared),
+                Start = _start,
+                End = _end,
+                IsStroked = _isStroked
+            };
+
+            shared[this] = copy;
+            return copy;
+        }
+
+        public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
+        {
+            return Copy(shared);
         }
     }
 }

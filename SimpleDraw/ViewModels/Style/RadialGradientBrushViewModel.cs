@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
@@ -38,6 +39,38 @@ namespace SimpleDraw.ViewModels
             _center = center;
             _gradientOrigin = gradientOrigin;
             _radius = radius;
+        }
+
+        public override BrushViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        {
+            if (shared.TryGetValue(this, out var value))
+            {
+                return value as RadialGradientBrushViewModel;
+            }
+
+            var gradientStops = new ObservableCollection<GradientStopViewModel>();
+
+            foreach (var gradientStop in _gradientStops)
+            {
+                gradientStops.Add(gradientStop.Copy(shared));
+            }
+
+            var copy = new RadialGradientBrushViewModel()
+            {
+                GradientStops = gradientStops,
+                SpreadMethod = _spreadMethod,
+                Center = _center.Copy(shared),
+                GradientOrigin = _gradientOrigin.Copy(shared),
+                Radius = _radius
+            };
+
+            shared[this] = copy;
+            return copy;
+        }
+
+        public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
+        {
+            return Copy(shared);
         }
     }
 }

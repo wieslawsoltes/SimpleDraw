@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using System.Collections.Generic;
+using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
@@ -33,6 +34,28 @@ namespace SimpleDraw.ViewModels
         {
             _point = new PointViewModel(x, y);
             _unit = unit;
+        }
+
+        public RelativePointViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        {
+            if (shared.TryGetValue(this, out var value))
+            {
+                return value as RelativePointViewModel;
+            }
+
+            var copy = new RelativePointViewModel()
+            {
+                Point = _point.Copy(shared),
+                Unit = _unit
+            };
+
+            shared[this] = copy;
+            return copy;
+        }
+
+        public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
+        {
+            return Copy(shared);
         }
     }
 }

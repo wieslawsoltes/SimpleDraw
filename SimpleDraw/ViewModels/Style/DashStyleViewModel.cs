@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
@@ -28,6 +29,35 @@ namespace SimpleDraw.ViewModels
         {
             _dashes = dashes;
             _offset = offset;
+        }
+
+        public DashStyleViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        {
+            if (shared.TryGetValue(this, out var value))
+            {
+                return value as DashStyleViewModel;
+            }
+
+            var dashes = new ObservableCollection<double>();
+
+            foreach (var dash in _dashes)
+            {
+                dashes.Add(dash);
+            }
+
+            var copy = new DashStyleViewModel()
+            {
+                Dashes = dashes,
+                Offset = _offset
+            };
+
+            shared[this] = copy;
+            return copy;
+        }
+
+        public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
+        {
+            return Copy(shared);
         }
     }
 }
