@@ -184,34 +184,7 @@ namespace SimpleDraw.ViewModels
                         double deltaX = x - _previousX;
                         double deltaY = y - _previousY;
 
-                        foreach (var item in canvas.Selected)
-                        {
-                            switch (item)
-                            {
-                                case PointViewModel point:
-                                    {
-                                        point.X += deltaX;
-                                        point.Y += deltaY;
-                                    }
-                                    break;
-                                case LineShapeViewModel lineShape:
-                                    {
-                                        lineShape.Start.X += deltaX;
-                                        lineShape.Start.Y += deltaY;
-                                        lineShape.End.X += deltaX;
-                                        lineShape.End.Y += deltaY;
-                                    }
-                                    break;
-                                case RectangleShapeViewModel rectangleShape:
-                                    {
-                                        rectangleShape.TopLeft.X += deltaX;
-                                        rectangleShape.TopLeft.Y += deltaY;
-                                        rectangleShape.BottomRight.X += deltaX;
-                                        rectangleShape.BottomRight.Y += deltaY;
-                                    }
-                                    break;
-                            }
-                        }
+                        Move(canvas, deltaX, deltaY);
 
                         _previousX = x;
                         _previousY = y;
@@ -223,6 +196,42 @@ namespace SimpleDraw.ViewModels
                         _rectangle.BottomRight.Y = y;
                     }
                     break;
+            }
+        }
+
+        private void Move(CanvasViewModel canvas, double deltaX, double deltaY)
+        {
+            var points = new HashSet<PointViewModel>();
+
+            foreach (var item in canvas.Selected)
+            {
+                switch (item)
+                {
+                    case PointViewModel point:
+                        {
+                            points.Add(point);
+                            points.Add(point);
+                        }
+                        break;
+                    case LineShapeViewModel lineShape:
+                        {
+                            points.Add(lineShape.Start);
+                            points.Add(lineShape.End);
+                        }
+                        break;
+                    case RectangleShapeViewModel rectangleShape:
+                        {
+                            points.Add(rectangleShape.TopLeft);
+                            points.Add(rectangleShape.BottomRight);
+                        }
+                        break;
+                }
+            }
+
+            foreach (var point in points)
+            {
+                point.X += deltaX;
+                point.Y += deltaY;
             }
         }
 
