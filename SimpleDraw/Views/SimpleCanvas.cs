@@ -89,12 +89,68 @@ namespace SimpleDraw.Views
         {
             base.OnPointerMoved(e);
 
-            if (DataContext is CanvasViewModel canvas)
+            if (!(DataContext is CanvasViewModel canvas))
             {
-                var point = e.GetCurrentPoint(this);
-                var type = point.Properties.PointerUpdateKind;
-                canvas.Tool?.Moved(canvas, point.Position.X, point.Position.Y, ToToolPointerType(type), ToToolKeyModifiers(e.KeyModifiers));
-                InvalidateVisual();
+                return;
+            }
+
+            var point = e.GetCurrentPoint(this);
+            var type = point.Properties.PointerUpdateKind;
+            canvas.Tool?.Moved(canvas, point.Position.X, point.Position.Y, ToToolPointerType(type), ToToolKeyModifiers(e.KeyModifiers));
+            InvalidateVisual();
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            
+            if (!(DataContext is CanvasViewModel canvas))
+            {
+                return;
+            }
+
+            switch (e.Key)
+            {
+                case Key.C:
+                    {
+                        if (e.KeyModifiers == KeyModifiers.Control)
+                        {
+                            // TODO:
+                            InvalidateVisual();
+                        }
+                    }
+                    break;
+                case Key.V:
+                    {
+                        if (e.KeyModifiers == KeyModifiers.Control)
+                        {
+                            // TODO:
+                            InvalidateVisual();
+                        }
+                    }
+                    break;
+                case Key.X:
+                    {
+                        if (e.KeyModifiers == KeyModifiers.Control)
+                        {
+                            // TODO:
+                            InvalidateVisual();
+                        }
+                    }
+                    break;
+                case Key.Delete:
+                    {
+                        if (e.KeyModifiers == KeyModifiers.None)
+                        {
+                            foreach (var item in canvas.Selected)
+                            {
+                                canvas.Items.Remove(item);
+                            }
+                            canvas.Selected.Clear();
+                            InvalidateVisual();
+                        }
+                    }
+                    break;
             }
         }
 
@@ -102,10 +158,12 @@ namespace SimpleDraw.Views
         {
             base.Render(context);
 
-            if (DataContext is CanvasViewModel canvas)
+            if (!(DataContext is CanvasViewModel canvas))
             {
-                AvaloniaRenderer.Render(context, canvas);
+                return;
             }
+
+            AvaloniaRenderer.Render(context, canvas);
         }
     }
 }
