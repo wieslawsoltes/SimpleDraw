@@ -10,7 +10,6 @@ namespace SimpleDraw.ViewModels
         private enum State { None, Pressed }
         private State _state = State.None;
         private double _hitRadius = 6;
-        private ViewModelBase _selected = null;
 
         public double HitRadius
         {
