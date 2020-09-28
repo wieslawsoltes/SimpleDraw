@@ -10,13 +10,10 @@
         x:Class="SimpleDraw.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="SimpleDraw">
-
     <Design.DataContext>
         <vm:CanvasViewModel/>
     </Design.DataContext>
-
     <Grid ColumnDefinitions="120,*">
-        
         <ListBox Items="{Binding Tools}" SelectedItem="{Binding Tool}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -24,11 +21,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-
-        <local:SimpleCanvas Background="WhiteSmoke" Width="{Binding Width}" Height="{Binding Height}" Grid.Column="1">
-
-        </local:SimpleCanvas>
-        
+        <local:SimpleCanvas Background="WhiteSmoke" Width="{Binding Width}" Height="{Binding Height}" Grid.Column="1"/>
     </Grid>
-    
 </Window>
