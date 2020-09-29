@@ -138,10 +138,9 @@ namespace SimpleDraw.ViewModels
             return result;
         }
 
-        public static ViewModelBase Contains(PointViewModel point, double x, double y, double hitRadius)
+        public static ViewModelBase Contains(PointViewModel point, SKRect hitRect)
         {
-            var rect = Expand(new SKPoint((float)point.X, (float)point.Y), hitRadius);
-            var result = rect.Contains((float)x, (float)y);
+            var result = hitRect.Contains((float)point.X, (float)point.Y);
             if (result)
             {
                 return point;
@@ -149,13 +148,13 @@ namespace SimpleDraw.ViewModels
             return null;
         }
 
-        public static ViewModelBase Contains(ViewModelBase item, double x, double y, double hitRadius)
+        public static ViewModelBase Contains(ViewModelBase item, SKRect hitRect)
         {
             switch (item)
             {
                 case PointViewModel point:
                     {
-                        var result = Contains(point, x, y, hitRadius);
+                        var result = Contains(point, hitRect);
                         if (result != null)
                         {
                             return result;
@@ -165,7 +164,7 @@ namespace SimpleDraw.ViewModels
                 case GroupViewModel group:
                     {
                         var bounds = GetBounds(group.Items);
-                        var result = bounds.Contains((float)x, (float)y);
+                        var result = bounds.IntersectsWith(hitRect);
                         if (result)
                         {
                             return group;
@@ -174,20 +173,20 @@ namespace SimpleDraw.ViewModels
                     break;
                 case LineShapeViewModel lineShape:
                     {
-                        var resultStart = Contains(lineShape.Start, x, y, hitRadius);
+                        var resultStart = Contains(lineShape.Start, hitRect);
                         if (resultStart != null)
                         {
                             return resultStart;
                         }
 
-                        var resultEnd = Contains(lineShape.End, x, y, hitRadius);
+                        var resultEnd = Contains(lineShape.End, hitRect);
                         if (resultEnd != null)
                         {
                             return resultEnd;
                         }
 
                         var bounds = GetBounds(lineShape);
-                        var result = bounds.Contains((float)x, (float)y);
+                        var result = bounds.IntersectsWith(hitRect);
                         if (result)
                         {
                             return lineShape;
@@ -196,20 +195,20 @@ namespace SimpleDraw.ViewModels
                     break;
                 case RectangleShapeViewModel rectangleShape:
                     {
-                        var resultTopLeft = Contains(rectangleShape.TopLeft, x, y, hitRadius);
+                        var resultTopLeft = Contains(rectangleShape.TopLeft, hitRect);
                         if (resultTopLeft != null)
                         {
                             return resultTopLeft;
                         }
 
-                        var resultBottomRight = Contains(rectangleShape.BottomRight, x, y, hitRadius);
+                        var resultBottomRight = Contains(rectangleShape.BottomRight, hitRect);
                         if (resultBottomRight != null)
                         {
                             return resultBottomRight;
                         }
 
                         var bounds = GetBounds(rectangleShape);
-                        var result = bounds.Contains((float)x, (float)y);
+                        var result = bounds.IntersectsWith(hitRect);
                         if (result)
                         {
                             return rectangleShape;
@@ -223,10 +222,12 @@ namespace SimpleDraw.ViewModels
 
         public static ViewModelBase Contains(IList<ViewModelBase> items, double x, double y, double hitRadius)
         {
+            var hitRect = Expand(new SKPoint((float)x, (float)y), hitRadius);
+
             for (int i = items.Count - 1; i >= 0; i--)
             {
                 var item = items[i];
-                var result = Contains(item, x, y, hitRadius);
+                var result = Contains(item, hitRect);
                 if (result != null)
                 {
                     return result;
