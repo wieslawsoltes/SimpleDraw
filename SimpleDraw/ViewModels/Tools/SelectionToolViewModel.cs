@@ -14,7 +14,8 @@ namespace SimpleDraw.ViewModels
         private double _pressedY = double.NaN;
         private double _previousX = double.NaN;
         private double _previousY = double.NaN;
-        private RectangleShapeViewModel _rectangle;
+        private RectangleShapeViewModel _rectangleSelection;
+        private RectangleShapeViewModel _rectangleBounds;
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public double HitRadius
@@ -28,7 +29,7 @@ namespace SimpleDraw.ViewModels
 
         public SelectionToolViewModel()
         {
-            _rectangle = new RectangleShapeViewModel()
+            _rectangleSelection = new RectangleShapeViewModel()
             {
                 TopLeft = new PointViewModel(0, 0),
                 BottomRight = new PointViewModel(0, 0),
@@ -39,6 +40,51 @@ namespace SimpleDraw.ViewModels
                 Brush = new SolidColorBrushViewModel(new ColorViewModel(80, 0, 0, 255)),
                 Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(160, 0, 0, 255)), 2)
             };
+
+            _rectangleBounds = new RectangleShapeViewModel()
+            {
+                TopLeft = new PointViewModel(0, 0),
+                BottomRight = new PointViewModel(0, 0),
+                IsStroked = true,
+                IsFilled = true,
+                RadiusX = 0,
+                RadiusY = 0,
+                Brush = new SolidColorBrushViewModel(new ColorViewModel(0, 0, 255, 255)),
+                Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 255, 255)), 2)
+            };
+        }
+
+        public void UpdateBounds(CanvasViewModel canvas)
+        {
+            if (canvas.Selected.Count > 0)
+            {
+                var bounds = HitTest.GetBounds(canvas.Selected);
+                if (!bounds.IsEmpty)
+                {
+                    if (!canvas.Decorators.Contains(_rectangleBounds))
+                    {
+                        canvas.Decorators.Add(_rectangleBounds);
+                    }
+                    _rectangleBounds.TopLeft.X = bounds.Left;
+                    _rectangleBounds.TopLeft.Y = bounds.Top;
+                    _rectangleBounds.BottomRight.X = bounds.Right;
+                    _rectangleBounds.BottomRight.Y = bounds.Bottom;
+                }
+                else
+                {
+                    if (canvas.Decorators.Contains(_rectangleBounds))
+                    {
+                        canvas.Decorators.Remove(_rectangleBounds);
+                    }
+                }
+            }
+            else
+            {
+                if (canvas.Decorators.Contains(_rectangleBounds))
+                {
+                    canvas.Decorators.Remove(_rectangleBounds);
+                }
+            }
         }
 
         public override void Pressed(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
@@ -77,6 +123,7 @@ namespace SimpleDraw.ViewModels
                                     canvas.Invalidate();
                                 }
                             }
+                            UpdateBounds(canvas);
                             _previousX = x;
                             _previousY = y;
                             _state = State.Selected;
@@ -87,11 +134,12 @@ namespace SimpleDraw.ViewModels
                             {
                                 canvas.Selected.Clear();
                             }
-                            canvas.Decorators.Add(_rectangle);
-                            _rectangle.TopLeft.X = x;
-                            _rectangle.TopLeft.Y = y;
-                            _rectangle.BottomRight.X = x;
-                            _rectangle.BottomRight.Y = y;
+                            canvas.Decorators.Add(_rectangleSelection);
+                            _rectangleSelection.TopLeft.X = x;
+                            _rectangleSelection.TopLeft.Y = y;
+                            _rectangleSelection.BottomRight.X = x;
+                            _rectangleSelection.BottomRight.Y = y;
+                            UpdateBounds(canvas);
                             canvas.Invalidate();
                             _pressedX = x;
                             _pressedY = y;
@@ -132,7 +180,8 @@ namespace SimpleDraw.ViewModels
                     break;
                 case State.Pressed:
                     {
-                        canvas.Decorators.Remove(_rectangle);
+                        canvas.Decorators.Remove(_rectangleSelection);
+                        canvas.Decorators.Remove(_rectangleBounds);
 
                         var rect = HitTest.ToSKRect(_pressedX, _pressedY, x, y);
                         if (keyModifiers.HasFlag(ToolKeyModifiers.Control))
@@ -146,15 +195,16 @@ namespace SimpleDraw.ViewModels
                                     if (canvas.Selected.Contains(result))
                                     {
                                         canvas.Selected.Remove(result);
-                                        canvas.Invalidate();
                                     }
                                     else
                                     {
                                         canvas.Selected.Add(result);
-                                        canvas.Invalidate();
                                     }
                                 }
                             }
+
+                            UpdateBounds(canvas);
+                            canvas.Invalidate();
                         }
                         else
                         {
@@ -170,6 +220,7 @@ namespace SimpleDraw.ViewModels
                                 }
                             }
 
+                            UpdateBounds(canvas);
                             canvas.Invalidate();
                         }
                         _state = State.None;
@@ -197,6 +248,7 @@ namespace SimpleDraw.ViewModels
                         double deltaY = y - _previousY;
 
                         Move(canvas, deltaX, deltaY);
+                        UpdateBounds(canvas);
                         canvas.Invalidate();
 
                         _previousX = x;
@@ -205,8 +257,8 @@ namespace SimpleDraw.ViewModels
                     break;
                 case State.Pressed:
                     {
-                        _rectangle.BottomRight.X = x;
-                        _rectangle.BottomRight.Y = y;
+                        _rectangleSelection.BottomRight.X = x;
+                        _rectangleSelection.BottomRight.Y = y;
                         canvas.Invalidate();
                     }
                     break;
