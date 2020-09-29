@@ -119,7 +119,7 @@ namespace SimpleDraw.ViewModels
             }
 
             var items = new ObservableCollection<ViewModelBase>();
-            
+
             foreach (var item in _items)
             {
                 items.Add(item.Clone(shared));
