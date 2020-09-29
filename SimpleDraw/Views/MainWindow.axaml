@@ -10,9 +10,6 @@
         x:Class="SimpleDraw.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="SimpleDraw">
-    <Design.DataContext>
-        <vm:CanvasViewModel/>
-    </Design.DataContext>
     <Grid ColumnDefinitions="*" RowDefinitions="Auto,*,Auto">
         <Menu Grid.Column="0" Grid.Row="0">
             <MenuItem Header="_File">
