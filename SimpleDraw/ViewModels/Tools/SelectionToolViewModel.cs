@@ -60,10 +60,12 @@ namespace SimpleDraw.ViewModels
                                 if (canvas.Selected.Contains(result))
                                 {
                                     canvas.Selected.Remove(result);
+                                    canvas.Invalidate();
                                 }
                                 else
                                 {
                                     canvas.Selected.Add(result);
+                                    canvas.Invalidate();
                                 }
                             }
                             else
@@ -72,6 +74,7 @@ namespace SimpleDraw.ViewModels
                                 {
                                     canvas.Selected.Clear();
                                     canvas.Selected.Add(result);
+                                    canvas.Invalidate();
                                 }
                             }
                             _previousX = x;
@@ -89,6 +92,7 @@ namespace SimpleDraw.ViewModels
                             _rectangle.TopLeft.Y = y;
                             _rectangle.BottomRight.X = x;
                             _rectangle.BottomRight.Y = y;
+                            canvas.Invalidate();
                             _pressedX = x;
                             _pressedY = y;
                             _state = State.Pressed;
@@ -142,10 +146,12 @@ namespace SimpleDraw.ViewModels
                                     if (canvas.Selected.Contains(result))
                                     {
                                         canvas.Selected.Remove(result);
+                                        canvas.Invalidate();
                                     }
                                     else
                                     {
                                         canvas.Selected.Add(result);
+                                        canvas.Invalidate();
                                     }
                                 }
                             }
@@ -163,6 +169,8 @@ namespace SimpleDraw.ViewModels
                                     canvas.Selected.Add(result);
                                 }
                             }
+
+                            canvas.Invalidate();
                         }
                         _state = State.None;
                     }
@@ -189,6 +197,7 @@ namespace SimpleDraw.ViewModels
                         double deltaY = y - _previousY;
 
                         Move(canvas, deltaX, deltaY);
+                        canvas.Invalidate();
 
                         _previousX = x;
                         _previousY = y;
@@ -198,6 +207,7 @@ namespace SimpleDraw.ViewModels
                     {
                         _rectangle.BottomRight.X = x;
                         _rectangle.BottomRight.Y = y;
+                        canvas.Invalidate();
                     }
                     break;
             }
@@ -237,6 +247,8 @@ namespace SimpleDraw.ViewModels
                 point.X += deltaX;
                 point.Y += deltaY;
             }
+
+            canvas.Invalidate();
         }
 
         public override ToolBaseViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)

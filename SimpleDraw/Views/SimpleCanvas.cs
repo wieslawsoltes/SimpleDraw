@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
@@ -57,6 +58,35 @@ namespace SimpleDraw.Views
             Focus();
         }
 
+        private void Canvas_Invalidate(object sender, System.EventArgs e)
+        {
+            InvalidateVisual();
+        }
+
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            base.OnAttachedToVisualTree(e);
+
+            if (!(DataContext is CanvasViewModel canvas))
+            {
+                return;
+            }
+
+            canvas.InvalidateCanvas += Canvas_Invalidate;
+        }
+
+        protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            base.OnDetachedFromVisualTree(e);
+
+            if (!(DataContext is CanvasViewModel canvas))
+            {
+                return;
+            }
+
+            canvas.InvalidateCanvas -= Canvas_Invalidate;
+        }
+
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             base.OnPointerPressed(e);
@@ -69,7 +99,6 @@ namespace SimpleDraw.Views
             var point = e.GetCurrentPoint(this);
             var type = point.Properties.PointerUpdateKind;
             canvas.Tool?.Pressed(canvas, point.Position.X, point.Position.Y, ToToolPointerType(type), ToToolKeyModifiers(e.KeyModifiers));
-            InvalidateVisual();
         }
 
         protected override void OnPointerReleased(PointerReleasedEventArgs e)
@@ -84,7 +113,6 @@ namespace SimpleDraw.Views
             var point = e.GetCurrentPoint(this);
             var type = point.Properties.PointerUpdateKind;
             canvas.Tool?.Released(canvas, point.Position.X, point.Position.Y, ToToolPointerType(type), ToToolKeyModifiers(e.KeyModifiers));
-            InvalidateVisual();
         }
 
         protected override void OnPointerMoved(PointerEventArgs e)
@@ -99,7 +127,6 @@ namespace SimpleDraw.Views
             var point = e.GetCurrentPoint(this);
             var type = point.Properties.PointerUpdateKind;
             canvas.Tool?.Moved(canvas, point.Position.X, point.Position.Y, ToToolPointerType(type), ToToolKeyModifiers(e.KeyModifiers));
-            InvalidateVisual();
         }
 
         protected override async void OnKeyDown(KeyEventArgs e)
@@ -179,7 +206,6 @@ namespace SimpleDraw.Views
                         if (e.KeyModifiers == KeyModifiers.Control)
                         {
                             canvas.Paste();
-                            InvalidateVisual();
                         }
                     }
                     break;
@@ -188,7 +214,6 @@ namespace SimpleDraw.Views
                         if (e.KeyModifiers == KeyModifiers.Control)
                         {
                             canvas.Cut();
-                            InvalidateVisual();
                         }
                     }
                     break;
@@ -197,7 +222,6 @@ namespace SimpleDraw.Views
                         if (e.KeyModifiers == KeyModifiers.None)
                         {
                             canvas.Delete();
-                            InvalidateVisual();
                         }
                     }
                     break;
@@ -225,7 +249,16 @@ namespace SimpleDraw.Views
                 var path = result.FirstOrDefault();
                 if (path != null)
                 {
-                    window.DataContext = App.Open(path);
+                    var canvasOpen = App.Open(path);
+                    if (canvasOpen != null)
+                    {
+                        if (DataContext is CanvasViewModel canvasOld)
+                        {
+                            canvasOld.InvalidateCanvas -= Canvas_Invalidate;
+                        }
+                        window.DataContext = canvasOpen;
+                        canvasOpen.InvalidateCanvas += Canvas_Invalidate;
+                    }
                 }
             }
         }

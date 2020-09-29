@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
+    public delegate void InvalidateEventHandler(object sender, EventArgs e);
+
     [DataContract(IsReference = true)]
     public class CanvasViewModel : ViewModelBase
     {
@@ -66,9 +69,16 @@ namespace SimpleDraw.ViewModels
             set => this.RaiseAndSetIfChanged(ref _tools, value);
         }
 
+        public event InvalidateEventHandler InvalidateCanvas;
+
         public CanvasViewModel()
         {
             _copy = new ObservableCollection<ViewModelBase>();
+        }
+
+        public void Invalidate()
+        {
+            InvalidateCanvas?.Invoke(this, new EventArgs());
         }
 
         public CanvasViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
@@ -143,6 +153,8 @@ namespace SimpleDraw.ViewModels
             }
 
             _selected.Clear();
+
+            Invalidate();
         }
 
         public void Copy()
@@ -155,6 +167,8 @@ namespace SimpleDraw.ViewModels
             {
                 _copy.Add(item.Clone(shared));
             }
+
+            Invalidate();
         }
 
         public void Paste()
@@ -169,6 +183,8 @@ namespace SimpleDraw.ViewModels
                 _items.Add(clone);
                 _selected.Add(clone);
             }
+
+            Invalidate();
         }
 
         public void Delete()
@@ -179,6 +195,8 @@ namespace SimpleDraw.ViewModels
             }
 
             _selected.Clear();
+
+            Invalidate();
         }
 
         public void SelectAll()
@@ -189,6 +207,8 @@ namespace SimpleDraw.ViewModels
             {
                 _selected.Add(item);
             }
+
+            Invalidate();
         }
 
         public void SetTool(string name)
@@ -200,6 +220,8 @@ namespace SimpleDraw.ViewModels
                     Tool = tool;
                 }
             }
+
+            Invalidate();
         }
     }
 }

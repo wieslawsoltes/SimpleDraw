@@ -110,6 +110,7 @@ namespace SimpleDraw.ViewModels
                                 Pen = _pen.Copy(shared)
                             };
                             canvas.Decorators.Add(_rectangle);
+                            canvas.Invalidate();
                             _state = State.Pressed;
                         }
                     }
@@ -136,6 +137,7 @@ namespace SimpleDraw.ViewModels
 
                             canvas.Decorators.Remove(_rectangle);
                             canvas.Items.Add(_rectangle);
+                            canvas.Invalidate();
 
                             _rectangle = null;
                             _state = State.None;
@@ -144,6 +146,7 @@ namespace SimpleDraw.ViewModels
                         if (pointerType == ToolPointerType.Right)
                         {
                             canvas.Decorators.Remove(_rectangle);
+                            canvas.Invalidate();
                             _rectangle = null;
                             _state = State.None;
                         }
@@ -181,6 +184,7 @@ namespace SimpleDraw.ViewModels
                         {
                             _rectangle.BottomRight.X = x;
                             _rectangle.BottomRight.Y = y;
+                            canvas.Invalidate();
                         }
                     }
                     break;
