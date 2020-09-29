@@ -258,6 +258,7 @@ namespace SimpleDraw.Views
                         }
                         window.DataContext = canvasOpen;
                         canvasOpen.InvalidateCanvas += Canvas_Invalidate;
+                        canvasOpen.Invalidate();
                     }
                 }
             }
