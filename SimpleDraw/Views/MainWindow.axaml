@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        Width="1100" Height="640"
+        Width="1100" Height="650"
         WindowState="Normal" WindowStartupLocation="CenterScreen"
         x:Class="SimpleDraw.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
@@ -13,8 +13,8 @@
     <Design.DataContext>
         <vm:CanvasViewModel/>
     </Design.DataContext>
-    <Grid ColumnDefinitions="120,*" RowDefinitions="Auto,*,Auto">
-        <Menu Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0">
+    <Grid ColumnDefinitions="*" RowDefinitions="Auto,*,Auto">
+        <Menu Grid.Column="0" Grid.Row="0">
             <MenuItem Header="_File">
                 <MenuItem Header="Open..." InputGesture="Ctrl+O" Command="{Binding #canvas.Open}"/>
                 <MenuItem Header="Save As..." InputGesture="Ctrl+S" Command="{Binding #canvas.Save}" CommandParameter="{Binding}"/>
@@ -36,15 +36,8 @@
                 <MenuItem Header="_Rectangle" InputGesture="R" Command="{Binding SetTool}" CommandParameter="Rectangle"/>
             </MenuItem>
         </Menu>
-        <ListBox Items="{Binding Tools}" SelectedItem="{Binding Tool}" Grid.Row="1">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <local:SimpleCanvas x:Name="canvas" Background="WhiteSmoke" Width="{Binding Width}" Height="{Binding Height}" Grid.Column="1" Grid.Row="1"/>
-        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
+        <local:SimpleCanvas x:Name="canvas" Background="WhiteSmoke" Width="{Binding Width}" Height="{Binding Height}" Grid.Column="0" Grid.Row="1"/>
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Items:" Margin="2"/>
                 <TextBlock Text="{Binding Items.Count}" Margin="2"/>
