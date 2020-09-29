@@ -302,6 +302,12 @@ namespace SimpleDraw.Views
             }
         }
 
+        public void Exit()
+        {
+            var window = this.VisualRoot as Window;
+            window.Close();
+        }
+
         public override void Render(DrawingContext context)
         {
             base.Render(context);
