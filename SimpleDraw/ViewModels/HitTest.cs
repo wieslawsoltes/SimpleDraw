@@ -6,6 +6,15 @@ namespace SimpleDraw.ViewModels
 {
     internal static class HitTest
     {
+        public static SKRect Expand(SKPoint point, double radius)
+        {
+            return SKRect.Create(
+                (float)(point.X - radius),
+                (float)(point.Y - radius),
+                (float)(radius + radius),
+                (float)(radius + radius));
+        }
+
         public static SKRect ToSKRect(double x1, double y1, double x2, double y2)
         {
             var x = Math.Min(x1, x2);
@@ -139,15 +148,6 @@ namespace SimpleDraw.ViewModels
             }
 
             return path;
-        }
-
-        public static SKRect Expand(SKPoint point, double radius)
-        {
-            return SKRect.Create(
-                (float)(point.X - radius),
-                (float)(point.Y - radius),
-                (float)(radius + radius),
-                (float)(radius + radius));
         }
 
         public static SKRect GetBounds(LineShapeViewModel lineShape)
