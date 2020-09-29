@@ -161,9 +161,9 @@ namespace SimpleDraw.ViewModels
             return null;
         }
 
-        public static ViewModelBase Intersects(ViewModelBase shape, SKRect rect)
+        public static ViewModelBase Intersects(ViewModelBase item, SKRect rect)
         {
-            switch (shape)
+            switch (item)
             {
                 case PointViewModel point:
                     {
