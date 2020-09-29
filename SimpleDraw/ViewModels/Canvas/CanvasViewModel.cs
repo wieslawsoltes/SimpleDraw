@@ -19,6 +19,8 @@ namespace SimpleDraw.ViewModels
         private ToolBaseViewModel _tool;
         private ObservableCollection<ToolBaseViewModel> _tools;
         private ObservableCollection<ViewModelBase> _copy;
+        private RectangleShapeViewModel _rectangleSelection;
+        private RectangleShapeViewModel _rectangleBounds;
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public double Width
@@ -74,8 +76,34 @@ namespace SimpleDraw.ViewModels
         public CanvasViewModel()
         {
             _selected = new ObservableCollection<ViewModelBase>();
+
             _decorators = new ObservableCollection<ViewModelBase>();
+
             _copy = new ObservableCollection<ViewModelBase>();
+
+            _rectangleSelection = new RectangleShapeViewModel()
+            {
+                TopLeft = new PointViewModel(0, 0),
+                BottomRight = new PointViewModel(0, 0),
+                IsStroked = true,
+                IsFilled = true,
+                RadiusX = 0,
+                RadiusY = 0,
+                Brush = new SolidColorBrushViewModel(new ColorViewModel(80, 0, 0, 255)),
+                Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(160, 0, 0, 255)), 2)
+            };
+
+            _rectangleBounds = new RectangleShapeViewModel()
+            {
+                TopLeft = new PointViewModel(0, 0),
+                BottomRight = new PointViewModel(0, 0),
+                IsStroked = true,
+                IsFilled = true,
+                RadiusX = 0,
+                RadiusY = 0,
+                Brush = new SolidColorBrushViewModel(new ColorViewModel(0, 0, 255, 255)),
+                Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 255, 255)), 2)
+            };
         }
 
         public void Invalidate()
@@ -136,6 +164,100 @@ namespace SimpleDraw.ViewModels
         public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
             return CloneSelf(shared);
+        }
+
+        public void MoveSelected(double deltaX, double deltaY)
+        {
+            var points = new HashSet<PointViewModel>();
+
+            foreach (var item in _selected)
+            {
+                switch (item)
+                {
+                    case PointViewModel point:
+                        {
+                            points.Add(point);
+                            points.Add(point);
+                        }
+                        break;
+                    case LineShapeViewModel lineShape:
+                        {
+                            points.Add(lineShape.Start);
+                            points.Add(lineShape.End);
+                        }
+                        break;
+                    case RectangleShapeViewModel rectangleShape:
+                        {
+                            points.Add(rectangleShape.TopLeft);
+                            points.Add(rectangleShape.BottomRight);
+                        }
+                        break;
+                }
+            }
+
+            foreach (var point in points)
+            {
+                point.X += deltaX;
+                point.Y += deltaY;
+            }
+        }
+
+        public void ShowSelection(double x, double y)
+        {
+            _decorators.Add(_rectangleSelection);
+            _rectangleSelection.TopLeft.X = x;
+            _rectangleSelection.TopLeft.Y = y;
+            _rectangleSelection.BottomRight.X = x;
+            _rectangleSelection.BottomRight.Y = y;
+        }
+
+        public void MoveSelection(double x, double y)
+        {
+            _rectangleSelection.BottomRight.X = x;
+            _rectangleSelection.BottomRight.Y = y;
+        }
+
+        public void RemoveSelection()
+        {
+            _decorators.Remove(_rectangleSelection);
+        }
+
+        public void UpdateBounds()
+        {
+            if (_selected.Count > 0)
+            {
+                var bounds = HitTest.GetBounds(_selected);
+                if (!bounds.IsEmpty)
+                {
+                    if (!_decorators.Contains(_rectangleBounds))
+                    {
+                        _decorators.Add(_rectangleBounds);
+                    }
+                    _rectangleBounds.TopLeft.X = bounds.Left;
+                    _rectangleBounds.TopLeft.Y = bounds.Top;
+                    _rectangleBounds.BottomRight.X = bounds.Right;
+                    _rectangleBounds.BottomRight.Y = bounds.Bottom;
+                }
+                else
+                {
+                    if (_decorators.Contains(_rectangleBounds))
+                    {
+                        _decorators.Remove(_rectangleBounds);
+                    }
+                }
+            }
+            else
+            {
+                if (_decorators.Contains(_rectangleBounds))
+                {
+                    _decorators.Remove(_rectangleBounds);
+                }
+            }
+        }
+
+        public void RemoveBounds()
+        {
+            _decorators.Remove(_rectangleBounds);
         }
 
         public void Cut()
