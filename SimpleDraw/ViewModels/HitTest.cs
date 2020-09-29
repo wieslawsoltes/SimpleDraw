@@ -38,25 +38,15 @@ namespace SimpleDraw.ViewModels
                 rectangleShape.BottomRight.Y);
         }
 
-        public static SKRect Expand(SKPoint point, double radius)
-        {
-            return SKRect.Create(
-                (float)(point.X - radius),
-                (float)(point.Y - radius),
-                (float)(radius + radius),
-                (float)(radius + radius));
-        }
-
-        public static SKRect GetBounds(LineShapeViewModel lineShape)
+        public static SKPath ToPath(LineShapeViewModel lineShape)
         {
             var path = new SKPath() { FillType = SKPathFillType.Winding };
             path.MoveTo(new SKPoint((float)lineShape.StartPoint.X, (float)lineShape.StartPoint.Y));
             path.LineTo(new SKPoint((float)lineShape.Point.X, (float)lineShape.Point.Y));
-            var bounds = path.ComputeTightBounds();
-            return bounds;
+            return path;
         }
 
-        public static SKRect GetBounds(CubicBezierShapeViewModel cubicBezierShape)
+        public static SKPath ToPath(CubicBezierShapeViewModel cubicBezierShape)
         {
             var path = new SKPath() { FillType = SKPathFillType.Winding };
             path.MoveTo(new SKPoint((float)cubicBezierShape.StartPoint.X, (float)cubicBezierShape.StartPoint.Y));
@@ -64,22 +54,28 @@ namespace SimpleDraw.ViewModels
                 new SKPoint((float)cubicBezierShape.Point1.X, (float)cubicBezierShape.Point1.Y),
                 new SKPoint((float)cubicBezierShape.Point2.X, (float)cubicBezierShape.Point2.Y),
                 new SKPoint((float)cubicBezierShape.Point3.X, (float)cubicBezierShape.Point3.Y));
-            var bounds = path.ComputeTightBounds();
-            return bounds;
+            return path;
         }
 
-        public static SKRect GetBounds(QuadraticBezierShapeViewModel quadraticBezierShape)
+        public static SKPath ToPath(QuadraticBezierShapeViewModel quadraticBezierShape)
         {
             var path = new SKPath() { FillType = SKPathFillType.Winding };
             path.MoveTo(new SKPoint((float)quadraticBezierShape.StartPoint.X, (float)quadraticBezierShape.StartPoint.Y));
             path.QuadTo(
                 new SKPoint((float)quadraticBezierShape.Control.X, (float)quadraticBezierShape.Control.Y),
                 new SKPoint((float)quadraticBezierShape.EndPoint.X, (float)quadraticBezierShape.EndPoint.Y));
-            var bounds = path.ComputeTightBounds();
-            return bounds;
+            return path;
         }
 
-        public static SKRect GetBounds(PathShapeViewModel pathShape)
+        public static SKPath ToPath(RectangleShapeViewModel rectangleShape)
+        {
+            var rect = ToSKRect(rectangleShape);
+            var path = new SKPath() { FillType = SKPathFillType.Winding };
+            path.AddRect(rect);
+            return path;
+        }
+
+        public static SKPath ToPath(PathShapeViewModel pathShape)
         {
             var path = new SKPath() { FillType = pathShape.FillRule == PathFillRule.EvenOdd ? SKPathFillType.EvenOdd : SKPathFillType.Winding };
 
@@ -142,15 +138,49 @@ namespace SimpleDraw.ViewModels
                 }
             }
 
+            return path;
+        }
+
+        public static SKRect Expand(SKPoint point, double radius)
+        {
+            return SKRect.Create(
+                (float)(point.X - radius),
+                (float)(point.Y - radius),
+                (float)(radius + radius),
+                (float)(radius + radius));
+        }
+
+        public static SKRect GetBounds(LineShapeViewModel lineShape)
+        {
+            var path = ToPath(lineShape);
+            var bounds = path.ComputeTightBounds();
+            return bounds;
+        }
+
+        public static SKRect GetBounds(CubicBezierShapeViewModel cubicBezierShape)
+        {
+            var path = ToPath(cubicBezierShape);
+            var bounds = path.ComputeTightBounds();
+            return bounds;
+        }
+
+        public static SKRect GetBounds(QuadraticBezierShapeViewModel quadraticBezierShape)
+        {
+            var path = ToPath(quadraticBezierShape);
             var bounds = path.ComputeTightBounds();
             return bounds;
         }
 
         public static SKRect GetBounds(RectangleShapeViewModel rectangleShape)
         {
-            var rect = ToSKRect(rectangleShape);
-            var path = new SKPath() { FillType = SKPathFillType.Winding };
-            path.AddRect(rect);
+            var path = ToPath(rectangleShape);
+            var bounds = path.ComputeTightBounds();
+            return bounds;
+        }
+
+        public static SKRect GetBounds(PathShapeViewModel pathShape)
+        {
+            var path = ToPath(pathShape);
             var bounds = path.ComputeTightBounds();
             return bounds;
         }
@@ -208,9 +238,51 @@ namespace SimpleDraw.ViewModels
                             }
                         }
                         break;
+                    case CubicBezierShapeViewModel cubicBezierShape:
+                        {
+                            var bounds = GetBounds(cubicBezierShape);
+                            if (haveResult)
+                            {
+                                result.Union(bounds);
+                            }
+                            else
+                            {
+                                result = bounds;
+                                haveResult = true;
+                            }
+                        }
+                        break;
+                    case QuadraticBezierShapeViewModel quadraticBezierShape:
+                        {
+                            var bounds = GetBounds(quadraticBezierShape);
+                            if (haveResult)
+                            {
+                                result.Union(bounds);
+                            }
+                            else
+                            {
+                                result = bounds;
+                                haveResult = true;
+                            }
+                        }
+                        break;
                     case RectangleShapeViewModel rectangleShape:
                         {
                             var bounds = GetBounds(rectangleShape);
+                            if (haveResult)
+                            {
+                                result.Union(bounds);
+                            }
+                            else
+                            {
+                                result = bounds;
+                                haveResult = true;
+                            }
+                        }
+                        break;
+                    case PathShapeViewModel pathShape:
+                        {
+                            var bounds = GetBounds(pathShape);
                             if (haveResult)
                             {
                                 result.Union(bounds);
