@@ -65,6 +65,65 @@ namespace SimpleDraw.ViewModels
             return bounds;
         }
 
+        public static SKRect GetBounds(IList<ViewModelBase> items)
+        {
+            var result = SKRect.Empty;
+            var haveResult = false;
+
+            for (int i = items.Count - 1; i >= 0; i--)
+            {
+                var item = items[i];
+
+                switch (item)
+                {
+                    case PointViewModel point:
+                        {
+                            var bounds = SKRect.Create((float)point.X, (float)point.Y, 0, 0);
+                            if (haveResult)
+                            {
+                                result.Union(bounds);
+                            }
+                            else
+                            {
+                                result = bounds;
+                                haveResult = true;
+                            }
+                        }
+                        break;
+                    case LineShapeViewModel lineShape:
+                        {
+                            var bounds = GetBounds(lineShape);
+                            if (haveResult)
+                            {
+                                result.Union(bounds);
+                            }
+                            else
+                            {
+                                result = bounds;
+                                haveResult = true;
+                            }
+                        }
+                        break;
+                    case RectangleShapeViewModel rectangleShape:
+                        {
+                            var bounds = GetBounds(rectangleShape);
+                            if (haveResult)
+                            {
+                                result.Union(bounds);
+                            }
+                            else
+                            {
+                                result = bounds;
+                                haveResult = true;
+                            }
+                        }
+                        break;
+                }
+            }
+
+            return result;
+        }
+
         public static ViewModelBase Contains(PointViewModel point, double x, double y, double hitRadius)
         {
             var rect = Expand(new SKPoint((float)point.X, (float)point.Y), hitRadius);
