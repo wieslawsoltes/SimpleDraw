@@ -98,7 +98,9 @@ namespace SimpleDraw.Views
 
             var point = e.GetCurrentPoint(this);
             var type = point.Properties.PointerUpdateKind;
-            canvas.Tool?.Pressed(canvas, point.Position.X, point.Position.Y, ToToolPointerType(type), ToToolKeyModifiers(e.KeyModifiers));
+            var pointerType = ToToolPointerType(type);
+            var keyModifiers = ToToolKeyModifiers(e.KeyModifiers);
+            canvas.Tool?.Pressed(canvas, point.Position.X, point.Position.Y, pointerType, keyModifiers);
         }
 
         protected override void OnPointerReleased(PointerReleasedEventArgs e)
@@ -112,7 +114,9 @@ namespace SimpleDraw.Views
 
             var point = e.GetCurrentPoint(this);
             var type = point.Properties.PointerUpdateKind;
-            canvas.Tool?.Released(canvas, point.Position.X, point.Position.Y, ToToolPointerType(type), ToToolKeyModifiers(e.KeyModifiers));
+            var pointerType = ToToolPointerType(type);
+            var keyModifiers = ToToolKeyModifiers(e.KeyModifiers);
+            canvas.Tool?.Released(canvas, point.Position.X, point.Position.Y, pointerType, keyModifiers);
         }
 
         protected override void OnPointerMoved(PointerEventArgs e)
@@ -126,7 +130,9 @@ namespace SimpleDraw.Views
 
             var point = e.GetCurrentPoint(this);
             var type = point.Properties.PointerUpdateKind;
-            canvas.Tool?.Moved(canvas, point.Position.X, point.Position.Y, ToToolPointerType(type), ToToolKeyModifiers(e.KeyModifiers));
+            var pointerType = ToToolPointerType(type);
+            var keyModifiers = ToToolKeyModifiers(e.KeyModifiers);
+            canvas.Tool?.Moved(canvas, point.Position.X, point.Position.Y, pointerType, keyModifiers);
         }
 
         protected override async void OnKeyDown(KeyEventArgs e)
