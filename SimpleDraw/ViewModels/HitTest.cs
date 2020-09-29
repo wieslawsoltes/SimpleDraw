@@ -6,6 +6,8 @@ namespace SimpleDraw.ViewModels
 {
     internal static class HitTest
     {
+        //public static double PointBoundsRadius = 6;
+
         public static SKRect ToSKRect(double x1, double y1, double x2, double y2)
         {
             var x = Math.Min(x1, x2);
@@ -79,6 +81,7 @@ namespace SimpleDraw.ViewModels
                     case PointViewModel point:
                         {
                             var bounds = SKRect.Create((float)point.X, (float)point.Y, 0, 0);
+                            //var bounds = Expand(new SKPoint((float)point.X, (float)point.Y), PointBoundsRadius);
                             if (haveResult)
                             {
                                 result.Union(bounds);
