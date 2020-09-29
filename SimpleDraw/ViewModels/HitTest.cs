@@ -457,6 +457,26 @@ namespace SimpleDraw.ViewModels
                         }
                     }
                     break;
+                case CubicBezierShapeViewModel cubicBezierShape:
+                    {
+                        var bounds = GetBounds(cubicBezierShape);
+                        var result = rect.IntersectsWith(bounds);
+                        if (result)
+                        {
+                            return cubicBezierShape;
+                        }
+                    }
+                    break;
+                case QuadraticBezierShapeViewModel quadraticBezierShape:
+                    {
+                        var bounds = GetBounds(quadraticBezierShape);
+                        var result = rect.IntersectsWith(bounds);
+                        if (result)
+                        {
+                            return quadraticBezierShape;
+                        }
+                    }
+                    break;
                 case RectangleShapeViewModel rectangleShape:
                     {
                         var bounds = GetBounds(rectangleShape);
@@ -464,6 +484,16 @@ namespace SimpleDraw.ViewModels
                         if (result)
                         {
                             return rectangleShape;
+                        }
+                    }
+                    break;
+                case PathShapeViewModel pathShape:
+                    {
+                        var bounds = GetBounds(pathShape);
+                        var result = rect.IntersectsWith(bounds);
+                        if (result)
+                        {
+                            return pathShape;
                         }
                     }
                     break;
