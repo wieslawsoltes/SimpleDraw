@@ -15,6 +15,7 @@ namespace SimpleDraw.ViewModels
         private ObservableCollection<ViewModelBase> _decorators;
         private ToolBaseViewModel _tool;
         private ObservableCollection<ToolBaseViewModel> _tools;
+        private ObservableCollection<ViewModelBase> _copy;
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public double Width
@@ -63,6 +64,11 @@ namespace SimpleDraw.ViewModels
         {
             get => _tools;
             set => this.RaiseAndSetIfChanged(ref _tools, value);
+        }
+
+        public CanvasViewModel()
+        {
+            _copy = new ObservableCollection<ViewModelBase>();
         }
 
         public CanvasViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
@@ -118,6 +124,82 @@ namespace SimpleDraw.ViewModels
         public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
             return Copy(shared);
+        }
+
+        public void Cut()
+        {
+            var shared = new Dictionary<ViewModelBase, ViewModelBase>();
+
+            _copy.Clear();
+
+            foreach (var item in _selected)
+            {
+                _copy.Add(item.Clone(shared));
+            }
+
+            foreach (var item in _selected)
+            {
+                _items.Remove(item);
+            }
+
+            _selected.Clear();
+        }
+
+        public void Copy()
+        {
+            var shared = new Dictionary<ViewModelBase, ViewModelBase>();
+
+            _copy.Clear();
+
+            foreach (var item in _selected)
+            {
+                _copy.Add(item.Clone(shared));
+            }
+        }
+
+        public void Paste()
+        {
+            var shared = new Dictionary<ViewModelBase, ViewModelBase>();
+
+            _selected.Clear();
+
+            foreach (var item in _copy)
+            {
+                var clone = item.Clone(shared);
+                _items.Add(clone);
+                _selected.Add(clone);
+            }
+        }
+
+        public void Delete()
+        {
+            foreach (var item in _selected)
+            {
+                _items.Remove(item);
+            }
+
+            _selected.Clear();
+        }
+
+        public void SelectAll()
+        {
+            _selected.Clear();
+
+            foreach (var item in _items)
+            {
+                _selected.Add(item);
+            }
+        }
+
+        public void SetTool(string name)
+        {
+            foreach (var tool in _tools)
+            {
+                if (tool.Name == name)
+                {
+                    Tool = tool;
+                }
+            }
         }
     }
 }
