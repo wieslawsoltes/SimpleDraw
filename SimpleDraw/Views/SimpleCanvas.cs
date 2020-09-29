@@ -184,6 +184,11 @@ namespace SimpleDraw.Views
                         {
                             canvas.SetTool("None");
                         }
+
+                        if (e.KeyModifiers == KeyModifiers.Control)
+                        {
+                            New();
+                        }
                     }
                     break;
                 case Key.O:
@@ -267,6 +272,13 @@ namespace SimpleDraw.Views
             window.DataContext = canvasOpen;
             canvasOpen.InvalidateCanvas += Canvas_Invalidate;
             canvasOpen.Invalidate();
+        }
+
+        public void New()
+        {
+            var window = this.VisualRoot as Window;
+            var canvasNew = App.Create();
+            Load(window, canvasNew);
         }
 
         public async Task Open()
