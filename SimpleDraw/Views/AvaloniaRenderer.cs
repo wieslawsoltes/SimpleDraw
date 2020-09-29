@@ -331,11 +331,6 @@ namespace SimpleDraw.Views
                         Render(context, lineShape);
                     }
                     break;
-                case RectangleShapeViewModel rectangleShape:
-                    {
-                        Render(context, rectangleShape);
-                    }
-                    break;
                 case CubicBezierShapeViewModel cubicBezierShape:
                     {
                         Render(context, cubicBezierShape);
@@ -344,6 +339,11 @@ namespace SimpleDraw.Views
                 case QuadraticBezierShapeViewModel quadraticBezierShape:
                     {
                         Render(context, quadraticBezierShape);
+                    }
+                    break;
+                case RectangleShapeViewModel rectangleShape:
+                    {
+                        Render(context, rectangleShape);
                     }
                     break;
                 case PathShapeViewModel pathShape:
@@ -362,11 +362,6 @@ namespace SimpleDraw.Views
             {
                 switch (item)
                 {
-                    case PointViewModel point:
-                        {
-                            // TODO:
-                        }
-                        break;
                     case GroupViewModel group:
                         {
                             Render(context, group.Items);
