@@ -132,7 +132,7 @@ namespace SimpleDraw.Views
         protected override async void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
-            
+
             if (!(DataContext is CanvasViewModel canvas))
             {
                 return;
