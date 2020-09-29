@@ -258,6 +258,17 @@ namespace SimpleDraw.Views
             }
         }
 
+        private void Load(Window window, CanvasViewModel canvasOpen)
+        {
+            if (window.DataContext is CanvasViewModel canvasOld)
+            {
+                canvasOld.InvalidateCanvas -= Canvas_Invalidate;
+            }
+            window.DataContext = canvasOpen;
+            canvasOpen.InvalidateCanvas += Canvas_Invalidate;
+            canvasOpen.Invalidate();
+        }
+
         public async Task Open()
         {
             var dlg = new OpenFileDialog() { Title = "Open" };
@@ -274,13 +285,7 @@ namespace SimpleDraw.Views
                     var canvasOpen = App.Open(path);
                     if (canvasOpen != null)
                     {
-                        if (DataContext is CanvasViewModel canvasOld)
-                        {
-                            canvasOld.InvalidateCanvas -= Canvas_Invalidate;
-                        }
-                        window.DataContext = canvasOpen;
-                        canvasOpen.InvalidateCanvas += Canvas_Invalidate;
-                        canvasOpen.Invalidate();
+                        Load(window, canvasOpen);
                     }
                 }
             }
