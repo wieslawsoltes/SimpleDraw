@@ -46,7 +46,7 @@ namespace SimpleDraw.ViewModels
             _radius = radius;
         }
 
-        public override BrushViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        public override BrushViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
             if (shared.TryGetValue(this, out var value))
             {
@@ -57,15 +57,15 @@ namespace SimpleDraw.ViewModels
 
             foreach (var gradientStop in _gradientStops)
             {
-                gradientStops.Add(gradientStop.Copy(shared));
+                gradientStops.Add(gradientStop.CloneSelf(shared));
             }
 
             var copy = new RadialGradientBrushViewModel()
             {
                 GradientStops = gradientStops,
                 SpreadMethod = _spreadMethod,
-                Center = _center?.Copy(shared),
-                GradientOrigin = _gradientOrigin?.Copy(shared),
+                Center = _center?.CloneSelf(shared),
+                GradientOrigin = _gradientOrigin?.CloneSelf(shared),
                 Radius = _radius
             };
 
@@ -75,7 +75,7 @@ namespace SimpleDraw.ViewModels
 
         public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
-            return Copy(shared);
+            return CloneSelf(shared);
         }
     }
 }

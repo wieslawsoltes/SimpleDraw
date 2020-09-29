@@ -21,7 +21,7 @@ namespace SimpleDraw.ViewModels
         {
         }
 
-        public override ToolBaseViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        public override ToolBaseViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
             if (shared.TryGetValue(this, out var value))
             {
@@ -38,7 +38,7 @@ namespace SimpleDraw.ViewModels
 
         public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
-            return Copy(shared);
+            return CloneSelf(shared);
         }
     }
 }

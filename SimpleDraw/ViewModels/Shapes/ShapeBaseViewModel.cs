@@ -24,6 +24,6 @@ namespace SimpleDraw.ViewModels
             set => this.RaiseAndSetIfChanged(ref _pen, value);
         }
 
-        public abstract ShapeBaseViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared);
+        public abstract ShapeBaseViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared);
     }
 }

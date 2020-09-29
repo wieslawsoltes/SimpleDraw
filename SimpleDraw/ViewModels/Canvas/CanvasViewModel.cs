@@ -81,7 +81,7 @@ namespace SimpleDraw.ViewModels
             InvalidateCanvas?.Invoke(this, new EventArgs());
         }
 
-        public CanvasViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        public CanvasViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
             if (shared.TryGetValue(this, out var value))
             {
@@ -113,7 +113,7 @@ namespace SimpleDraw.ViewModels
 
             foreach (var item in _tools)
             {
-                tools.Add(item.Copy(shared));
+                tools.Add(item.CloneSelf(shared));
             }
 
             var copy = new CanvasViewModel()
@@ -123,7 +123,7 @@ namespace SimpleDraw.ViewModels
                 Items = items,
                 Selected = selected,
                 Decorators = decorators,
-                Tool = _tool?.Copy(shared),
+                Tool = _tool?.CloneSelf(shared),
                 Tools = tools
             };
 
@@ -133,7 +133,7 @@ namespace SimpleDraw.ViewModels
 
         public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
-            return Copy(shared);
+            return CloneSelf(shared);
         }
 
         public void Cut()

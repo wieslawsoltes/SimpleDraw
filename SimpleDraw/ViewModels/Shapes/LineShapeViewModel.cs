@@ -32,7 +32,7 @@ namespace SimpleDraw.ViewModels
             set => this.RaiseAndSetIfChanged(ref _isStroked, value);
         }
 
-        public override ShapeBaseViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        public override ShapeBaseViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
             if (shared.TryGetValue(this, out var value))
             {
@@ -41,10 +41,10 @@ namespace SimpleDraw.ViewModels
 
             var copy = new LineShapeViewModel()
             {
-                Brush = _brush?.Copy(shared),
-                Pen = _pen?.Copy(shared),
-                Start = _start?.Copy(shared),
-                End = _end?.Copy(shared),
+                Brush = _brush?.CloneSelf(shared),
+                Pen = _pen?.CloneSelf(shared),
+                Start = _start?.CloneSelf(shared),
+                End = _end?.CloneSelf(shared),
                 IsStroked = _isStroked
             };
 
@@ -54,7 +54,7 @@ namespace SimpleDraw.ViewModels
 
         public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
-            return Copy(shared);
+            return CloneSelf(shared);
         }
     }
 }

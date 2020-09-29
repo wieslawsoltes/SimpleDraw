@@ -34,7 +34,7 @@ namespace SimpleDraw.ViewModels
             _offset = offset;
         }
 
-        public GradientStopViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        public GradientStopViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
             if (shared.TryGetValue(this, out var value))
             {
@@ -43,7 +43,7 @@ namespace SimpleDraw.ViewModels
 
             var copy = new GradientStopViewModel()
             {
-                Color = _color?.Copy(shared),
+                Color = _color?.CloneSelf(shared),
                 Offset = _offset
             };
 
@@ -53,7 +53,7 @@ namespace SimpleDraw.ViewModels
 
         public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
-            return Copy(shared);
+            return CloneSelf(shared);
         }
     }
 }

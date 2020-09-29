@@ -6,6 +6,6 @@ namespace SimpleDraw.ViewModels
     [DataContract(IsReference = true)]
     public abstract class BrushViewModel : ViewModelBase
     {
-        public abstract BrushViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared);
+        public abstract BrushViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared);
     }
 }

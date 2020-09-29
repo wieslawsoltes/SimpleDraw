@@ -14,6 +14,6 @@ namespace SimpleDraw.ViewModels
         
         public abstract void Moved(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers);
         
-        public abstract ToolBaseViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared);
+        public abstract ToolBaseViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared);
     }
 }

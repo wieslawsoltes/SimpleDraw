@@ -70,7 +70,7 @@ namespace SimpleDraw.ViewModels
             _thickness = thickness;
         }
 
-        public PenViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        public PenViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
             if (shared.TryGetValue(this, out var value))
             {
@@ -79,9 +79,9 @@ namespace SimpleDraw.ViewModels
 
             var copy = new PenViewModel()
             {
-                Brush = _brush?.Copy(shared),
+                Brush = _brush?.CloneSelf(shared),
                 Thickness = _thickness,
-                DashStyle = _dashStyle?.Copy(shared),
+                DashStyle = _dashStyle?.CloneSelf(shared),
                 LineCap = _lineCap,
                 LineJoin = _lineJoin,
                 MiterLimit = _miterLimit
@@ -93,7 +93,7 @@ namespace SimpleDraw.ViewModels
 
         public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
-            return Copy(shared);
+            return CloneSelf(shared);
         }
     }
 }

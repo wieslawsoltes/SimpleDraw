@@ -37,7 +37,7 @@ namespace SimpleDraw.ViewModels
             _endPoint = endPoint;
         }
 
-        public override BrushViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        public override BrushViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
             if (shared.TryGetValue(this, out var value))
             {
@@ -48,15 +48,15 @@ namespace SimpleDraw.ViewModels
 
             foreach (var gradientStop in _gradientStops)
             {
-                gradientStops.Add(gradientStop.Copy(shared));
+                gradientStops.Add(gradientStop.CloneSelf(shared));
             }
 
             var copy = new LinearGradientBrushViewModel()
             {
                 GradientStops = gradientStops,
                 SpreadMethod = _spreadMethod,
-                StartPoint = _startPoint?.Copy(shared),
-                EndPoint = _endPoint?.Copy(shared)
+                StartPoint = _startPoint?.CloneSelf(shared),
+                EndPoint = _endPoint?.CloneSelf(shared)
             };
 
             shared[this] = copy;
@@ -65,7 +65,7 @@ namespace SimpleDraw.ViewModels
 
         public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
-            return Copy(shared);
+            return CloneSelf(shared);
         }
     }
 }

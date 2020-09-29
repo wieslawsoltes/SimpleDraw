@@ -56,7 +56,7 @@ namespace SimpleDraw.ViewModels
             set => this.RaiseAndSetIfChanged(ref _radiusY, value);
         }
 
-        public override ShapeBaseViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        public override ShapeBaseViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
             if (shared.TryGetValue(this, out var value))
             {
@@ -65,10 +65,10 @@ namespace SimpleDraw.ViewModels
 
             var copy = new RectangleShapeViewModel()
             {
-                Brush = _brush?.Copy(shared),
-                Pen = _pen?.Copy(shared),
-                TopLeft = _topLeft?.Copy(shared),
-                BottomRight = _bottomRight?.Copy(shared),
+                Brush = _brush?.CloneSelf(shared),
+                Pen = _pen?.CloneSelf(shared),
+                TopLeft = _topLeft?.CloneSelf(shared),
+                BottomRight = _bottomRight?.CloneSelf(shared),
                 IsStroked = _isStroked,
                 IsFilled = _isFilled,
                 RadiusX = _radiusX,
@@ -81,7 +81,7 @@ namespace SimpleDraw.ViewModels
 
         public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
-            return Copy(shared);
+            return CloneSelf(shared);
         }
     }
 }

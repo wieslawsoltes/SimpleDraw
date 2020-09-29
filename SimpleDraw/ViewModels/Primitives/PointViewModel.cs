@@ -34,7 +34,7 @@ namespace SimpleDraw.ViewModels
             _y = y;
         }
 
-        public PointViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        public PointViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
             if (shared.TryGetValue(this, out var value))
             {
@@ -53,7 +53,7 @@ namespace SimpleDraw.ViewModels
 
         public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
-            return Copy(shared);
+            return CloneSelf(shared);
         }
     }
 }

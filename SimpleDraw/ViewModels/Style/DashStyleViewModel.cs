@@ -35,7 +35,7 @@ namespace SimpleDraw.ViewModels
             _offset = offset;
         }
 
-        public DashStyleViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        public DashStyleViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
             if (shared.TryGetValue(this, out var value))
             {
@@ -61,7 +61,7 @@ namespace SimpleDraw.ViewModels
 
         public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
-            return Copy(shared);
+            return CloneSelf(shared);
         }
     }
 }

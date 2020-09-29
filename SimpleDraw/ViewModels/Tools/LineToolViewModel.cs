@@ -71,7 +71,7 @@ namespace SimpleDraw.ViewModels
                                 Start = start ?? new PointViewModel(x, y),
                                 End = new PointViewModel(x, y),
                                 IsStroked = _isStroked,
-                                Pen = _pen.Copy(shared)
+                                Pen = _pen.CloneSelf(shared)
                             };
                             canvas.Decorators.Add(_line);
                             canvas.Invalidate();
@@ -144,7 +144,7 @@ namespace SimpleDraw.ViewModels
             }
         }
 
-        public override ToolBaseViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        public override ToolBaseViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
             if (shared.TryGetValue(this, out var value))
             {
@@ -153,7 +153,7 @@ namespace SimpleDraw.ViewModels
 
             var copy = new LineToolViewModel()
             {
-                Pen = _pen?.Copy(shared),
+                Pen = _pen?.CloneSelf(shared),
                 IsStroked = _isStroked
             };
 
@@ -163,7 +163,7 @@ namespace SimpleDraw.ViewModels
 
         public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
-            return Copy(shared);
+            return CloneSelf(shared);
         }
     }
 }

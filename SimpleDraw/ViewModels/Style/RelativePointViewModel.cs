@@ -40,7 +40,7 @@ namespace SimpleDraw.ViewModels
             _unit = unit;
         }
 
-        public RelativePointViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        public RelativePointViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
             if (shared.TryGetValue(this, out var value))
             {
@@ -49,7 +49,7 @@ namespace SimpleDraw.ViewModels
 
             var copy = new RelativePointViewModel()
             {
-                Point = _point?.Copy(shared),
+                Point = _point?.CloneSelf(shared),
                 Unit = _unit
             };
 
@@ -59,7 +59,7 @@ namespace SimpleDraw.ViewModels
 
         public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
-            return Copy(shared);
+            return CloneSelf(shared);
         }
     }
 }

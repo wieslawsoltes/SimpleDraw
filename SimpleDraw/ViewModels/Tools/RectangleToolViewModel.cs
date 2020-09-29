@@ -106,8 +106,8 @@ namespace SimpleDraw.ViewModels
                                 IsFilled = _isFilled,
                                 RadiusX = _radiusX,
                                 RadiusY = _radiusY,
-                                Brush = _brush.Copy(shared),
-                                Pen = _pen.Copy(shared)
+                                Brush = _brush.CloneSelf(shared),
+                                Pen = _pen.CloneSelf(shared)
                             };
                             canvas.Decorators.Add(_rectangle);
                             canvas.Invalidate();
@@ -191,7 +191,7 @@ namespace SimpleDraw.ViewModels
             }
         }
 
-        public override ToolBaseViewModel Copy(Dictionary<ViewModelBase, ViewModelBase> shared)
+        public override ToolBaseViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
             if (shared.TryGetValue(this, out var value))
             {
@@ -200,8 +200,8 @@ namespace SimpleDraw.ViewModels
 
             var copy = new RectangleToolViewModel()
             {
-                Brush = _brush?.Copy(shared),
-                Pen = _pen?.Copy(shared),
+                Brush = _brush?.CloneSelf(shared),
+                Pen = _pen?.CloneSelf(shared),
                 IsStroked = _isStroked,
                 IsFilled = _isFilled,
                 RadiusX = _radiusX,
@@ -214,7 +214,7 @@ namespace SimpleDraw.ViewModels
 
         public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
-            return Copy(shared);
+            return CloneSelf(shared);
         }
     }
 }
