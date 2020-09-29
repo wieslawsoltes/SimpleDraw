@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
@@ -10,8 +9,6 @@ namespace SimpleDraw.Views
 {
     public class SimpleCanvas : Canvas
     {
-        private ObservableCollection<ViewModelBase> _copy = new ObservableCollection<ViewModelBase>();
-
         private ToolPointerType ToToolPointerType(PointerUpdateKind pointerUpdateKind)
         {
             switch (pointerUpdateKind)
@@ -120,12 +117,7 @@ namespace SimpleDraw.Views
                     {
                         if (e.KeyModifiers == KeyModifiers.Control)
                         {
-                            canvas.Selected.Clear();
-
-                            foreach (var item in canvas.Items)
-                            {
-                                canvas.Selected.Add(item);
-                            }
+                            canvas.SelectAll();
                         }
                     }
                     break;
@@ -133,7 +125,7 @@ namespace SimpleDraw.Views
                     {
                         if (e.KeyModifiers == KeyModifiers.Control)
                         {
-                            Copy(canvas);
+                            canvas.Copy();
                         }
                     }
                     break;
@@ -141,7 +133,7 @@ namespace SimpleDraw.Views
                     {
                         if (e.KeyModifiers == KeyModifiers.None)
                         {
-                            SetTool<LineToolViewModel>(canvas);
+                            canvas.SetTool("Line");
                         }
                     }
                     break;
@@ -149,7 +141,7 @@ namespace SimpleDraw.Views
                     {
                         if (e.KeyModifiers == KeyModifiers.None)
                         {
-                            SetTool<NoneToolViewModel>(canvas);
+                            canvas.SetTool("None");
                         }
                     }
                     break;
@@ -157,19 +149,7 @@ namespace SimpleDraw.Views
                     {
                         if (e.KeyModifiers == KeyModifiers.Control)
                         {
-                            var dlg = new OpenFileDialog() { Title = "Open" };
-                            dlg.Filters.Add(new FileDialogFilter() { Name = "Json", Extensions = { "json" } });
-                            dlg.Filters.Add(new FileDialogFilter() { Name = "All", Extensions = { "*" } });
-                            var window = this.VisualRoot as Window;
-                            var result = await dlg.ShowAsync(window);
-                            if (result != null)
-                            {
-                                var path = result.FirstOrDefault();
-                                if (path != null)
-                                {
-                                    window.DataContext = App.Open(path);
-                                }
-                            }
+                            await Open();
                         }
                     }
                     break;
@@ -177,7 +157,7 @@ namespace SimpleDraw.Views
                     {
                         if (e.KeyModifiers == KeyModifiers.None)
                         {
-                            SetTool<RectangleToolViewModel>(canvas);
+                            canvas.SetTool("Rectangle");
                         }
                     }
                     break;
@@ -185,22 +165,12 @@ namespace SimpleDraw.Views
                     {
                         if (e.KeyModifiers == KeyModifiers.None)
                         {
-                            SetTool<SelectionToolViewModel>(canvas);
+                            canvas.SetTool("Selection");
                         }
 
                         if (e.KeyModifiers == KeyModifiers.Control)
                         {
-                            var dlg = new SaveFileDialog() { Title = "Save" };
-                            dlg.Filters.Add(new FileDialogFilter() { Name = "Json", Extensions = { "json" } });
-                            dlg.Filters.Add(new FileDialogFilter() { Name = "All", Extensions = { "*" } });
-                            dlg.InitialFileName = "canvas";
-                            dlg.DefaultExtension = "json";
-                            var window = this.VisualRoot as Window;
-                            var path = await dlg.ShowAsync(window);
-                            if (path != null)
-                            {
-                                App.Save(path, canvas);
-                            }
+                            await Save(canvas);
                         }
                     }
                     break;
@@ -208,7 +178,7 @@ namespace SimpleDraw.Views
                     {
                         if (e.KeyModifiers == KeyModifiers.Control)
                         {
-                            Paste(canvas);
+                            canvas.Paste();
                             InvalidateVisual();
                         }
                     }
@@ -217,7 +187,7 @@ namespace SimpleDraw.Views
                     {
                         if (e.KeyModifiers == KeyModifiers.Control)
                         {
-                            Cut(canvas);
+                            canvas.Cut();
                             InvalidateVisual();
                         }
                     }
@@ -226,7 +196,7 @@ namespace SimpleDraw.Views
                     {
                         if (e.KeyModifiers == KeyModifiers.None)
                         {
-                            Delete(canvas);
+                            canvas.Delete();
                             InvalidateVisual();
                         }
                     }
@@ -242,70 +212,38 @@ namespace SimpleDraw.Views
             }
         }
 
-        private void SetTool<T>(CanvasViewModel canvas) where T : ToolBaseViewModel
+        public async Task Open()
         {
-            foreach (var tool in canvas.Tools)
+            var dlg = new OpenFileDialog() { Title = "Open" };
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Json", Extensions = { "json" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "All", Extensions = { "*" } });
+
+            var window = this.VisualRoot as Window;
+            var result = await dlg.ShowAsync(window);
+            if (result != null)
             {
-                if (tool is T toolType)
+                var path = result.FirstOrDefault();
+                if (path != null)
                 {
-                    canvas.Tool = toolType;
+                    window.DataContext = App.Open(path);
                 }
             }
         }
 
-        private void Cut(CanvasViewModel canvas)
+        public async Task Save(CanvasViewModel canvas)
         {
-            var shared = new Dictionary<ViewModelBase, ViewModelBase>();
+            var dlg = new SaveFileDialog() { Title = "Save" };
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Json", Extensions = { "json" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "All", Extensions = { "*" } });
+            dlg.InitialFileName = "canvas";
+            dlg.DefaultExtension = "json";
 
-            _copy.Clear();
-
-            foreach (var item in canvas.Selected)
+            var window = this.VisualRoot as Window;
+            var path = await dlg.ShowAsync(window);
+            if (path != null)
             {
-                _copy.Add(item.Clone(shared));
+                App.Save(path, canvas);
             }
-
-            foreach (var item in canvas.Selected)
-            {
-                canvas.Items.Remove(item);
-            }
-
-            canvas.Selected.Clear();
-        }
-
-        private void Copy(CanvasViewModel canvas)
-        {
-            var shared = new Dictionary<ViewModelBase, ViewModelBase>();
-
-            _copy.Clear();
-
-            foreach (var item in canvas.Selected)
-            {
-                _copy.Add(item.Clone(shared));
-            }
-        }
-
-        private void Paste(CanvasViewModel canvas)
-        {
-            var shared = new Dictionary<ViewModelBase, ViewModelBase>();
-
-            canvas.Selected.Clear();
-
-            foreach (var item in _copy)
-            {
-                var clone = item.Clone(shared);
-                canvas.Items.Add(clone);
-                canvas.Selected.Add(clone);
-            }
-        }
-
-        private void Delete(CanvasViewModel canvas)
-        {
-            foreach (var item in canvas.Selected)
-            {
-                canvas.Items.Remove(item);
-            }
-
-            canvas.Selected.Clear();
         }
 
         public override void Render(DrawingContext context)
