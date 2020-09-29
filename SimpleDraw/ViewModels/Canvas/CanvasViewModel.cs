@@ -41,14 +41,14 @@ namespace SimpleDraw.ViewModels
             set => this.RaiseAndSetIfChanged(ref _items, value);
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = true)]
+        [IgnoreDataMember]
         public ObservableCollection<ViewModelBase> Selected
         {
             get => _selected;
             set => this.RaiseAndSetIfChanged(ref _selected, value);
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = true)]
+        [IgnoreDataMember]
         public ObservableCollection<ViewModelBase> Decorators
         {
             get => _decorators;
@@ -73,6 +73,8 @@ namespace SimpleDraw.ViewModels
 
         public CanvasViewModel()
         {
+            _selected = new ObservableCollection<ViewModelBase>();
+            _decorators = new ObservableCollection<ViewModelBase>();
             _copy = new ObservableCollection<ViewModelBase>();
         }
 
