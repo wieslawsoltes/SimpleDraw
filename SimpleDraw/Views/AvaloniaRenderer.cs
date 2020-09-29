@@ -154,6 +154,57 @@ namespace SimpleDraw.Views
             return new Rect(x, y, width, height);
         }
 
+        public static Geometry ToGeometry(PathShapeViewModel pathShape)
+        {
+            var geometry = new StreamGeometry();
+
+            using var geometryContext = geometry.Open();
+
+            geometryContext.SetFillRule(pathShape.FillRule == PathFillRule.EvenOdd ? FillRule.EvenOdd : FillRule.NonZero);
+
+            foreach (var figure in pathShape.Figures)
+            {
+                if (figure.Segments.Count > 0)
+                {
+                    var firstSegment = figure.Segments[0];
+
+                    switch (firstSegment)
+                    {
+                        // TODO: CubicBezier
+                        // TODO: QuadraticBezier
+                        case LineShapeViewModel lineShape:
+                            {
+                                geometryContext.BeginFigure(ToPoint(lineShape.Start), true);
+                            }
+                            break;
+                    }
+
+                    for (int i = 1; i < figure.Segments.Count; i++)
+                    {
+                        var nextSegment = figure.Segments[i];
+
+                        switch (nextSegment)
+                        {
+                            // TODO: CubicBezier
+                            // TODO: QuadraticBezier
+                            case LineShapeViewModel lineShape:
+                                {
+                                    geometryContext.LineTo(ToPoint(lineShape.End));
+                                }
+                                break;
+                        }
+                    }
+
+                    if (figure.IsClosed)
+                    {
+                        geometryContext.EndFigure(figure.IsClosed);
+                    }
+                }
+            }
+
+            return geometry;
+        }
+
         public static void Render(DrawingContext context, LineShapeViewModel lineShape)
         {
             if (lineShape.IsStroked)
@@ -181,6 +232,20 @@ namespace SimpleDraw.Views
             }
         }
 
+        public static void Render(DrawingContext context, PathShapeViewModel pathShape)
+        {
+            if (pathShape.IsStroked || pathShape.IsFilled)
+            {
+                var geometry = ToGeometry(pathShape);
+                var brush = ToBrush(pathShape.Brush);
+                var pen = ToPen(pathShape.Pen);
+                context.DrawGeometry(
+                    pathShape.IsFilled ? brush : default,
+                    pathShape.IsStroked ? pen : default(IPen),
+                    geometry);
+            }
+        }
+
         public static void Render(DrawingContext context, ShapeBaseViewModel shape)
         {
             switch (shape)
@@ -193,6 +258,11 @@ namespace SimpleDraw.Views
                 case RectangleShapeViewModel rectangleShape:
                     {
                         Render(context, rectangleShape);
+                    }
+                    break;
+                case PathShapeViewModel pathShape:
+                    {
+                        Render(context, pathShape);
                     }
                     break;
                 default:
