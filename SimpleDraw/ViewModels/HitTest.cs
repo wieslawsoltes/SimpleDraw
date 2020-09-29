@@ -58,6 +58,96 @@ namespace SimpleDraw.ViewModels
             return bounds;
         }
 
+        public static SKRect GetBounds(CubicBezierShapeViewModel cubicBezierShape)
+        {
+            var path = new SKPath() { FillType = SKPathFillType.Winding };
+            path.MoveTo(new SKPoint((float)cubicBezierShape.StartPoint.X, (float)cubicBezierShape.StartPoint.Y));
+            path.CubicTo(
+                new SKPoint((float)cubicBezierShape.Point1.X, (float)cubicBezierShape.Point1.Y),
+                new SKPoint((float)cubicBezierShape.Point2.X, (float)cubicBezierShape.Point2.Y),
+                new SKPoint((float)cubicBezierShape.Point3.X, (float)cubicBezierShape.Point3.Y));
+            var bounds = path.ComputeTightBounds();
+            return bounds;
+        }
+
+        public static SKRect GetBounds(QuadraticBezierShapeViewModel quadraticBezierShape)
+        {
+            var path = new SKPath() { FillType = SKPathFillType.Winding };
+            path.MoveTo(new SKPoint((float)quadraticBezierShape.StartPoint.X, (float)quadraticBezierShape.StartPoint.Y));
+            path.QuadTo(
+                new SKPoint((float)quadraticBezierShape.Control.X, (float)quadraticBezierShape.Control.Y),
+                new SKPoint((float)quadraticBezierShape.EndPoint.X, (float)quadraticBezierShape.EndPoint.Y));
+            var bounds = path.ComputeTightBounds();
+            return bounds;
+        }
+
+        public static SKRect GetBounds(PathShapeViewModel pathShape)
+        {
+            var path = new SKPath() { FillType = pathShape.FillRule == PathFillRule.EvenOdd ? SKPathFillType.EvenOdd : SKPathFillType.Winding };
+
+            foreach (var figure in pathShape.Figures)
+            {
+                if (figure.Segments.Count > 0)
+                {
+                    var firstSegment = figure.Segments[0];
+
+                    switch (firstSegment)
+                    {
+                        case LineShapeViewModel lineShape:
+                            {
+                                path.MoveTo(new SKPoint((float)lineShape.StartPoint.X, (float)lineShape.StartPoint.Y));
+                            }
+                            break;
+                        case CubicBezierShapeViewModel cubicBezierShape:
+                            {
+                                path.MoveTo(new SKPoint((float)cubicBezierShape.StartPoint.X, (float)cubicBezierShape.StartPoint.Y));
+                            }
+                            break;
+                        case QuadraticBezierShapeViewModel quadraticBezierShape:
+                            {
+                                path.MoveTo(new SKPoint((float)quadraticBezierShape.StartPoint.X, (float)quadraticBezierShape.StartPoint.Y));
+                            }
+                            break;
+                    }
+
+                    foreach (var nextSegment in figure.Segments)
+                    {
+                        switch (nextSegment)
+                        {
+                            case LineShapeViewModel lineShape:
+                                {
+                                    path.LineTo(new SKPoint((float)lineShape.Point.X, (float)lineShape.Point.Y));
+                                }
+                                break;
+                            case CubicBezierShapeViewModel cubicBezierShape:
+                                {
+                                    path.CubicTo(
+                                        new SKPoint((float)cubicBezierShape.Point1.X, (float)cubicBezierShape.Point1.Y),
+                                        new SKPoint((float)cubicBezierShape.Point2.X, (float)cubicBezierShape.Point2.Y),
+                                        new SKPoint((float)cubicBezierShape.Point3.X, (float)cubicBezierShape.Point3.Y));
+                                }
+                                break;
+                            case QuadraticBezierShapeViewModel quadraticBezierShape:
+                                {
+                                    path.QuadTo(
+                                        new SKPoint((float)quadraticBezierShape.Control.X, (float)quadraticBezierShape.Control.Y),
+                                        new SKPoint((float)quadraticBezierShape.EndPoint.X, (float)quadraticBezierShape.EndPoint.Y));
+                                }
+                                break;
+                        }
+                    }
+
+                    if (figure.IsClosed)
+                    {
+                        path.Close();
+                    }
+                }
+            }
+
+            var bounds = path.ComputeTightBounds();
+            return bounds;
+        }
+
         public static SKRect GetBounds(RectangleShapeViewModel rectangleShape)
         {
             var rect = ToSKRect(rectangleShape);
@@ -176,16 +266,16 @@ namespace SimpleDraw.ViewModels
                     break;
                 case LineShapeViewModel lineShape:
                     {
-                        var resultStart = Contains(lineShape.StartPoint, hitRect);
-                        if (resultStart != null)
+                        var resultStartPoint = Contains(lineShape.StartPoint, hitRect);
+                        if (resultStartPoint != null)
                         {
-                            return resultStart;
+                            return resultStartPoint;
                         }
 
-                        var resultEnd = Contains(lineShape.Point, hitRect);
-                        if (resultEnd != null)
+                        var resultPoint = Contains(lineShape.Point, hitRect);
+                        if (resultPoint != null)
                         {
-                            return resultEnd;
+                            return resultPoint;
                         }
 
                         var bounds = GetBounds(lineShape);
@@ -193,6 +283,68 @@ namespace SimpleDraw.ViewModels
                         if (result)
                         {
                             return lineShape;
+                        }
+                    }
+                    break;
+                case CubicBezierShapeViewModel cubicBezierShape:
+                    {
+                        var resultStartPoint = Contains(cubicBezierShape.StartPoint, hitRect);
+                        if (resultStartPoint != null)
+                        {
+                            return resultStartPoint;
+                        }
+
+                        var resultPoint1 = Contains(cubicBezierShape.Point1, hitRect);
+                        if (resultPoint1 != null)
+                        {
+                            return resultPoint1;
+                        }
+
+                        var resultPoint2 = Contains(cubicBezierShape.Point2, hitRect);
+                        if (resultPoint2 != null)
+                        {
+                            return resultPoint2;
+                        }
+
+                        var resultPoint3 = Contains(cubicBezierShape.Point3, hitRect);
+                        if (resultPoint3 != null)
+                        {
+                            return resultPoint3;
+                        }
+
+                        var bounds = GetBounds(cubicBezierShape);
+                        var result = bounds.IntersectsWith(hitRect);
+                        if (result)
+                        {
+                            return cubicBezierShape;
+                        }
+                    }
+                    break;
+                case QuadraticBezierShapeViewModel quadraticBezierShape:
+                    {
+                        var resultStartPoint = Contains(quadraticBezierShape.StartPoint, hitRect);
+                        if (resultStartPoint != null)
+                        {
+                            return resultStartPoint;
+                        }
+
+                        var resultControl = Contains(quadraticBezierShape.Control, hitRect);
+                        if (resultControl != null)
+                        {
+                            return resultControl;
+                        }
+
+                        var resultEndPoint = Contains(quadraticBezierShape.EndPoint, hitRect);
+                        if (resultEndPoint != null)
+                        {
+                            return resultEndPoint;
+                        }
+
+                        var bounds = GetBounds(quadraticBezierShape);
+                        var result = bounds.IntersectsWith(hitRect);
+                        if (result)
+                        {
+                            return quadraticBezierShape;
                         }
                     }
                     break;
@@ -215,6 +367,32 @@ namespace SimpleDraw.ViewModels
                         if (result)
                         {
                             return rectangleShape;
+                        }
+                    }
+                    break;
+                case PathShapeViewModel pathShape:
+                    {
+                        foreach (var figure in pathShape.Figures)
+                        {
+                            foreach (var segment in figure.Segments)
+                            {
+                                var segmentResult = Contains(segment, hitRect);
+                                if (segmentResult is PointViewModel resultPoint)
+                                {
+                                    return resultPoint;
+                                }
+                                else
+                                {
+                                    return pathShape;
+                                }
+                            }
+                        }
+
+                        var bounds = GetBounds(pathShape);
+                        var result = bounds.IntersectsWith(hitRect);
+                        if (result)
+                        {
+                            return pathShape;
                         }
                     }
                     break;
