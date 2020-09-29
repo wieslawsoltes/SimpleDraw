@@ -13,6 +13,8 @@
     <Grid ColumnDefinitions="*" RowDefinitions="Auto,*,Auto">
         <Menu Grid.Column="0" Grid.Row="0">
             <MenuItem Header="_File">
+                <MenuItem Header="_New" InputGesture="Ctrl+N" Command="{Binding #canvas.New}"/>
+                <Separator/>
                 <MenuItem Header="Open..." InputGesture="Ctrl+O" Command="{Binding #canvas.Open}"/>
                 <MenuItem Header="Save As..." InputGesture="Ctrl+S" Command="{Binding #canvas.Save}" CommandParameter="{Binding}"/>
                 <Separator/>
