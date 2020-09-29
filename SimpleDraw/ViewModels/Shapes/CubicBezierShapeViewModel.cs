@@ -5,11 +5,14 @@ using ReactiveUI;
 namespace SimpleDraw.ViewModels
 {
     [DataContract(IsReference = true)]
-    public class LineShapeViewModel : ShapeBaseViewModel
+    public class CubicBezierShapeViewModel : ShapeBaseViewModel
     {
         private PointViewModel _startPoint;
-        private PointViewModel _point;
+        private PointViewModel _point1;
+        private PointViewModel _point2;
+        private PointViewModel _point3;
         private bool _isStroked;
+        private bool _isFilled;
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public PointViewModel StartPoint
@@ -19,10 +22,24 @@ namespace SimpleDraw.ViewModels
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
-        public PointViewModel Point
+        public PointViewModel Point1
         {
-            get => _point;
-            set => this.RaiseAndSetIfChanged(ref _point, value);
+            get => _point1;
+            set => this.RaiseAndSetIfChanged(ref _point1, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
+        public PointViewModel Point2
+        {
+            get => _point2;
+            set => this.RaiseAndSetIfChanged(ref _point2, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
+        public PointViewModel Point3
+        {
+            get => _point3;
+            set => this.RaiseAndSetIfChanged(ref _point3, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
@@ -32,20 +49,30 @@ namespace SimpleDraw.ViewModels
             set => this.RaiseAndSetIfChanged(ref _isStroked, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
+        public bool IsFilled
+        {
+            get => _isFilled;
+            set => this.RaiseAndSetIfChanged(ref _isFilled, value);
+        }
+
         public override ShapeBaseViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
             if (shared.TryGetValue(this, out var value))
             {
-                return value as LineShapeViewModel;
+                return value as CubicBezierShapeViewModel;
             }
 
-            var copy = new LineShapeViewModel()
+            var copy = new CubicBezierShapeViewModel()
             {
                 Brush = _brush?.CloneSelf(shared),
                 Pen = _pen?.CloneSelf(shared),
                 StartPoint = _startPoint?.CloneSelf(shared),
-                Point = _point?.CloneSelf(shared),
-                IsStroked = _isStroked
+                Point1 = _point1?.CloneSelf(shared),
+                Point2 = _point2?.CloneSelf(shared),
+                Point3 = _point3?.CloneSelf(shared),
+                IsStroked = _isStroked,
+                IsFilled = _isFilled
             };
 
             shared[this] = copy;

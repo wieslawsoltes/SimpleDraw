@@ -154,6 +154,33 @@ namespace SimpleDraw.Views
             return new Rect(x, y, width, height);
         }
 
+        public static Geometry ToGeometry(CubicBezierShapeViewModel cubicBezierShape)
+        {
+            var geometry = new StreamGeometry();
+            using var geometryContext = geometry.Open();
+            geometryContext.SetFillRule(FillRule.EvenOdd);
+            geometryContext.BeginFigure(ToPoint(cubicBezierShape.StartPoint), true);
+            geometryContext.CubicBezierTo(
+                ToPoint(cubicBezierShape.Point1),
+                ToPoint(cubicBezierShape.Point2),
+                ToPoint(cubicBezierShape.Point3));
+            geometryContext.EndFigure(false);
+            return geometry;
+        }
+
+        public static Geometry ToGeometry(QuadraticBezierShapeViewModel quadraticBezierShape)
+        {
+            var geometry = new StreamGeometry();
+            using var geometryContext = geometry.Open();
+            geometryContext.SetFillRule(FillRule.EvenOdd);
+            geometryContext.BeginFigure(ToPoint(quadraticBezierShape.StartPoint), true);
+            geometryContext.QuadraticBezierTo(
+                ToPoint(quadraticBezierShape.Control),
+                ToPoint(quadraticBezierShape.EndPoint));
+            geometryContext.EndFigure(false);
+            return geometry;
+        }
+
         public static Geometry ToGeometry(PathShapeViewModel pathShape)
         {
             var geometry = new StreamGeometry();
@@ -170,11 +197,19 @@ namespace SimpleDraw.Views
 
                     switch (firstSegment)
                     {
-                        // TODO: CubicBezier
-                        // TODO: QuadraticBezier
                         case LineShapeViewModel lineShape:
                             {
-                                geometryContext.BeginFigure(ToPoint(lineShape.Start), true);
+                                geometryContext.BeginFigure(ToPoint(lineShape.StartPoint), true);
+                            }
+                            break;
+                        case CubicBezierShapeViewModel cubicBezierShape:
+                            {
+                                geometryContext.BeginFigure(ToPoint(cubicBezierShape.StartPoint), true);
+                            }
+                            break;
+                        case QuadraticBezierShapeViewModel quadraticBezierShape:
+                            {
+                                geometryContext.BeginFigure(ToPoint(quadraticBezierShape.StartPoint), true);
                             }
                             break;
                     }
@@ -185,11 +220,24 @@ namespace SimpleDraw.Views
 
                         switch (nextSegment)
                         {
-                            // TODO: CubicBezier
-                            // TODO: QuadraticBezier
                             case LineShapeViewModel lineShape:
                                 {
-                                    geometryContext.LineTo(ToPoint(lineShape.End));
+                                    geometryContext.LineTo(ToPoint(lineShape.Point));
+                                }
+                                break;
+                            case CubicBezierShapeViewModel cubicBezierShape:
+                                {
+                                    geometryContext.CubicBezierTo(
+                                        ToPoint(cubicBezierShape.Point1),
+                                        ToPoint(cubicBezierShape.Point2),
+                                        ToPoint(cubicBezierShape.Point3));
+                                }
+                                break;
+                            case QuadraticBezierShapeViewModel quadraticBezierShape:
+                                {
+                                    geometryContext.QuadraticBezierTo(
+                                        ToPoint(quadraticBezierShape.Control),
+                                        ToPoint(quadraticBezierShape.EndPoint));
                                 }
                                 break;
                         }
@@ -209,10 +257,38 @@ namespace SimpleDraw.Views
         {
             if (lineShape.IsStroked)
             {
-                var p1 = new Point(lineShape.Start.X, lineShape.Start.Y);
-                var p2 = new Point(lineShape.End.X, lineShape.End.Y);
+                var p1 = new Point(lineShape.StartPoint.X, lineShape.StartPoint.Y);
+                var p2 = new Point(lineShape.Point.X, lineShape.Point.Y);
                 var pen = ToPen(lineShape.Pen);
                 context.DrawLine(pen, p1, p2);
+            }
+        }
+
+        public static void Render(DrawingContext context, CubicBezierShapeViewModel cubicBezierShape)
+        {
+            if (cubicBezierShape.IsStroked || cubicBezierShape.IsFilled)
+            {
+                var geometry = ToGeometry(cubicBezierShape);
+                var brush = ToBrush(cubicBezierShape.Brush);
+                var pen = ToPen(cubicBezierShape.Pen);
+                context.DrawGeometry(
+                    cubicBezierShape.IsFilled ? brush : default,
+                    cubicBezierShape.IsStroked ? pen : default(IPen),
+                    geometry);
+            }
+        }
+
+        public static void Render(DrawingContext context, QuadraticBezierShapeViewModel quadraticBezierShape)
+        {
+            if (quadraticBezierShape.IsStroked || quadraticBezierShape.IsFilled)
+            {
+                var geometry = ToGeometry(quadraticBezierShape);
+                var brush = ToBrush(quadraticBezierShape.Brush);
+                var pen = ToPen(quadraticBezierShape.Pen);
+                context.DrawGeometry(
+                    quadraticBezierShape.IsFilled ? brush : default,
+                    quadraticBezierShape.IsStroked ? pen : default(IPen),
+                    geometry);
             }
         }
 
@@ -258,6 +334,16 @@ namespace SimpleDraw.Views
                 case RectangleShapeViewModel rectangleShape:
                     {
                         Render(context, rectangleShape);
+                    }
+                    break;
+                case CubicBezierShapeViewModel cubicBezierShape:
+                    {
+                        Render(context, cubicBezierShape);
+                    }
+                    break;
+                case QuadraticBezierShapeViewModel quadraticBezierShape:
+                    {
+                        Render(context, quadraticBezierShape);
                     }
                     break;
                 case PathShapeViewModel pathShape:

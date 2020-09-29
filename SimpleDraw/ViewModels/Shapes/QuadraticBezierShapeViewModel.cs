@@ -5,11 +5,13 @@ using ReactiveUI;
 namespace SimpleDraw.ViewModels
 {
     [DataContract(IsReference = true)]
-    public class LineShapeViewModel : ShapeBaseViewModel
+    public class QuadraticBezierShapeViewModel : ShapeBaseViewModel
     {
         private PointViewModel _startPoint;
-        private PointViewModel _point;
+        private PointViewModel _control;
+        private PointViewModel _endPoint;
         private bool _isStroked;
+        private bool _isFilled;
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public PointViewModel StartPoint
@@ -19,10 +21,17 @@ namespace SimpleDraw.ViewModels
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
-        public PointViewModel Point
+        public PointViewModel Control
         {
-            get => _point;
-            set => this.RaiseAndSetIfChanged(ref _point, value);
+            get => _control;
+            set => this.RaiseAndSetIfChanged(ref _control, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
+        public PointViewModel EndPoint
+        {
+            get => _endPoint;
+            set => this.RaiseAndSetIfChanged(ref _endPoint, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
@@ -32,20 +41,29 @@ namespace SimpleDraw.ViewModels
             set => this.RaiseAndSetIfChanged(ref _isStroked, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
+        public bool IsFilled
+        {
+            get => _isFilled;
+            set => this.RaiseAndSetIfChanged(ref _isFilled, value);
+        }
+
         public override ShapeBaseViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
             if (shared.TryGetValue(this, out var value))
             {
-                return value as LineShapeViewModel;
+                return value as QuadraticBezierShapeViewModel;
             }
 
-            var copy = new LineShapeViewModel()
+            var copy = new QuadraticBezierShapeViewModel()
             {
                 Brush = _brush?.CloneSelf(shared),
                 Pen = _pen?.CloneSelf(shared),
                 StartPoint = _startPoint?.CloneSelf(shared),
-                Point = _point?.CloneSelf(shared),
-                IsStroked = _isStroked
+                Control = _control?.CloneSelf(shared),
+                EndPoint = _endPoint?.CloneSelf(shared),
+                IsStroked = _isStroked,
+                IsFilled = _isFilled
             };
 
             shared[this] = copy;

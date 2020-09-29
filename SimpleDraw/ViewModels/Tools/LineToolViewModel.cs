@@ -68,8 +68,8 @@ namespace SimpleDraw.ViewModels
 
                             _line = new LineShapeViewModel()
                             {
-                                Start = start ?? new PointViewModel(x, y),
-                                End = new PointViewModel(x, y),
+                                StartPoint = start ?? new PointViewModel(x, y),
+                                Point = new PointViewModel(x, y),
                                 IsStroked = _isStroked,
                                 Pen = _pen.CloneSelf(shared)
                             };
@@ -96,7 +96,7 @@ namespace SimpleDraw.ViewModels
 
                             if (end != null)
                             {
-                                _line.End = end;
+                                _line.Point = end;
                             }
 
                             canvas.Decorators.Remove(_line);
@@ -135,8 +135,8 @@ namespace SimpleDraw.ViewModels
                     {
                         if (pointerType == ToolPointerType.None)
                         {
-                            _line.End.X = x;
-                            _line.End.Y = y;
+                            _line.Point.X = x;
+                            _line.Point.Y = y;
                             canvas.Invalidate();
                         }
                     }

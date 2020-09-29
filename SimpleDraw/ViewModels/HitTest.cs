@@ -23,10 +23,10 @@ namespace SimpleDraw.ViewModels
         public static SKRect ToSKRect(LineShapeViewModel lineShape)
         {
             return ToSKRect(
-                lineShape.Start.X,
-                lineShape.Start.Y,
-                lineShape.End.X,
-                lineShape.End.Y);
+                lineShape.StartPoint.X,
+                lineShape.StartPoint.Y,
+                lineShape.Point.X,
+                lineShape.Point.Y);
         }
 
         public static SKRect ToSKRect(RectangleShapeViewModel rectangleShape)
@@ -50,8 +50,8 @@ namespace SimpleDraw.ViewModels
         public static SKRect GetBounds(LineShapeViewModel lineShape)
         {
             var path = new SKPath() { FillType = SKPathFillType.Winding };
-            path.MoveTo(new SKPoint((float)lineShape.Start.X, (float)lineShape.Start.Y));
-            path.LineTo(new SKPoint((float)lineShape.End.X, (float)lineShape.End.Y));
+            path.MoveTo(new SKPoint((float)lineShape.StartPoint.X, (float)lineShape.StartPoint.Y));
+            path.LineTo(new SKPoint((float)lineShape.Point.X, (float)lineShape.Point.Y));
             var bounds = path.ComputeTightBounds();
             return bounds;
         }
@@ -173,13 +173,13 @@ namespace SimpleDraw.ViewModels
                     break;
                 case LineShapeViewModel lineShape:
                     {
-                        var resultStart = Contains(lineShape.Start, hitRect);
+                        var resultStart = Contains(lineShape.StartPoint, hitRect);
                         if (resultStart != null)
                         {
                             return resultStart;
                         }
 
-                        var resultEnd = Contains(lineShape.End, hitRect);
+                        var resultEnd = Contains(lineShape.Point, hitRect);
                         if (resultEnd != null)
                         {
                             return resultEnd;

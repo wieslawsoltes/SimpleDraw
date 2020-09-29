@@ -185,8 +185,8 @@ namespace SimpleDraw.ViewModels
                         break;
                     case LineShapeViewModel lineShape:
                         {
-                            points.Add(lineShape.Start);
-                            points.Add(lineShape.End);
+                            points.Add(lineShape.StartPoint);
+                            points.Add(lineShape.Point);
                         }
                         break;
                     case RectangleShapeViewModel rectangleShape:
