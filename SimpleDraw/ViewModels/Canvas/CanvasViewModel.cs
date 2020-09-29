@@ -278,6 +278,7 @@ namespace SimpleDraw.ViewModels
 
             _selected.Clear();
 
+            UpdateBounds();
             Invalidate();
         }
 
@@ -292,6 +293,7 @@ namespace SimpleDraw.ViewModels
                 _copy.Add(item.Clone(shared));
             }
 
+            UpdateBounds();
             Invalidate();
         }
 
@@ -308,6 +310,7 @@ namespace SimpleDraw.ViewModels
                 _selected.Add(clone);
             }
 
+            UpdateBounds();
             Invalidate();
         }
 
@@ -320,6 +323,7 @@ namespace SimpleDraw.ViewModels
 
             _selected.Clear();
 
+            UpdateBounds();
             Invalidate();
         }
 
@@ -332,6 +336,7 @@ namespace SimpleDraw.ViewModels
                 _selected.Add(item);
             }
 
+            UpdateBounds();
             Invalidate();
         }
 
