@@ -142,7 +142,8 @@ namespace SimpleDraw.ViewModels
         {
             for (int i = items.Count - 1; i >= 0; i--)
             {
-                var result = Contains(items[i], x, y, hitRadius);
+                var item = items[i];
+                var result = Contains(item, x, y, hitRadius);
                 if (result != null)
                 {
                     return result;
