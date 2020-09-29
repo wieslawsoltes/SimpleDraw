@@ -52,9 +52,7 @@ namespace SimpleDraw
             {
                 Width = 840,
                 Height = 600,
-                Items = new ObservableCollection<ViewModelBase>(),
-                Selected = new ObservableCollection<ViewModelBase>(),
-                Decorators = new ObservableCollection<ViewModelBase>()
+                Items = new ObservableCollection<ViewModelBase>()
             };
 
             canvas.Tools = new ObservableCollection<ToolBaseViewModel>()
