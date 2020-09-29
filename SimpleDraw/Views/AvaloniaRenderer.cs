@@ -211,6 +211,11 @@ namespace SimpleDraw.Views
                             // TODO:
                         }
                         break;
+                    case GroupViewModel group:
+                        {
+                            Render(context, group.Items);
+                        }
+                        break;
                     case ShapeBaseViewModel shape:
                         {
                             Render(context, shape);

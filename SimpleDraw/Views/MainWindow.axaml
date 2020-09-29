@@ -24,6 +24,10 @@
                 <Separator/>
                 <MenuItem Header="Select _All" InputGesture="Ctrl+A" Command="{Binding SelectAll}"/>
             </MenuItem>
+            <MenuItem Header="_Object">
+                <MenuItem Header="_Group" InputGesture="Ctrl+G" Command="{Binding Group}"/>
+                <MenuItem Header="_Ungroup" InputGesture="Ctrl+U" Command="{Binding Ungroup}"/>
+            </MenuItem>
             <MenuItem Header="_Tool">
                 <MenuItem Header="_None" InputGesture="N" Command="{Binding SetTool}" CommandParameter="None"/>
                 <Separator/>

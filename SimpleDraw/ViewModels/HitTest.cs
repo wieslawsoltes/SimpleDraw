@@ -90,6 +90,20 @@ namespace SimpleDraw.ViewModels
                             }
                         }
                         break;
+                    case GroupViewModel group:
+                        {
+                            var bounds = GetBounds(group.Items);
+                            if (haveResult)
+                            {
+                                result.Union(bounds);
+                            }
+                            else
+                            {
+                                result = bounds;
+                                haveResult = true;
+                            }
+                        }
+                        break;
                     case LineShapeViewModel lineShape:
                         {
                             var bounds = GetBounds(lineShape);
@@ -145,6 +159,16 @@ namespace SimpleDraw.ViewModels
                         if (result != null)
                         {
                             return result;
+                        }
+                    }
+                    break;
+                case GroupViewModel group:
+                    {
+                        var bounds = GetBounds(group.Items);
+                        var result = bounds.Contains((float)x, (float)y);
+                        if (result)
+                        {
+                            return group;
                         }
                     }
                     break;
@@ -231,6 +255,16 @@ namespace SimpleDraw.ViewModels
                         if (result != null)
                         {
                             return result;
+                        }
+                    }
+                    break;
+                case GroupViewModel group:
+                    {
+                        var bounds = GetBounds(group.Items);
+                        var result = rect.IntersectsWith(bounds);
+                        if (result)
+                        {
+                            return group;
                         }
                     }
                     break;

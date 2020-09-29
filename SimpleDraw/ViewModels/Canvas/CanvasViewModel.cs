@@ -166,11 +166,9 @@ namespace SimpleDraw.ViewModels
             return CloneSelf(shared);
         }
 
-        public void MoveSelected(double deltaX, double deltaY)
+        private void GetPoints(IList<ViewModelBase> items, HashSet<PointViewModel> points)
         {
-            var points = new HashSet<PointViewModel>();
-
-            foreach (var item in _selected)
+            foreach (var item in items)
             {
                 switch (item)
                 {
@@ -178,6 +176,11 @@ namespace SimpleDraw.ViewModels
                         {
                             points.Add(point);
                             points.Add(point);
+                        }
+                        break;
+                    case GroupViewModel group:
+                        {
+                            GetPoints(group.Items, points);
                         }
                         break;
                     case LineShapeViewModel lineShape:
@@ -194,6 +197,13 @@ namespace SimpleDraw.ViewModels
                         break;
                 }
             }
+        }
+
+        public void MoveSelected(double deltaX, double deltaY)
+        {
+            var points = new HashSet<PointViewModel>();
+
+            GetPoints(_selected, points);
 
             foreach (var point in points)
             {
@@ -338,6 +348,66 @@ namespace SimpleDraw.ViewModels
 
             UpdateBounds();
             Invalidate();
+        }
+
+        public void Group()
+        {
+            var group = new GroupViewModel()
+            {
+                Items = new ObservableCollection<ViewModelBase>()
+            };
+
+            foreach (var item in _selected)
+            {
+                group.Items.Add(item);
+            }
+
+            foreach (var item in _selected)
+            {
+                _items.Remove(item);
+            }
+
+            _items.Add(group);
+
+            _selected.Clear();
+            _selected.Add(group);
+
+            UpdateBounds();
+            Invalidate();
+        }
+
+        public void Ungroup()
+        {
+            var update = false;
+            var ungrouped = new List<ViewModelBase>();
+
+            foreach (var item in _selected)
+            {
+                if (item is GroupViewModel group)
+                {
+                    foreach (var groupItem in group.Items)
+                    {
+                        ungrouped.Add(groupItem);
+                    }
+
+                    _items.Remove(group);
+                    update = true;
+                }
+            }
+
+            if (update)
+            {
+                _selected.Clear();
+
+                foreach (var item in ungrouped)
+                {
+                    _items.Add(item);
+                    _selected.Add(item);
+                }
+
+                UpdateBounds();
+                Invalidate(); 
+            }
         }
 
         public void SetTool(string name)

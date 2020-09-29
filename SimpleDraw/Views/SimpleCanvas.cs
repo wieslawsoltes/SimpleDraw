@@ -162,6 +162,14 @@ namespace SimpleDraw.Views
                         }
                     }
                     break;
+                case Key.G:
+                    {
+                        if (e.KeyModifiers == KeyModifiers.Control)
+                        {
+                            canvas.Group();
+                        }
+                    }
+                    break;
                 case Key.L:
                     {
                         if (e.KeyModifiers == KeyModifiers.None)
@@ -204,6 +212,14 @@ namespace SimpleDraw.Views
                         if (e.KeyModifiers == KeyModifiers.Control)
                         {
                             await Save(canvas);
+                        }
+                    }
+                    break;
+                case Key.U:
+                    {
+                        if (e.KeyModifiers == KeyModifiers.Control)
+                        {
+                            canvas.Ungroup();
                         }
                     }
                     break;
