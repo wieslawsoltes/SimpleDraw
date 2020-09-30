@@ -154,6 +154,15 @@ namespace SimpleDraw.Renderer
             return new Rect(x, y, width, height);
         }
 
+        public static Rect ToRect(EllipseShapeViewModel ellipseShape)
+        {
+            var x = Math.Min(ellipseShape.TopLeft.X, ellipseShape.BottomRight.X);
+            var y = Math.Min(ellipseShape.TopLeft.Y, ellipseShape.BottomRight.Y);
+            var width = Math.Abs(ellipseShape.TopLeft.X - ellipseShape.BottomRight.X);
+            var height = Math.Abs(ellipseShape.TopLeft.Y - ellipseShape.BottomRight.Y);
+            return new Rect(x, y, width, height);
+        }
+
         public static Geometry ToGeometry(CubicBezierShapeViewModel cubicBezierShape)
         {
             var geometry = new StreamGeometry();
@@ -253,6 +262,20 @@ namespace SimpleDraw.Renderer
             return geometry;
         }
 
+        public static Geometry ToGeometry(RectangleShapeViewModel rectangleShape)
+        {
+            var rect = ToRect(rectangleShape);
+            var geometry = new RectangleGeometry(rect);
+            return geometry;
+        }
+
+        public static Geometry ToGeometry(EllipseShapeViewModel ellipseShape)
+        {
+            var rect = ToRect(ellipseShape);
+            var geometry = new EllipseGeometry(rect);
+            return geometry;
+        }
+
         public static void Render(DrawingContext context, LineShapeViewModel lineShape)
         {
             if (lineShape.IsStroked)
@@ -308,6 +331,20 @@ namespace SimpleDraw.Renderer
             }
         }
 
+        public static void Render(DrawingContext context, EllipseShapeViewModel ellipseShape)
+        {
+            if (ellipseShape.IsStroked || ellipseShape.IsFilled)
+            {
+                var geometry = ToGeometry(ellipseShape);
+                var brush = ToBrush(ellipseShape.Brush);
+                var pen = ToPen(ellipseShape.Pen);
+                context.DrawGeometry(
+                    ellipseShape.IsFilled ? brush : default,
+                    ellipseShape.IsStroked ? pen : default(IPen),
+                    geometry);
+            }
+        }
+
         public static void Render(DrawingContext context, PathShapeViewModel pathShape)
         {
             if (pathShape.IsStroked || pathShape.IsFilled)
@@ -341,14 +378,19 @@ namespace SimpleDraw.Renderer
                         Render(context, quadraticBezierShape);
                     }
                     break;
+                case PathShapeViewModel pathShape:
+                    {
+                        Render(context, pathShape);
+                    }
+                    break;
                 case RectangleShapeViewModel rectangleShape:
                     {
                         Render(context, rectangleShape);
                     }
                     break;
-                case PathShapeViewModel pathShape:
+                case EllipseShapeViewModel ellipseShape:
                     {
-                        Render(context, pathShape);
+                        Render(context, ellipseShape);
                     }
                     break;
                 default:

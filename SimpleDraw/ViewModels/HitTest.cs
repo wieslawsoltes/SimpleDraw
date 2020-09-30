@@ -47,6 +47,15 @@ namespace SimpleDraw.ViewModels
                 rectangleShape.BottomRight.Y);
         }
 
+        public static SKRect ToSKRect(EllipseShapeViewModel ellipseShape)
+        {
+            return ToSKRect(
+                ellipseShape.TopLeft.X,
+                ellipseShape.TopLeft.Y,
+                ellipseShape.BottomRight.X,
+                ellipseShape.BottomRight.Y);
+        }
+
         public static SKPath ToPath(LineShapeViewModel lineShape)
         {
             var path = new SKPath() { FillType = SKPathFillType.Winding };
@@ -73,14 +82,6 @@ namespace SimpleDraw.ViewModels
             path.QuadTo(
                 new SKPoint((float)quadraticBezierShape.Control.X, (float)quadraticBezierShape.Control.Y),
                 new SKPoint((float)quadraticBezierShape.EndPoint.X, (float)quadraticBezierShape.EndPoint.Y));
-            return path;
-        }
-
-        public static SKPath ToPath(RectangleShapeViewModel rectangleShape)
-        {
-            var rect = ToSKRect(rectangleShape);
-            var path = new SKPath() { FillType = SKPathFillType.Winding };
-            path.AddRect(rect);
             return path;
         }
 
@@ -150,6 +151,22 @@ namespace SimpleDraw.ViewModels
             return path;
         }
 
+        public static SKPath ToPath(RectangleShapeViewModel rectangleShape)
+        {
+            var rect = ToSKRect(rectangleShape);
+            var path = new SKPath() { FillType = SKPathFillType.Winding };
+            path.AddRect(rect);
+            return path;
+        }
+
+        public static SKPath ToPath(EllipseShapeViewModel ellipseShape)
+        {
+            var rect = ToSKRect(ellipseShape);
+            var path = new SKPath() { FillType = SKPathFillType.Winding };
+            path.AddOval(rect);
+            return path;
+        }
+
         public static SKRect GetBounds(LineShapeViewModel lineShape)
         {
             var path = ToPath(lineShape);
@@ -171,6 +188,13 @@ namespace SimpleDraw.ViewModels
             return bounds;
         }
 
+        public static SKRect GetBounds(PathShapeViewModel pathShape)
+        {
+            var path = ToPath(pathShape);
+            var bounds = path.ComputeTightBounds();
+            return bounds;
+        }
+
         public static SKRect GetBounds(RectangleShapeViewModel rectangleShape)
         {
             var path = ToPath(rectangleShape);
@@ -178,9 +202,9 @@ namespace SimpleDraw.ViewModels
             return bounds;
         }
 
-        public static SKRect GetBounds(PathShapeViewModel pathShape)
+        public static SKRect GetBounds(EllipseShapeViewModel ellipseShape)
         {
-            var path = ToPath(pathShape);
+            var path = ToPath(ellipseShape);
             var bounds = path.ComputeTightBounds();
             return bounds;
         }
@@ -266,6 +290,20 @@ namespace SimpleDraw.ViewModels
                             }
                         }
                         break;
+                    case PathShapeViewModel pathShape:
+                        {
+                            var bounds = GetBounds(pathShape);
+                            if (haveResult)
+                            {
+                                result.Union(bounds);
+                            }
+                            else
+                            {
+                                result = bounds;
+                                haveResult = true;
+                            }
+                        }
+                        break;
                     case RectangleShapeViewModel rectangleShape:
                         {
                             var bounds = GetBounds(rectangleShape);
@@ -280,9 +318,9 @@ namespace SimpleDraw.ViewModels
                             }
                         }
                         break;
-                    case PathShapeViewModel pathShape:
+                    case EllipseShapeViewModel ellipseShape:
                         {
-                            var bounds = GetBounds(pathShape);
+                            var bounds = GetBounds(ellipseShape);
                             if (haveResult)
                             {
                                 result.Union(bounds);
@@ -417,28 +455,6 @@ namespace SimpleDraw.ViewModels
                         }
                     }
                     break;
-                case RectangleShapeViewModel rectangleShape:
-                    {
-                        var resultTopLeft = Contains(rectangleShape.TopLeft, hitRect);
-                        if (resultTopLeft != null)
-                        {
-                            return resultTopLeft;
-                        }
-
-                        var resultBottomRight = Contains(rectangleShape.BottomRight, hitRect);
-                        if (resultBottomRight != null)
-                        {
-                            return resultBottomRight;
-                        }
-
-                        var bounds = GetBounds(rectangleShape);
-                        var result = bounds.IntersectsWith(hitRect);
-                        if (result)
-                        {
-                            return rectangleShape;
-                        }
-                    }
-                    break;
                 case PathShapeViewModel pathShape:
                     {
                         foreach (var figure in pathShape.Figures)
@@ -462,6 +478,50 @@ namespace SimpleDraw.ViewModels
                         if (result)
                         {
                             return pathShape;
+                        }
+                    }
+                    break;
+                case RectangleShapeViewModel rectangleShape:
+                    {
+                        var resultTopLeft = Contains(rectangleShape.TopLeft, hitRect);
+                        if (resultTopLeft != null)
+                        {
+                            return resultTopLeft;
+                        }
+
+                        var resultBottomRight = Contains(rectangleShape.BottomRight, hitRect);
+                        if (resultBottomRight != null)
+                        {
+                            return resultBottomRight;
+                        }
+
+                        var bounds = GetBounds(rectangleShape);
+                        var result = bounds.IntersectsWith(hitRect);
+                        if (result)
+                        {
+                            return rectangleShape;
+                        }
+                    }
+                    break;
+                case EllipseShapeViewModel ellipseShape:
+                    {
+                        var resultTopLeft = Contains(ellipseShape.TopLeft, hitRect);
+                        if (resultTopLeft != null)
+                        {
+                            return resultTopLeft;
+                        }
+
+                        var resultBottomRight = Contains(ellipseShape.BottomRight, hitRect);
+                        if (resultBottomRight != null)
+                        {
+                            return resultBottomRight;
+                        }
+
+                        var bounds = GetBounds(ellipseShape);
+                        var result = bounds.IntersectsWith(hitRect);
+                        if (result)
+                        {
+                            return ellipseShape;
                         }
                     }
                     break;
@@ -549,6 +609,16 @@ namespace SimpleDraw.ViewModels
                         }
                     }
                     break;
+                case PathShapeViewModel pathShape:
+                    {
+                        var bounds = GetBounds(pathShape);
+                        var result = rect.IntersectsWith(bounds);
+                        if (result)
+                        {
+                            return pathShape;
+                        }
+                    }
+                    break;
                 case RectangleShapeViewModel rectangleShape:
                     {
                         var bounds = GetBounds(rectangleShape);
@@ -559,13 +629,13 @@ namespace SimpleDraw.ViewModels
                         }
                     }
                     break;
-                case PathShapeViewModel pathShape:
+                case EllipseShapeViewModel ellipseShape:
                     {
-                        var bounds = GetBounds(pathShape);
+                        var bounds = GetBounds(ellipseShape);
                         var result = rect.IntersectsWith(bounds);
                         if (result)
                         {
-                            return pathShape;
+                            return ellipseShape;
                         }
                     }
                     break;

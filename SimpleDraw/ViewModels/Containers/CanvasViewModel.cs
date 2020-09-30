@@ -189,10 +189,39 @@ namespace SimpleDraw.ViewModels
                             points.Add(lineShape.Point);
                         }
                         break;
+                    case CubicBezierShapeViewModel cubicBezierShape:
+                        {
+                            points.Add(cubicBezierShape.StartPoint);
+                            points.Add(cubicBezierShape.Point1);
+                            points.Add(cubicBezierShape.Point2);
+                            points.Add(cubicBezierShape.Point3);
+                        }
+                        break;
+                    case QuadraticBezierShapeViewModel quadraticBezierShape:
+                        {
+                            points.Add(quadraticBezierShape.StartPoint);
+                            points.Add(quadraticBezierShape.Control);
+                            points.Add(quadraticBezierShape.EndPoint);
+                        }
+                        break;
+                    case PathShapeViewModel pathShape:
+                        {
+                            foreach (var figure in pathShape.Figures)
+                            {
+                                GetPoints(figure.Segments, points);
+                            }
+                        }
+                        break;
                     case RectangleShapeViewModel rectangleShape:
                         {
                             points.Add(rectangleShape.TopLeft);
                             points.Add(rectangleShape.BottomRight);
+                        }
+                        break;
+                    case EllipseShapeViewModel ellipseShape:
+                        {
+                            points.Add(ellipseShape.TopLeft);
+                            points.Add(ellipseShape.BottomRight);
                         }
                         break;
                 }
