@@ -7,7 +7,7 @@ namespace SimpleDraw.ViewModels
     [DataContract(IsReference = true)]
     public class RectangleToolViewModel : ToolBaseViewModel
     {
-        private enum State { None, Pressed }
+        private enum State { None, BottomRight }
         private State _state = State.None;
         private RectangleShapeViewModel _rectangle;
         private BrushViewModel _brush;
@@ -111,11 +111,11 @@ namespace SimpleDraw.ViewModels
                             };
                             canvas.Decorators.Add(_rectangle);
                             canvas.Invalidate();
-                            _state = State.Pressed;
+                            _state = State.BottomRight;
                         }
                     }
                     break;
-                case State.Pressed:
+                case State.BottomRight:
                     {
                         if (pointerType == ToolPointerType.Left)
                         {
@@ -163,7 +163,7 @@ namespace SimpleDraw.ViewModels
                     {
                     }
                     break;
-                case State.Pressed:
+                case State.BottomRight:
                     {
                     }
                     break;
@@ -178,7 +178,7 @@ namespace SimpleDraw.ViewModels
                     {
                     }
                     break;
-                case State.Pressed:
+                case State.BottomRight:
                     {
                         if (pointerType == ToolPointerType.None)
                         {
