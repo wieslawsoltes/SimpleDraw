@@ -100,7 +100,7 @@ namespace SimpleDraw
                 }
             };
 
-            canvas.Tool = canvas.Tools[3];
+            canvas.Tool = canvas.Tools[1];
 
             return canvas;
         }
