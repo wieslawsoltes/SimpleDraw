@@ -38,7 +38,13 @@
                 <MenuItem Header="_Selection" InputGesture="S" Command="{Binding SetTool}" CommandParameter="Selection"/>
                 <Separator/>
                 <MenuItem Header="_Line" InputGesture="L" Command="{Binding SetTool}" CommandParameter="Line"/>
+                <MenuItem Header="_Cubic Bezier" InputGesture="C" Command="{Binding SetTool}" CommandParameter="CubicBezier"/>
+                <MenuItem Header="_Quadratic Bezier" InputGesture="Q" Command="{Binding SetTool}" CommandParameter="QuadraticBezier"/>
+                <Separator/>
+                <MenuItem Header="Path_h" InputGesture="H" Command="{Binding SetTool}" CommandParameter="Path"/>
+                <Separator/>
                 <MenuItem Header="_Rectangle" InputGesture="R" Command="{Binding SetTool}" CommandParameter="Rectangle"/>
+                <MenuItem Header="_Ellipse" InputGesture="E" Command="{Binding SetTool}" CommandParameter="Ellipse"/>
             </MenuItem>
         </Menu>
         <Grid x:Name="inputGrid" Grid.Column="0" Grid.Row="1">

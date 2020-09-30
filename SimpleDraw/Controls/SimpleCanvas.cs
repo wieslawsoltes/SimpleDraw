@@ -177,9 +177,22 @@ namespace SimpleDraw.Controls
                     break;
                 case Key.C:
                     {
+                        if (e.KeyModifiers == KeyModifiers.None)
+                        {
+                            canvas.SetTool("CubicBezier");
+                        }
+
                         if (e.KeyModifiers == KeyModifiers.Control)
                         {
                             canvas.Copy();
+                        }
+                    }
+                    break;
+                case Key.E:
+                    {
+                        if (e.KeyModifiers == KeyModifiers.None)
+                        {
+                            canvas.SetTool("Ellipse");
                         }
                     }
                     break;
@@ -188,6 +201,14 @@ namespace SimpleDraw.Controls
                         if (e.KeyModifiers == KeyModifiers.Control)
                         {
                             canvas.Group();
+                        }
+                    }
+                    break;
+                case Key.H:
+                    {
+                        if (e.KeyModifiers == KeyModifiers.None)
+                        {
+                            canvas.SetTool("Path");
                         }
                     }
                     break;
@@ -217,6 +238,14 @@ namespace SimpleDraw.Controls
                         if (e.KeyModifiers == KeyModifiers.Control)
                         {
                             await Open();
+                        }
+                    }
+                    break;
+                case Key.Q:
+                    {
+                        if (e.KeyModifiers == KeyModifiers.None)
+                        {
+                            canvas.SetTool("QuadraticBezier");
                         }
                     }
                     break;
