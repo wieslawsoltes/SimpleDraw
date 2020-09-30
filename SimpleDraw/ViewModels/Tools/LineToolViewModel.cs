@@ -7,7 +7,7 @@ namespace SimpleDraw.ViewModels
     [DataContract(IsReference = true)]
     public class LineToolViewModel : ToolBaseViewModel
     {
-        private enum State { None, Pressed }
+        private enum State { None, Point }
         private State _state = State.None;
         private LineShapeViewModel _line = null;
         private PenViewModel _pen;
@@ -75,11 +75,11 @@ namespace SimpleDraw.ViewModels
                             };
                             canvas.Decorators.Add(_line);
                             canvas.Invalidate();
-                            _state = State.Pressed;
+                            _state = State.Point;
                         }
                     }
                     break;
-                case State.Pressed:
+                case State.Point:
                     {
                         if (pointerType == ToolPointerType.Left)
                         {
@@ -131,7 +131,7 @@ namespace SimpleDraw.ViewModels
                     {
                     }
                     break;
-                case State.Pressed:
+                case State.Point:
                     {
                         if (pointerType == ToolPointerType.None)
                         {
