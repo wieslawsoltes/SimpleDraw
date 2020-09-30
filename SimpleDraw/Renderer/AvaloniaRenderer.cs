@@ -6,7 +6,7 @@ using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using SimpleDraw.ViewModels;
 
-namespace SimpleDraw.Views
+namespace SimpleDraw.Renderer
 {
     internal static class AvaloniaRenderer
     {

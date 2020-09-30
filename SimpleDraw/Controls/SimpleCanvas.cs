@@ -4,9 +4,10 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
+using SimpleDraw.Renderer;
 using SimpleDraw.ViewModels;
 
-namespace SimpleDraw.Views
+namespace SimpleDraw.Controls
 {
     public class SimpleCanvas : Canvas
     {

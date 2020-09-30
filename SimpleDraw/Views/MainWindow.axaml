@@ -1,6 +1,6 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:SimpleDraw.Views;assembly=SimpleDraw"
+        xmlns:controls="clr-namespace:SimpleDraw.Controls;assembly=SimpleDraw"
         xmlns:vm="clr-namespace:SimpleDraw.ViewModels;assembly=SimpleDraw"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -41,7 +41,7 @@
                 <MenuItem Header="_Rectangle" InputGesture="R" Command="{Binding SetTool}" CommandParameter="Rectangle"/>
             </MenuItem>
         </Menu>
-        <local:SimpleCanvas x:Name="canvas" Background="WhiteSmoke" Width="{Binding Width}" Height="{Binding Height}" Grid.Column="0" Grid.Row="1"/>
+        <controls:SimpleCanvas x:Name="canvas" Background="WhiteSmoke" Width="{Binding Width}" Height="{Binding Height}" Grid.Column="0" Grid.Row="1"/>
         <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Items:" Margin="2"/>
