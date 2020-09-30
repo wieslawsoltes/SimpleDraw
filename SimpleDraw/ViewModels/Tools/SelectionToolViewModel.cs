@@ -7,7 +7,7 @@ namespace SimpleDraw.ViewModels
     [DataContract(IsReference = true)]
     public class SelectionToolViewModel : ToolBaseViewModel
     {
-        private enum State { None, Selected, Pressed }
+        private enum State { None, Selected, Move }
         private State _state = State.None;
         private double _hitRadius;
         private double _pressedX = double.NaN;
@@ -77,7 +77,7 @@ namespace SimpleDraw.ViewModels
                             canvas.Invalidate();
                             _pressedX = x;
                             _pressedY = y;
-                            _state = State.Pressed;
+                            _state = State.Move;
                         }
                     }
                     break;
@@ -86,7 +86,7 @@ namespace SimpleDraw.ViewModels
                         _state = State.None;
                     }
                     break;
-                case State.Pressed:
+                case State.Move:
                     {
                         _state = State.None;
                     }
@@ -112,7 +112,7 @@ namespace SimpleDraw.ViewModels
                         _state = State.None;
                     }
                     break;
-                case State.Pressed:
+                case State.Move:
                     {
                         canvas.RemoveSelection();
                         canvas.RemoveBounds();
@@ -187,7 +187,7 @@ namespace SimpleDraw.ViewModels
                         _previousY = y;
                     }
                     break;
-                case State.Pressed:
+                case State.Move:
                     {
                         canvas.MoveSelection(x, y);
                         canvas.Invalidate();
