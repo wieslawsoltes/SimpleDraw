@@ -69,6 +69,24 @@ namespace SimpleDraw
                     HitRadius = 6,
                     TryToConnect = true
                 },
+                new CubicBezierToolViewModel()
+                {
+                    Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
+                    Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
+                    IsStroked = true,
+                    IsFilled = false,
+                    HitRadius = 6,
+                    TryToConnect = true
+                },
+                new QuadraticBezierToolViewModel()
+                {
+                    Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
+                    Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
+                    IsStroked = true,
+                    IsFilled = false,
+                    HitRadius = 6,
+                    TryToConnect = true
+                },
                 new RectangleToolViewModel()
                 {
                     Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
