@@ -47,7 +47,7 @@
                 <MenuItem Header="_Ellipse" InputGesture="E" Command="{Binding SetTool}" CommandParameter="Ellipse"/>
             </MenuItem>
         </Menu>
-        <Grid x:Name="inputGrid" Grid.Column="0" Grid.Row="1">
+        <Grid x:Name="inputGrid" Background="Transparent" Grid.Column="0" Grid.Row="1">
             <controls:SimpleCanvas x:Name="simpleCanvas" InputSource="{Binding #inputGrid}" Background="WhiteSmoke" Width="{Binding Width}" Height="{Binding Height}"/>
         </Grid>
         <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2">
