@@ -41,7 +41,9 @@
                 <MenuItem Header="_Rectangle" InputGesture="R" Command="{Binding SetTool}" CommandParameter="Rectangle"/>
             </MenuItem>
         </Menu>
-        <controls:SimpleCanvas x:Name="canvas" Background="WhiteSmoke" Width="{Binding Width}" Height="{Binding Height}" Grid.Column="0" Grid.Row="1"/>
+        <Border Grid.Column="0" Grid.Row="1">
+            <controls:SimpleCanvas x:Name="canvas" Background="WhiteSmoke" Width="{Binding Width}" Height="{Binding Height}"/>
+        </Border>
         <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Items:" Margin="2"/>
