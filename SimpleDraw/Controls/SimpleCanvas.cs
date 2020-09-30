@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -11,6 +12,15 @@ namespace SimpleDraw.Controls
 {
     public class SimpleCanvas : Canvas
     {
+        public static readonly StyledProperty<IInputElement> InputSourceProperty =
+            AvaloniaProperty.Register<SimpleCanvas, IInputElement>(nameof(InputSource));
+
+        public IInputElement InputSource
+        {
+            get => GetValue(InputSourceProperty);
+            set => SetValue(InputSourceProperty, value);
+        }
+
         private ToolPointerType ToToolPointerType(PointerUpdateKind pointerUpdateKind)
         {
             switch (pointerUpdateKind)
@@ -59,7 +69,7 @@ namespace SimpleDraw.Controls
             Focus();
         }
 
-        private void Canvas_Invalidate(object sender, System.EventArgs e)
+        private void Canvas_Invalidate(object sender, EventArgs e)
         {
             InvalidateVisual();
         }
@@ -67,6 +77,15 @@ namespace SimpleDraw.Controls
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
         {
             base.OnAttachedToVisualTree(e);
+
+            var inputSource = InputSource ?? this;
+            if (inputSource != null)
+            {
+                inputSource.PointerPressed += InputSource_PointerPressed;
+                inputSource.PointerReleased += InputSource_PointerReleased;
+                inputSource.PointerMoved += InputSource_PointerMoved;
+                inputSource.KeyDown += InputSource_KeyDown;
+            }
 
             if (!(DataContext is CanvasViewModel canvas))
             {
@@ -80,6 +99,15 @@ namespace SimpleDraw.Controls
         {
             base.OnDetachedFromVisualTree(e);
 
+            var inputSource = InputSource ?? this;
+            if (inputSource != null)
+            {
+                inputSource.PointerPressed -= InputSource_PointerPressed;
+                inputSource.PointerReleased -= InputSource_PointerReleased;
+                inputSource.PointerMoved -= InputSource_PointerMoved;
+                inputSource.KeyDown -= InputSource_KeyDown;
+            }
+
             if (!(DataContext is CanvasViewModel canvas))
             {
                 return;
@@ -88,10 +116,8 @@ namespace SimpleDraw.Controls
             canvas.InvalidateCanvas -= Canvas_Invalidate;
         }
 
-        protected override void OnPointerPressed(PointerPressedEventArgs e)
+        private void InputSource_PointerPressed(object sender, PointerPressedEventArgs e)
         {
-            base.OnPointerPressed(e);
-
             if (!(DataContext is CanvasViewModel canvas))
             {
                 return;
@@ -104,10 +130,8 @@ namespace SimpleDraw.Controls
             canvas.Tool?.Pressed(canvas, point.Position.X, point.Position.Y, pointerType, keyModifiers);
         }
 
-        protected override void OnPointerReleased(PointerReleasedEventArgs e)
+        private void InputSource_PointerReleased(object sender, PointerReleasedEventArgs e)
         {
-            base.OnPointerReleased(e);
-
             if (!(DataContext is CanvasViewModel canvas))
             {
                 return;
@@ -120,10 +144,8 @@ namespace SimpleDraw.Controls
             canvas.Tool?.Released(canvas, point.Position.X, point.Position.Y, pointerType, keyModifiers);
         }
 
-        protected override void OnPointerMoved(PointerEventArgs e)
+        private void InputSource_PointerMoved(object sender, PointerEventArgs e)
         {
-            base.OnPointerMoved(e);
-
             if (!(DataContext is CanvasViewModel canvas))
             {
                 return;
@@ -136,10 +158,8 @@ namespace SimpleDraw.Controls
             canvas.Tool?.Moved(canvas, point.Position.X, point.Position.Y, pointerType, keyModifiers);
         }
 
-        protected override async void OnKeyDown(KeyEventArgs e)
+        private async void InputSource_KeyDown(object sender, KeyEventArgs e)
         {
-            base.OnKeyDown(e);
-
             if (!(DataContext is CanvasViewModel canvas))
             {
                 return;

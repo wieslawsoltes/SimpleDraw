@@ -13,12 +13,12 @@
     <Grid ColumnDefinitions="*" RowDefinitions="Auto,*,Auto">
         <Menu Grid.Column="0" Grid.Row="0">
             <MenuItem Header="_File">
-                <MenuItem Header="_New" InputGesture="Ctrl+N" Command="{Binding #canvas.New}"/>
+                <MenuItem Header="_New" InputGesture="Ctrl+N" Command="{Binding #simpleCanvas.New}"/>
                 <Separator/>
-                <MenuItem Header="Open..." InputGesture="Ctrl+O" Command="{Binding #canvas.Open}"/>
-                <MenuItem Header="Save As..." InputGesture="Ctrl+S" Command="{Binding #canvas.Save}" CommandParameter="{Binding}"/>
+                <MenuItem Header="Open..." InputGesture="Ctrl+O" Command="{Binding #simpleCanvas.Open}"/>
+                <MenuItem Header="Save As..." InputGesture="Ctrl+S" Command="{Binding #simpleCanvas.Save}" CommandParameter="{Binding}"/>
                 <Separator/>
-                <MenuItem Header="E_xit" InputGesture="Alt+F4" Command="{Binding #canvas.Exit}"/>
+                <MenuItem Header="E_xit" InputGesture="Alt+F4" Command="{Binding #simpleCanvas.Exit}"/>
             </MenuItem>
             <MenuItem Header="_Edit">
                 <MenuItem Header="Cu_t" InputGesture="Ctrl+X" Command="{Binding Cut}"/>
@@ -41,9 +41,9 @@
                 <MenuItem Header="_Rectangle" InputGesture="R" Command="{Binding SetTool}" CommandParameter="Rectangle"/>
             </MenuItem>
         </Menu>
-        <Border Grid.Column="0" Grid.Row="1">
-            <controls:SimpleCanvas x:Name="canvas" Background="WhiteSmoke" Width="{Binding Width}" Height="{Binding Height}"/>
-        </Border>
+        <Grid x:Name="inputGrid" Grid.Column="0" Grid.Row="1">
+            <controls:SimpleCanvas x:Name="simpleCanvas" InputSource="{Binding #inputGrid}" Background="WhiteSmoke" Width="{Binding Width}" Height="{Binding Height}"/>
+        </Grid>
         <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Items:" Margin="2"/>
