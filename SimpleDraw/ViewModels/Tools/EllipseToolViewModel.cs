@@ -7,8 +7,8 @@ namespace SimpleDraw.ViewModels
     [DataContract(IsReference = true)]
     public class EllipseToolViewModel : ToolBaseViewModel
     {
-        private enum State { None, BottomRight }
-        private State _state = State.None;
+        private enum EllipseState { TopLeft, BottomRight }
+        private EllipseState _state = EllipseState.TopLeft;
         private EllipseShapeViewModel _ellipse;
         private BrushViewModel _brush;
         private PenViewModel _pen;
@@ -66,7 +66,7 @@ namespace SimpleDraw.ViewModels
         {
             switch (_state)
             {
-                case State.None:
+                case EllipseState.TopLeft:
                     {
                         if (pointerType == ToolPointerType.Left)
                         {
@@ -93,11 +93,11 @@ namespace SimpleDraw.ViewModels
                             };
                             canvas.Decorators.Add(_ellipse);
                             canvas.Invalidate();
-                            _state = State.BottomRight;
+                            _state = EllipseState.BottomRight;
                         }
                     }
                     break;
-                case State.BottomRight:
+                case EllipseState.BottomRight:
                     {
                         if (pointerType == ToolPointerType.Left)
                         {
@@ -122,7 +122,7 @@ namespace SimpleDraw.ViewModels
                             canvas.Invalidate();
 
                             _ellipse = null;
-                            _state = State.None;
+                            _state = EllipseState.TopLeft;
                         }
 
                         if (pointerType == ToolPointerType.Right)
@@ -130,7 +130,7 @@ namespace SimpleDraw.ViewModels
                             canvas.Decorators.Remove(_ellipse);
                             canvas.Invalidate();
                             _ellipse = null;
-                            _state = State.None;
+                            _state = EllipseState.TopLeft;
                         }
                     }
                     break;
@@ -141,11 +141,11 @@ namespace SimpleDraw.ViewModels
         {
             switch (_state)
             {
-                case State.None:
+                case EllipseState.TopLeft:
                     {
                     }
                     break;
-                case State.BottomRight:
+                case EllipseState.BottomRight:
                     {
                     }
                     break;
@@ -156,11 +156,11 @@ namespace SimpleDraw.ViewModels
         {
             switch (_state)
             {
-                case State.None:
+                case EllipseState.TopLeft:
                     {
                     }
                     break;
-                case State.BottomRight:
+                case EllipseState.BottomRight:
                     {
                         if (pointerType == ToolPointerType.None)
                         {
