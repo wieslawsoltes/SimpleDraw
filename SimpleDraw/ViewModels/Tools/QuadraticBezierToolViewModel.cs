@@ -7,8 +7,8 @@ namespace SimpleDraw.ViewModels
     [DataContract(IsReference = true)]
     public class QuadraticBezierToolViewModel : ToolBaseViewModel
     {
-        private enum State { None, EndPoint, Control }
-        private State _state = State.None;
+        private enum QuadraticBezierState { StartPoint, Control, EndPoint }
+        private QuadraticBezierState _state = QuadraticBezierState.StartPoint;
         private QuadraticBezierShapeViewModel _quadraticBezier;
         private BrushViewModel _brush;
         private PenViewModel _pen;
@@ -66,7 +66,7 @@ namespace SimpleDraw.ViewModels
         {
             switch (_state)
             {
-                case State.None:
+                case QuadraticBezierState.StartPoint:
                     {
                         if (pointerType == ToolPointerType.Left)
                         {
@@ -94,11 +94,11 @@ namespace SimpleDraw.ViewModels
                             };
                             canvas.Decorators.Add(_quadraticBezier);
                             canvas.Invalidate();
-                            _state = State.EndPoint;
+                            _state = QuadraticBezierState.EndPoint;
                         }
                     }
                     break;
-                case State.EndPoint:
+                case QuadraticBezierState.EndPoint:
                     {
                         if (pointerType == ToolPointerType.Left)
                         {
@@ -120,7 +120,7 @@ namespace SimpleDraw.ViewModels
 
                             canvas.Invalidate();
 
-                            _state = State.Control;
+                            _state = QuadraticBezierState.Control;
                         }
 
                         if (pointerType == ToolPointerType.Right)
@@ -128,11 +128,11 @@ namespace SimpleDraw.ViewModels
                             canvas.Decorators.Remove(_quadraticBezier);
                             canvas.Invalidate();
                             _quadraticBezier = null;
-                            _state = State.None;
+                            _state = QuadraticBezierState.StartPoint;
                         }
                     }
                     break;
-                case State.Control:
+                case QuadraticBezierState.Control:
                     {
                         if (pointerType == ToolPointerType.Left)
                         {
@@ -157,7 +157,7 @@ namespace SimpleDraw.ViewModels
                             canvas.Invalidate();
 
                             _quadraticBezier = null;
-                            _state = State.None;
+                            _state = QuadraticBezierState.StartPoint;
                         }
 
                         if (pointerType == ToolPointerType.Right)
@@ -165,7 +165,7 @@ namespace SimpleDraw.ViewModels
                             canvas.Decorators.Remove(_quadraticBezier);
                             canvas.Invalidate();
                             _quadraticBezier = null;
-                            _state = State.None;
+                            _state = QuadraticBezierState.StartPoint;
                         }
                     }
                     break;
@@ -176,15 +176,15 @@ namespace SimpleDraw.ViewModels
         {
             switch (_state)
             {
-                case State.None:
+                case QuadraticBezierState.StartPoint:
                     {
                     }
                     break;
-                case State.EndPoint:
+                case QuadraticBezierState.EndPoint:
                     {
                     }
                     break;
-                case State.Control:
+                case QuadraticBezierState.Control:
                     {
                     }
                     break;
@@ -195,11 +195,11 @@ namespace SimpleDraw.ViewModels
         {
             switch (_state)
             {
-                case State.None:
+                case QuadraticBezierState.StartPoint:
                     {
                     }
                     break;
-                case State.EndPoint:
+                case QuadraticBezierState.EndPoint:
                     {
                         if (pointerType == ToolPointerType.None)
                         {
@@ -211,7 +211,7 @@ namespace SimpleDraw.ViewModels
                         }
                     }
                     break;
-                case State.Control:
+                case QuadraticBezierState.Control:
                     {
                         if (pointerType == ToolPointerType.None)
                         {
