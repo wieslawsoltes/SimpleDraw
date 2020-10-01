@@ -139,27 +139,12 @@ namespace SimpleDraw.ViewModels
 
         public override void Released(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
-            switch (_state)
-            {
-                case EllipseState.TopLeft:
-                    {
-                    }
-                    break;
-                case EllipseState.BottomRight:
-                    {
-                    }
-                    break;
-            }
         }
 
         public override void Moved(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
             switch (_state)
             {
-                case EllipseState.TopLeft:
-                    {
-                    }
-                    break;
                 case EllipseState.BottomRight:
                     {
                         if (pointerType == ToolPointerType.None)
