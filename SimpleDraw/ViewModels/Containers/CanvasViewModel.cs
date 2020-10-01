@@ -9,7 +9,7 @@ namespace SimpleDraw.ViewModels
     public delegate void InvalidateEventHandler(object sender, EventArgs e);
 
     [DataContract(IsReference = true)]
-    public class CanvasViewModel : ViewModelBase
+    public class CanvasViewModel : ViewModelBase, IItemsCanvas
     {
         private double _width;
         private double _height;
