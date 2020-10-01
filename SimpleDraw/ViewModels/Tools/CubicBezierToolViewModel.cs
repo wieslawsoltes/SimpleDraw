@@ -7,8 +7,8 @@ namespace SimpleDraw.ViewModels
     [DataContract(IsReference = true)]
     public class CubicBezierToolViewModel : ToolBaseViewModel
     {
-        private enum State { None, Point3, Point2, Point1 }
-        private State _state = State.None;
+        private enum CubicBezierState { StartPoint, Point1, Point2, Point3 }
+        private CubicBezierState _state = CubicBezierState.StartPoint;
         private CubicBezierShapeViewModel _cubicBezier;
         private BrushViewModel _brush;
         private PenViewModel _pen;
@@ -66,7 +66,7 @@ namespace SimpleDraw.ViewModels
         {
             switch (_state)
             {
-                case State.None:
+                case CubicBezierState.StartPoint:
                     {
                         if (pointerType == ToolPointerType.Left)
                         {
@@ -95,11 +95,11 @@ namespace SimpleDraw.ViewModels
                             };
                             canvas.Decorators.Add(_cubicBezier);
                             canvas.Invalidate();
-                            _state = State.Point3;
+                            _state = CubicBezierState.Point3;
                         }
                     }
                     break;
-                case State.Point3:
+                case CubicBezierState.Point3:
                     {
                         if (pointerType == ToolPointerType.Left)
                         {
@@ -121,7 +121,7 @@ namespace SimpleDraw.ViewModels
 
                             canvas.Invalidate();
 
-                            _state = State.Point2;
+                            _state = CubicBezierState.Point2;
                         }
 
                         if (pointerType == ToolPointerType.Right)
@@ -129,11 +129,11 @@ namespace SimpleDraw.ViewModels
                             canvas.Decorators.Remove(_cubicBezier);
                             canvas.Invalidate();
                             _cubicBezier = null;
-                            _state = State.None;
+                            _state = CubicBezierState.StartPoint;
                         }
                     }
                     break;
-                case State.Point2:
+                case CubicBezierState.Point2:
                     {
                         if (pointerType == ToolPointerType.Left)
                         {
@@ -155,7 +155,7 @@ namespace SimpleDraw.ViewModels
 
                             canvas.Invalidate();
 
-                            _state = State.Point1;
+                            _state = CubicBezierState.Point1;
                         }
 
                         if (pointerType == ToolPointerType.Right)
@@ -163,11 +163,11 @@ namespace SimpleDraw.ViewModels
                             canvas.Decorators.Remove(_cubicBezier);
                             canvas.Invalidate();
                             _cubicBezier = null;
-                            _state = State.None;
+                            _state = CubicBezierState.StartPoint;
                         }
                     }
                     break;
-                case State.Point1:
+                case CubicBezierState.Point1:
                     {
                         if (pointerType == ToolPointerType.Left)
                         {
@@ -192,7 +192,7 @@ namespace SimpleDraw.ViewModels
                             canvas.Invalidate();
 
                             _cubicBezier = null;
-                            _state = State.None;
+                            _state = CubicBezierState.StartPoint;
                         }
 
                         if (pointerType == ToolPointerType.Right)
@@ -200,7 +200,7 @@ namespace SimpleDraw.ViewModels
                             canvas.Decorators.Remove(_cubicBezier);
                             canvas.Invalidate();
                             _cubicBezier = null;
-                            _state = State.None;
+                            _state = CubicBezierState.StartPoint;
                         }
                     }
                     break;
@@ -211,19 +211,19 @@ namespace SimpleDraw.ViewModels
         {
             switch (_state)
             {
-                case State.None:
+                case CubicBezierState.StartPoint:
                     {
                     }
                     break;
-                case State.Point3:
+                case CubicBezierState.Point3:
                     {
                     }
                     break;
-                case State.Point1:
+                case CubicBezierState.Point1:
                     {
                     }
                     break;
-                case State.Point2:
+                case CubicBezierState.Point2:
                     {
                     }
                     break;
@@ -234,11 +234,11 @@ namespace SimpleDraw.ViewModels
         {
             switch (_state)
             {
-                case State.None:
+                case CubicBezierState.StartPoint:
                     {
                     }
                     break;
-                case State.Point3:
+                case CubicBezierState.Point3:
                     {
                         if (pointerType == ToolPointerType.None)
                         {
@@ -250,7 +250,7 @@ namespace SimpleDraw.ViewModels
                         }
                     }
                     break;
-                case State.Point2:
+                case CubicBezierState.Point2:
                     {
                         if (pointerType == ToolPointerType.None)
                         {
@@ -262,7 +262,7 @@ namespace SimpleDraw.ViewModels
                         }
                     }
                     break;
-                case State.Point1:
+                case CubicBezierState.Point1:
                     {
                         if (pointerType == ToolPointerType.None)
                         {
