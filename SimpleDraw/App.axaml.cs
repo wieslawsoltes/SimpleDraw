@@ -64,7 +64,7 @@ namespace SimpleDraw
                 },
                 new LineToolViewModel()
                 {
-                    LineShapeTool = new LineShapeToolViewModel()
+                    ShapeTool = new LineShapeToolViewModel()
                     {
                         Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
                         IsStroked = true,
@@ -74,21 +74,27 @@ namespace SimpleDraw
                 },
                 new CubicBezierToolViewModel()
                 {
-                    Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
-                    Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
-                    IsStroked = true,
-                    IsFilled = false,
-                    HitRadius = 6,
-                    TryToConnect = true
+                    ShapeTool = new CubicBezierShapeToolViewModel()
+                    {
+                        Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
+                        Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
+                        IsStroked = true,
+                        IsFilled = false,
+                        HitRadius = 6,
+                        TryToConnect = true
+                    }
                 },
                 new QuadraticBezierToolViewModel()
                 {
-                    Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
-                    Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
-                    IsStroked = true,
-                    IsFilled = false,
-                    HitRadius = 6,
-                    TryToConnect = true
+                    ShapeTool = new QuadraticBezierShapeToolViewModel()
+                    {
+                        Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
+                        Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
+                        IsStroked = true,
+                        IsFilled = false,
+                        HitRadius = 6,
+                        TryToConnect = true
+                    }
                 },
                 new PathToolViewModel()
                 {
@@ -106,6 +112,24 @@ namespace SimpleDraw
                     {
                         Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
                         IsStroked = true,
+                        HitRadius = 6,
+                        TryToConnect = true
+                    },
+                    CubicBezierShapeTool = new CubicBezierShapeToolViewModel()
+                    {
+                        Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
+                        Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
+                        IsStroked = true,
+                        IsFilled = false,
+                        HitRadius = 6,
+                        TryToConnect = true
+                    },
+                    QuadraticBezierShapeTool = new QuadraticBezierShapeToolViewModel()
+                    {
+                        Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
+                        Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
+                        IsStroked = true,
+                        IsFilled = false,
                         HitRadius = 6,
                         TryToConnect = true
                     }
