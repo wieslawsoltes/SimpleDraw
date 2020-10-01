@@ -64,10 +64,13 @@ namespace SimpleDraw
                 },
                 new LineToolViewModel()
                 {
-                    Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
-                    IsStroked = true,
-                    HitRadius = 6,
-                    TryToConnect = true
+                    LineShapeTool = new LineShapeToolViewModel()
+                    {
+                        Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
+                        IsStroked = true,
+                        HitRadius = 6,
+                        TryToConnect = true
+                    }
                 },
                 new CubicBezierToolViewModel()
                 {
@@ -96,8 +99,16 @@ namespace SimpleDraw
                     HitRadius = 6,
                     FillRule = PathFillRule.EvenOdd,
                     IsClosed = true,
+                    PreviousMode = PathToolMode.Line,
                     Mode = PathToolMode.Line,
-                    TryToConnect = true
+                    TryToConnect = true,
+                    LineShapeTool = new LineShapeToolViewModel()
+                    {
+                        Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
+                        IsStroked = true,
+                        HitRadius = 6,
+                        TryToConnect = true
+                    }
                 },
                 new RectangleToolViewModel()
                 {
