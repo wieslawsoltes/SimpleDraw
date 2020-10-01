@@ -157,27 +157,12 @@ namespace SimpleDraw.ViewModels
 
         public override void Released(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
-            switch (_state)
-            {
-                case RectangleState.TopLeft:
-                    {
-                    }
-                    break;
-                case RectangleState.BottomRight:
-                    {
-                    }
-                    break;
-            }
         }
 
         public override void Moved(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
             switch (_state)
             {
-                case RectangleState.TopLeft:
-                    {
-                    }
-                    break;
                 case RectangleState.BottomRight:
                     {
                         if (pointerType == ToolPointerType.None)
