@@ -13,11 +13,29 @@ namespace SimpleDraw.ViewModels
         QuadraticBezier
     }
 
+    internal class ItemsCanvasAdapter : IItemsCanvas
+    {
+        public CanvasViewModel Canvas { get; set; }
+
+        public PathShapeViewModel Path { get; set; }
+
+        public FigureViewModel Figure { get; set; }
+
+        public ObservableCollection<ViewModelBase> Items { get; set; }
+
+        public ObservableCollection<ViewModelBase> Decorators { get; set; }
+
+        public void Invalidate()
+        {
+            Canvas?.Invalidate();
+        }
+    }
+
     [DataContract(IsReference = true)]
     public class PathToolViewModel : ToolBaseViewModel
     {
-        private enum State { None, Pressed }
-        private State _state = State.None;
+        private enum PathState { StartPoint, NextPoint }
+        private PathState _state = PathState.StartPoint;
         private PathShapeViewModel _path;
         private FigureViewModel _figure;
         private BrushViewModel _brush;
@@ -30,6 +48,8 @@ namespace SimpleDraw.ViewModels
         private bool _isClosed;
         private PathToolMode _previousMode;
         private PathToolMode _mode;
+        private ItemsCanvasAdapter _itemsCanvasAdapter;
+        private LineShapeToolViewModel _lineShapeTool;
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public BrushViewModel Brush
@@ -101,28 +121,30 @@ namespace SimpleDraw.ViewModels
             set => this.RaiseAndSetIfChanged(ref _tryToConnect, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
+        public LineShapeToolViewModel LineShapeTool
+        {
+            get => _lineShapeTool;
+            set => this.RaiseAndSetIfChanged(ref _lineShapeTool, value);
+        }
+
         [IgnoreDataMember]
         public override string Name => "Path";
+
+        public PathToolViewModel()
+        {
+            _itemsCanvasAdapter = new ItemsCanvasAdapter();
+        }
 
         public override void Pressed(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
             switch (_state)
             {
-                case State.None:
+                case PathState.StartPoint:
                     {
                         if (pointerType == ToolPointerType.Left)
                         {
                             var shared = new Dictionary<ViewModelBase, ViewModelBase>();
-                            var startPoint = default(PointViewModel);
-
-                            if (_tryToConnect)
-                            {
-                                var result = HitTest.Contains(canvas.Items, x, y, _hitRadius);
-                                if (result is PointViewModel point)
-                                {
-                                    startPoint = point;
-                                }
-                            }
 
                             _path = new PathShapeViewModel()
                             {
@@ -142,6 +164,12 @@ namespace SimpleDraw.ViewModels
 
                             _path.Figures.Add(_figure);
 
+                            _itemsCanvasAdapter.Canvas = canvas;
+                            _itemsCanvasAdapter.Path = _path;
+                            _itemsCanvasAdapter.Figure = _figure;
+                            _itemsCanvasAdapter.Items = _figure.Segments;
+                            _itemsCanvasAdapter.Decorators = _figure.Segments;
+
                             switch (_mode)
                             {
                                 case PathToolMode.Move:
@@ -151,7 +179,7 @@ namespace SimpleDraw.ViewModels
                                     break;
                                 case PathToolMode.Line:
                                     {
-                                        // TODO: startPoint
+                                        _lineShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
                                     }
                                     break;
                                 case PathToolMode.CubicBezier:
@@ -168,46 +196,85 @@ namespace SimpleDraw.ViewModels
 
                             canvas.Decorators.Add(_path);
                             canvas.Invalidate();
-                            _state = State.Pressed;
+                            _state = PathState.NextPoint;
                         }
                     }
                     break;
-                case State.Pressed:
+                case PathState.NextPoint:
                     {
                         if (pointerType == ToolPointerType.Left)
                         {
-                            var nextPoint = default(PointViewModel);
+                            _itemsCanvasAdapter.Canvas = canvas;
+                            _itemsCanvasAdapter.Path = _path;
+                            _itemsCanvasAdapter.Figure = _figure;
+                            _itemsCanvasAdapter.Items = _figure.Segments;
+                            _itemsCanvasAdapter.Decorators = _figure.Segments;
 
-                            if (_tryToConnect)
+                            if (_mode == PathToolMode.Move)
                             {
-                                var result = HitTest.Contains(canvas.Items, x, y, _hitRadius);
-                                if (result is PointViewModel point)
+                                _figure = new FigureViewModel()
                                 {
-                                    nextPoint = point;
-                                }
+                                    Segments = new ObservableCollection<ViewModelBase>(),
+                                    IsClosed = _isClosed
+                                };
+
+                                _path.Figures.Add(_figure);
+
+                                _mode = _previousMode;
                             }
 
-                            if (nextPoint != null)
+                            switch (_mode)
                             {
-                                // TODO: nextPoint
+                                case PathToolMode.Line:
+                                    {
+                                        _lineShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
+                                        _lineShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
+                                    }
+                                    break;
+                                case PathToolMode.CubicBezier:
+                                    {
+                                        // TODO:
+                                    }
+                                    break;
+                                case PathToolMode.QuadraticBezier:
+                                    {
+                                        // TODO:
+                                    }
+                                    break;
                             }
-
-                            canvas.Decorators.Remove(_path);
-                            canvas.Items.Add(_path);
-                            canvas.Invalidate();
-
-                            _path = null;
-                            _figure = null;
-                            _state = State.None;
                         }
 
                         if (pointerType == ToolPointerType.Right)
                         {
+                            switch (_mode)
+                            {
+                                case PathToolMode.Line:
+                                    {
+                                        _lineShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
+                                    }
+                                    break;
+                                case PathToolMode.CubicBezier:
+                                    {
+                                        // TODO:
+                                    }
+                                    break;
+                                case PathToolMode.QuadraticBezier:
+                                    {
+                                        // TODO:
+                                    }
+                                    break;
+                            }
+
                             canvas.Decorators.Remove(_path);
+
+                            if (_path.Figures[0].Segments.Count >= 0)
+                            {
+                                canvas.Items.Add(_path);
+                            }
                             canvas.Invalidate();
                             _path = null;
                             _figure = null;
-                            _state = State.None;
+                            _state = PathState.StartPoint;
                         }
                     }
                     break;
@@ -218,11 +285,11 @@ namespace SimpleDraw.ViewModels
         {
             switch (_state)
             {
-                case State.None:
+                case PathState.StartPoint:
                     {
                     }
                     break;
-                case State.Pressed:
+                case PathState.NextPoint:
                     {
                     }
                     break;
@@ -233,16 +300,43 @@ namespace SimpleDraw.ViewModels
         {
             switch (_state)
             {
-                case State.None:
+                case PathState.StartPoint:
                     {
                     }
                     break;
-                case State.Pressed:
+                case PathState.NextPoint:
                     {
                         if (pointerType == ToolPointerType.None)
                         {
-                            // TODO:
-                            canvas.Invalidate();
+                            _itemsCanvasAdapter.Canvas = canvas;
+                            _itemsCanvasAdapter.Path = _path;
+                            _itemsCanvasAdapter.Figure = _figure;
+                            _itemsCanvasAdapter.Items = _figure.Segments;
+                            _itemsCanvasAdapter.Decorators = _figure.Segments;
+
+                            switch (_mode)
+                            {
+                                case PathToolMode.Move:
+                                    {
+                                        // TODO: startPoint
+                                    }
+                                    break;
+                                case PathToolMode.Line:
+                                    {
+                                        _lineShapeTool?.Moved(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
+                                    }
+                                    break;
+                                case PathToolMode.CubicBezier:
+                                    {
+                                        // TODO: startPoint
+                                    }
+                                    break;
+                                case PathToolMode.QuadraticBezier:
+                                    {
+                                        // TODO: startPoint
+                                    }
+                                    break;
+                            }
                         }
                     }
                     break;
