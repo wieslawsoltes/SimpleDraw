@@ -7,8 +7,8 @@ namespace SimpleDraw.ViewModels
     [DataContract(IsReference = true)]
     public class RectangleToolViewModel : ToolBaseViewModel
     {
-        private enum State { None, BottomRight }
-        private State _state = State.None;
+        private enum RectangleState { TopLeft, BottomRight }
+        private RectangleState _state = RectangleState.TopLeft;
         private RectangleShapeViewModel _rectangle;
         private BrushViewModel _brush;
         private PenViewModel _pen;
@@ -82,7 +82,7 @@ namespace SimpleDraw.ViewModels
         {
             switch (_state)
             {
-                case State.None:
+                case RectangleState.TopLeft:
                     {
                         if (pointerType == ToolPointerType.Left)
                         {
@@ -111,11 +111,11 @@ namespace SimpleDraw.ViewModels
                             };
                             canvas.Decorators.Add(_rectangle);
                             canvas.Invalidate();
-                            _state = State.BottomRight;
+                            _state = RectangleState.BottomRight;
                         }
                     }
                     break;
-                case State.BottomRight:
+                case RectangleState.BottomRight:
                     {
                         if (pointerType == ToolPointerType.Left)
                         {
@@ -140,7 +140,7 @@ namespace SimpleDraw.ViewModels
                             canvas.Invalidate();
 
                             _rectangle = null;
-                            _state = State.None;
+                            _state = RectangleState.TopLeft;
                         }
 
                         if (pointerType == ToolPointerType.Right)
@@ -148,7 +148,7 @@ namespace SimpleDraw.ViewModels
                             canvas.Decorators.Remove(_rectangle);
                             canvas.Invalidate();
                             _rectangle = null;
-                            _state = State.None;
+                            _state = RectangleState.TopLeft;
                         }
                     }
                     break;
@@ -159,11 +159,11 @@ namespace SimpleDraw.ViewModels
         {
             switch (_state)
             {
-                case State.None:
+                case RectangleState.TopLeft:
                     {
                     }
                     break;
-                case State.BottomRight:
+                case RectangleState.BottomRight:
                     {
                     }
                     break;
@@ -174,11 +174,11 @@ namespace SimpleDraw.ViewModels
         {
             switch (_state)
             {
-                case State.None:
+                case RectangleState.TopLeft:
                     {
                     }
                     break;
-                case State.BottomRight:
+                case RectangleState.BottomRight:
                     {
                         if (pointerType == ToolPointerType.None)
                         {
