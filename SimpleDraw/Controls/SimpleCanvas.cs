@@ -179,7 +179,15 @@ namespace SimpleDraw.Controls
                     {
                         if (e.KeyModifiers == KeyModifiers.None)
                         {
-                            canvas.SetTool("CubicBezier");
+                            if (canvas.Tool is PathToolViewModel pathTool)
+                            {
+                                pathTool.PreviousMode = pathTool.Mode;
+                                pathTool.Mode = PathToolMode.CubicBezier;
+                            }
+                            else
+                            {
+                                canvas.SetTool("CubicBezier");
+                            }
                         }
 
                         if (e.KeyModifiers == KeyModifiers.Control)
@@ -216,7 +224,27 @@ namespace SimpleDraw.Controls
                     {
                         if (e.KeyModifiers == KeyModifiers.None)
                         {
-                            canvas.SetTool("Line");
+                            if (canvas.Tool is PathToolViewModel pathTool)
+                            {
+                                pathTool.PreviousMode = pathTool.Mode;
+                                pathTool.Mode = PathToolMode.Line;
+                            }
+                            else
+                            {
+                                canvas.SetTool("Line");
+                            }
+                        }
+                    }
+                    break;
+                case Key.M:
+                    {
+                        if (e.KeyModifiers == KeyModifiers.None)
+                        {
+                            if (canvas.Tool is PathToolViewModel pathTool)
+                            {
+                                pathTool.PreviousMode = pathTool.Mode;
+                                pathTool.Mode = PathToolMode.Move;
+                            }
                         }
                     }
                     break;
@@ -245,7 +273,15 @@ namespace SimpleDraw.Controls
                     {
                         if (e.KeyModifiers == KeyModifiers.None)
                         {
-                            canvas.SetTool("QuadraticBezier");
+                            if (canvas.Tool is PathToolViewModel pathTool)
+                            {
+                                pathTool.PreviousMode = pathTool.Mode;
+                                pathTool.Mode = PathToolMode.QuadraticBezier;
+                            }
+                            else
+                            {
+                                canvas.SetTool("QuadraticBezier");
+                            }
                         }
                     }
                     break;
