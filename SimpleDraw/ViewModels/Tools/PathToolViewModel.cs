@@ -5,14 +5,6 @@ using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
-    public enum PathToolMode
-    {
-        Move = 0,
-        Line = 1,
-        CubicBezier = 2,
-        QuadraticBezier
-    }
-
     internal class ItemsCanvasAdapter : IItemsCanvas
     {
         public CanvasViewModel Canvas { get; set; }
@@ -29,6 +21,14 @@ namespace SimpleDraw.ViewModels
         {
             Canvas?.Invalidate();
         }
+    }
+
+    public enum PathToolMode
+    {
+        Move = 0,
+        Line = 1,
+        CubicBezier = 2,
+        QuadraticBezier
     }
 
     [DataContract(IsReference = true)]
