@@ -4,7 +4,7 @@ using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
-    public class LineShapeToolViewModel : ViewModelBase
+    public class LineShapeToolViewModel : ShapeToolViewModel
     {
         private enum LineState { StartPoint, Point }
         private LineState _state = LineState.StartPoint;
@@ -42,7 +42,7 @@ namespace SimpleDraw.ViewModels
             set => this.RaiseAndSetIfChanged(ref _tryToConnect, value);
         }
 
-        public void Pressed(IItemsCanvas canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
+        public override void Pressed(IItemsCanvas canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
             switch (_state)
             {
@@ -115,11 +115,11 @@ namespace SimpleDraw.ViewModels
             }
         }
 
-        public void Released(IItemsCanvas canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
+        public override void Released(IItemsCanvas canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
         }
 
-        public void Moved(IItemsCanvas canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
+        public override void Moved(IItemsCanvas canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
             switch (_state)
             {
@@ -140,7 +140,7 @@ namespace SimpleDraw.ViewModels
             }
         }
 
-        public LineShapeToolViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
+        public override ShapeToolViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
             if (shared.TryGetValue(this, out var value))
             {
