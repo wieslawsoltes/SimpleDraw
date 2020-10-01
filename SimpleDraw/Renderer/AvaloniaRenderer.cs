@@ -202,40 +202,27 @@ namespace SimpleDraw.Renderer
             {
                 if (figure.Segments.Count > 0)
                 {
-                    var firstSegment = figure.Segments[0];
-
-                    switch (firstSegment)
+                    for (int i = 0; i < figure.Segments.Count; i++)
                     {
-                        case LineShapeViewModel lineShape:
-                            {
-                                geometryContext.BeginFigure(ToPoint(lineShape.StartPoint), true);
-                            }
-                            break;
-                        case CubicBezierShapeViewModel cubicBezierShape:
-                            {
-                                geometryContext.BeginFigure(ToPoint(cubicBezierShape.StartPoint), true);
-                            }
-                            break;
-                        case QuadraticBezierShapeViewModel quadraticBezierShape:
-                            {
-                                geometryContext.BeginFigure(ToPoint(quadraticBezierShape.StartPoint), true);
-                            }
-                            break;
-                    }
+                        var segment = figure.Segments[i];
 
-                    for (int i = 1; i < figure.Segments.Count; i++)
-                    {
-                        var nextSegment = figure.Segments[i];
-
-                        switch (nextSegment)
+                        switch (segment)
                         {
                             case LineShapeViewModel lineShape:
                                 {
+                                    if (i == 0)
+                                    {
+                                        geometryContext.BeginFigure(ToPoint(lineShape.StartPoint), true);
+                                    }
                                     geometryContext.LineTo(ToPoint(lineShape.Point));
                                 }
                                 break;
                             case CubicBezierShapeViewModel cubicBezierShape:
                                 {
+                                    if (i == 0)
+                                    {
+                                        geometryContext.BeginFigure(ToPoint(cubicBezierShape.StartPoint), true);
+                                    }
                                     geometryContext.CubicBezierTo(
                                         ToPoint(cubicBezierShape.Point1),
                                         ToPoint(cubicBezierShape.Point2),
@@ -244,6 +231,10 @@ namespace SimpleDraw.Renderer
                                 break;
                             case QuadraticBezierShapeViewModel quadraticBezierShape:
                                 {
+                                    if (i == 0)
+                                    {
+                                        geometryContext.BeginFigure(ToPoint(quadraticBezierShape.StartPoint), true);
+                                    }
                                     geometryContext.QuadraticBezierTo(
                                         ToPoint(quadraticBezierShape.Control),
                                         ToPoint(quadraticBezierShape.EndPoint));
