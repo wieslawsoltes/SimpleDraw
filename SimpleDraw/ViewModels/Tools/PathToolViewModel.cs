@@ -49,7 +49,9 @@ namespace SimpleDraw.ViewModels
         private PathToolMode _previousMode;
         private PathToolMode _mode;
         private ItemsCanvasAdapter _itemsCanvasAdapter;
-        private LineShapeToolViewModel _lineShapeTool;
+        private ShapeToolViewModel _lineShapeTool;
+        private ShapeToolViewModel _cubicBezierShapeTool;
+        private ShapeToolViewModel _quadraticBezierShapeTool;
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public BrushViewModel Brush
@@ -122,10 +124,24 @@ namespace SimpleDraw.ViewModels
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
-        public LineShapeToolViewModel LineShapeTool
+        public ShapeToolViewModel LineShapeTool
         {
             get => _lineShapeTool;
             set => this.RaiseAndSetIfChanged(ref _lineShapeTool, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
+        public ShapeToolViewModel CubicBezierShapeTool
+        {
+            get => _cubicBezierShapeTool;
+            set => this.RaiseAndSetIfChanged(ref _cubicBezierShapeTool, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
+        public ShapeToolViewModel QuadraticBezierShapeTool
+        {
+            get => _quadraticBezierShapeTool;
+            set => this.RaiseAndSetIfChanged(ref _quadraticBezierShapeTool, value);
         }
 
         [IgnoreDataMember]
@@ -172,11 +188,6 @@ namespace SimpleDraw.ViewModels
 
                             switch (_mode)
                             {
-                                case PathToolMode.Move:
-                                    {
-                                        // TODO: startPoint
-                                    }
-                                    break;
                                 case PathToolMode.Line:
                                     {
                                         _lineShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
@@ -184,12 +195,12 @@ namespace SimpleDraw.ViewModels
                                     break;
                                 case PathToolMode.CubicBezier:
                                     {
-                                        // TODO: startPoint
+                                        _cubicBezierShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
                                     }
                                     break;
                                 case PathToolMode.QuadraticBezier:
                                     {
-                                        // TODO: startPoint
+                                        _quadraticBezierShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
                                     }
                                     break;
                             }
@@ -233,12 +244,14 @@ namespace SimpleDraw.ViewModels
                                     break;
                                 case PathToolMode.CubicBezier:
                                     {
-                                        // TODO:
+                                        _cubicBezierShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
+                                        _cubicBezierShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
                                     }
                                     break;
                                 case PathToolMode.QuadraticBezier:
                                     {
-                                        // TODO:
+                                        _quadraticBezierShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
+                                        _quadraticBezierShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
                                     }
                                     break;
                             }
@@ -255,12 +268,12 @@ namespace SimpleDraw.ViewModels
                                     break;
                                 case PathToolMode.CubicBezier:
                                     {
-                                        // TODO:
+                                        _cubicBezierShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
                                     }
                                     break;
                                 case PathToolMode.QuadraticBezier:
                                     {
-                                        // TODO:
+                                        _quadraticBezierShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
                                     }
                                     break;
                             }
@@ -283,27 +296,12 @@ namespace SimpleDraw.ViewModels
 
         public override void Released(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
-            switch (_state)
-            {
-                case PathState.StartPoint:
-                    {
-                    }
-                    break;
-                case PathState.NextPoint:
-                    {
-                    }
-                    break;
-            }
         }
 
         public override void Moved(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
             switch (_state)
             {
-                case PathState.StartPoint:
-                    {
-                    }
-                    break;
                 case PathState.NextPoint:
                     {
                         if (pointerType == ToolPointerType.None)
@@ -316,11 +314,6 @@ namespace SimpleDraw.ViewModels
 
                             switch (_mode)
                             {
-                                case PathToolMode.Move:
-                                    {
-                                        // TODO: startPoint
-                                    }
-                                    break;
                                 case PathToolMode.Line:
                                     {
                                         _lineShapeTool?.Moved(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
@@ -328,12 +321,12 @@ namespace SimpleDraw.ViewModels
                                     break;
                                 case PathToolMode.CubicBezier:
                                     {
-                                        // TODO: startPoint
+                                        _cubicBezierShapeTool?.Moved(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
                                     }
                                     break;
                                 case PathToolMode.QuadraticBezier:
                                     {
-                                        // TODO: startPoint
+                                        _quadraticBezierShapeTool?.Moved(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
                                     }
                                     break;
                             }
