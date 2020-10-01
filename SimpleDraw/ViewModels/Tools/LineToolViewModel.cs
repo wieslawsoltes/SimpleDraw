@@ -7,40 +7,13 @@ namespace SimpleDraw.ViewModels
     [DataContract(IsReference = true)]
     public class LineToolViewModel : ToolBaseViewModel
     {
-        private enum State { None, Point }
-        private State _state = State.None;
-        private LineShapeViewModel _line = null;
-        private PenViewModel _pen;
-        private bool _isStroked;
-        private double _hitRadius;
-        private bool _tryToConnect;
+        private LineShapeToolViewModel _lineShapeTool;
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
-        public PenViewModel Pen
+        public LineShapeToolViewModel LineShapeTool
         {
-            get => _pen;
-            set => this.RaiseAndSetIfChanged(ref _pen, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = true)]
-        public bool IsStroked
-        {
-            get => _isStroked;
-            set => this.RaiseAndSetIfChanged(ref _isStroked, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = true)]
-        public double HitRadius
-        {
-            get => _hitRadius;
-            set => this.RaiseAndSetIfChanged(ref _hitRadius, value);
-        }
-
-        [DataMember(IsRequired = false, EmitDefaultValue = true)]
-        public bool TryToConnect
-        {
-            get => _tryToConnect;
-            set => this.RaiseAndSetIfChanged(ref _tryToConnect, value);
+            get => _lineShapeTool;
+            set => this.RaiseAndSetIfChanged(ref _lineShapeTool, value);
         }
 
         [IgnoreDataMember]
@@ -48,100 +21,17 @@ namespace SimpleDraw.ViewModels
 
         public override void Pressed(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
-            switch (_state)
-            {
-                case State.None:
-                    {
-                        if (pointerType == ToolPointerType.Left)
-                        {
-                            var shared = new Dictionary<ViewModelBase, ViewModelBase>();
-                            var start = default(PointViewModel);
-
-                            if (_tryToConnect)
-                            {
-                                var result = HitTest.Contains(canvas.Items, x, y, _hitRadius);
-                                if (result is PointViewModel point)
-                                {
-                                    start = point;
-                                }
-                            }
-
-                            _line = new LineShapeViewModel()
-                            {
-                                StartPoint = start ?? new PointViewModel(x, y),
-                                Point = new PointViewModel(x, y),
-                                IsStroked = _isStroked,
-                                Pen = _pen.CloneSelf(shared)
-                            };
-                            canvas.Decorators.Add(_line);
-                            canvas.Invalidate();
-                            _state = State.Point;
-                        }
-                    }
-                    break;
-                case State.Point:
-                    {
-                        if (pointerType == ToolPointerType.Left)
-                        {
-                            var end = default(PointViewModel);
-
-                            if (_tryToConnect)
-                            {
-                                var result = HitTest.Contains(canvas.Items, x, y, _hitRadius);
-                                if (result is PointViewModel point)
-                                {
-                                    end = point;
-                                }
-                            }
-
-                            if (end != null)
-                            {
-                                _line.Point = end;
-                            }
-
-                            canvas.Decorators.Remove(_line);
-                            canvas.Items.Add(_line);
-                            canvas.Invalidate();
-
-                            _line = null;
-                            _state = State.None;
-                        }
-
-                        if (pointerType == ToolPointerType.Right)
-                        {
-                            canvas.Decorators.Remove(_line);
-                            canvas.Invalidate();
-                            _line = null;
-                            _state = State.None;
-                        }
-                    }
-                    break;
-            }
+            _lineShapeTool?.Pressed(canvas, x, y, pointerType, keyModifiers);
         }
 
         public override void Released(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
+            _lineShapeTool?.Released(canvas, x, y, pointerType, keyModifiers);
         }
 
         public override void Moved(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
-            switch (_state)
-            {
-                case State.None:
-                    {
-                    }
-                    break;
-                case State.Point:
-                    {
-                        if (pointerType == ToolPointerType.None)
-                        {
-                            _line.Point.X = x;
-                            _line.Point.Y = y;
-                            canvas.Invalidate();
-                        }
-                    }
-                    break;
-            }
+            _lineShapeTool?.Moved(canvas, x, y, pointerType, keyModifiers);
         }
 
         public override ToolBaseViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
@@ -153,8 +43,7 @@ namespace SimpleDraw.ViewModels
 
             var copy = new LineToolViewModel()
             {
-                Pen = _pen?.CloneSelf(shared),
-                IsStroked = _isStroked
+                LineShapeTool = _lineShapeTool?.CloneSelf(shared)
             };
 
             shared[this] = copy;
