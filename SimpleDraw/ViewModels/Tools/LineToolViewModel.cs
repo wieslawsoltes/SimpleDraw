@@ -7,13 +7,13 @@ namespace SimpleDraw.ViewModels
     [DataContract(IsReference = true)]
     public class LineToolViewModel : ToolBaseViewModel
     {
-        private LineShapeToolViewModel _lineShapeTool;
+        private ShapeToolViewModel _shapeTool;
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
-        public LineShapeToolViewModel LineShapeTool
+        public ShapeToolViewModel ShapeTool
         {
-            get => _lineShapeTool;
-            set => this.RaiseAndSetIfChanged(ref _lineShapeTool, value);
+            get => _shapeTool;
+            set => this.RaiseAndSetIfChanged(ref _shapeTool, value);
         }
 
         [IgnoreDataMember]
@@ -21,17 +21,17 @@ namespace SimpleDraw.ViewModels
 
         public override void Pressed(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
-            _lineShapeTool?.Pressed(canvas, x, y, pointerType, keyModifiers);
+            _shapeTool?.Pressed(canvas, x, y, pointerType, keyModifiers);
         }
 
         public override void Released(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
-            _lineShapeTool?.Released(canvas, x, y, pointerType, keyModifiers);
+            _shapeTool?.Released(canvas, x, y, pointerType, keyModifiers);
         }
 
         public override void Moved(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
-            _lineShapeTool?.Moved(canvas, x, y, pointerType, keyModifiers);
+            _shapeTool?.Moved(canvas, x, y, pointerType, keyModifiers);
         }
 
         public override ToolBaseViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
@@ -43,7 +43,7 @@ namespace SimpleDraw.ViewModels
 
             var copy = new LineToolViewModel()
             {
-                LineShapeTool = _lineShapeTool?.CloneSelf(shared)
+                ShapeTool = _shapeTool?.CloneSelf(shared)
             };
 
             shared[this] = copy;
