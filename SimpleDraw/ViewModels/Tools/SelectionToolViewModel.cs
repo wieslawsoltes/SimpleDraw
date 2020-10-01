@@ -61,7 +61,7 @@ namespace SimpleDraw.ViewModels
                                     canvas.Invalidate();
                                 }
                             }
-                            canvas.UpdateBounds();
+                            canvas.UpdateSelectionBounds();
                             _previousX = x;
                             _previousY = y;
                             _state = State.Selected;
@@ -72,8 +72,8 @@ namespace SimpleDraw.ViewModels
                             {
                                 canvas.Selected.Clear();
                             }
-                            canvas.ShowSelection(x, y);
-                            canvas.UpdateBounds();
+                            canvas.ShowSelectionDecorator(x, y);
+                            canvas.UpdateSelectionBounds();
                             canvas.Invalidate();
                             _pressedX = x;
                             _pressedY = y;
@@ -114,8 +114,8 @@ namespace SimpleDraw.ViewModels
                     break;
                 case State.Move:
                     {
-                        canvas.RemoveSelection();
-                        canvas.RemoveBounds();
+                        canvas.RemoveSelectionDecorator();
+                        canvas.RemoveSelectionBounds();
 
                         var rect = HitTest.ToSKRect(_pressedX, _pressedY, x, y);
                         if (keyModifiers.HasFlag(ToolKeyModifiers.Control))
@@ -137,7 +137,7 @@ namespace SimpleDraw.ViewModels
                                 }
                             }
 
-                            canvas.UpdateBounds();
+                            canvas.UpdateSelectionBounds();
                             canvas.Invalidate();
                         }
                         else
@@ -154,7 +154,7 @@ namespace SimpleDraw.ViewModels
                                 }
                             }
 
-                            canvas.UpdateBounds();
+                            canvas.UpdateSelectionBounds();
                             canvas.Invalidate();
                         }
                         _state = State.None;
@@ -181,7 +181,7 @@ namespace SimpleDraw.ViewModels
                         double deltaX = x - _previousX;
                         double deltaY = y - _previousY;
                         canvas.MoveSelected(deltaX, deltaY);
-                        canvas.UpdateBounds();
+                        canvas.UpdateSelectionBounds();
                         canvas.Invalidate();
                         _previousX = x;
                         _previousY = y;
@@ -189,7 +189,7 @@ namespace SimpleDraw.ViewModels
                     break;
                 case State.Move:
                     {
-                        canvas.MoveSelection(x, y);
+                        canvas.MoveSelectionDecorator(x, y);
                         canvas.Invalidate();
                     }
                     break;

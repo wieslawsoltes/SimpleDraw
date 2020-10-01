@@ -241,7 +241,7 @@ namespace SimpleDraw.ViewModels
             }
         }
 
-        public void ShowSelection(double x, double y)
+        public void ShowSelectionDecorator(double x, double y)
         {
             _decorators.Add(_rectangleSelection);
             _rectangleSelection.TopLeft.X = x;
@@ -250,18 +250,18 @@ namespace SimpleDraw.ViewModels
             _rectangleSelection.BottomRight.Y = y;
         }
 
-        public void MoveSelection(double x, double y)
+        public void MoveSelectionDecorator(double x, double y)
         {
             _rectangleSelection.BottomRight.X = x;
             _rectangleSelection.BottomRight.Y = y;
         }
 
-        public void RemoveSelection()
+        public void RemoveSelectionDecorator()
         {
             _decorators.Remove(_rectangleSelection);
         }
 
-        public void UpdateBounds()
+        public void UpdateSelectionBounds()
         {
             if (_selected.Count > 0)
             {
@@ -294,7 +294,7 @@ namespace SimpleDraw.ViewModels
             }
         }
 
-        public void RemoveBounds()
+        public void RemoveSelectionBounds()
         {
             _decorators.Remove(_rectangleBounds);
         }
@@ -317,7 +317,7 @@ namespace SimpleDraw.ViewModels
 
             _selected.Clear();
 
-            UpdateBounds();
+            UpdateSelectionBounds();
             Invalidate();
         }
 
@@ -332,7 +332,7 @@ namespace SimpleDraw.ViewModels
                 _copy.Add(item.Clone(shared));
             }
 
-            UpdateBounds();
+            UpdateSelectionBounds();
             Invalidate();
         }
 
@@ -349,7 +349,7 @@ namespace SimpleDraw.ViewModels
                 _selected.Add(clone);
             }
 
-            UpdateBounds();
+            UpdateSelectionBounds();
             Invalidate();
         }
 
@@ -362,7 +362,7 @@ namespace SimpleDraw.ViewModels
 
             _selected.Clear();
 
-            UpdateBounds();
+            UpdateSelectionBounds();
             Invalidate();
         }
 
@@ -375,7 +375,7 @@ namespace SimpleDraw.ViewModels
                 _selected.Add(item);
             }
 
-            UpdateBounds();
+            UpdateSelectionBounds();
             Invalidate();
         }
 
@@ -401,7 +401,7 @@ namespace SimpleDraw.ViewModels
             _selected.Clear();
             _selected.Add(group);
 
-            UpdateBounds();
+            UpdateSelectionBounds();
             Invalidate();
         }
 
@@ -434,7 +434,7 @@ namespace SimpleDraw.ViewModels
                     _selected.Add(item);
                 }
 
-                UpdateBounds();
+                UpdateSelectionBounds();
                 Invalidate(); 
             }
         }
