@@ -28,6 +28,7 @@ namespace SimpleDraw.ViewModels
         private bool _isFilled;
         private PathFillRule _fillRule;
         private bool _isClosed;
+        private PathToolMode _previousMode;
         private PathToolMode _mode;
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
@@ -70,6 +71,13 @@ namespace SimpleDraw.ViewModels
         {
             get => _isClosed;
             set => this.RaiseAndSetIfChanged(ref _isClosed, value);
+        }
+
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
+        public PathToolMode PreviousMode
+        {
+            get => _previousMode;
+            set => this.RaiseAndSetIfChanged(ref _previousMode, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
