@@ -93,38 +93,27 @@ namespace SimpleDraw.ViewModels
             {
                 if (figure.Segments.Count > 0)
                 {
-                    var firstSegment = figure.Segments[0];
-
-                    switch (firstSegment)
+                    for (int i = 0; i < figure.Segments.Count; i++)
                     {
-                        case LineShapeViewModel lineShape:
-                            {
-                                path.MoveTo(new SKPoint((float)lineShape.StartPoint.X, (float)lineShape.StartPoint.Y));
-                            }
-                            break;
-                        case CubicBezierShapeViewModel cubicBezierShape:
-                            {
-                                path.MoveTo(new SKPoint((float)cubicBezierShape.StartPoint.X, (float)cubicBezierShape.StartPoint.Y));
-                            }
-                            break;
-                        case QuadraticBezierShapeViewModel quadraticBezierShape:
-                            {
-                                path.MoveTo(new SKPoint((float)quadraticBezierShape.StartPoint.X, (float)quadraticBezierShape.StartPoint.Y));
-                            }
-                            break;
-                    }
+                        var segment = figure.Segments[i];
 
-                    foreach (var nextSegment in figure.Segments)
-                    {
-                        switch (nextSegment)
+                        switch (segment)
                         {
                             case LineShapeViewModel lineShape:
                                 {
+                                    if (i == 0)
+                                    {
+                                        path.MoveTo(new SKPoint((float)lineShape.StartPoint.X, (float)lineShape.StartPoint.Y));
+                                    }
                                     path.LineTo(new SKPoint((float)lineShape.Point.X, (float)lineShape.Point.Y));
                                 }
                                 break;
                             case CubicBezierShapeViewModel cubicBezierShape:
                                 {
+                                    if (i == 0)
+                                    {
+                                        path.MoveTo(new SKPoint((float)cubicBezierShape.StartPoint.X, (float)cubicBezierShape.StartPoint.Y));
+                                    }
                                     path.CubicTo(
                                         new SKPoint((float)cubicBezierShape.Point1.X, (float)cubicBezierShape.Point1.Y),
                                         new SKPoint((float)cubicBezierShape.Point2.X, (float)cubicBezierShape.Point2.Y),
@@ -133,6 +122,10 @@ namespace SimpleDraw.ViewModels
                                 break;
                             case QuadraticBezierShapeViewModel quadraticBezierShape:
                                 {
+                                    if (i == 0)
+                                    {
+                                        path.MoveTo(new SKPoint((float)quadraticBezierShape.StartPoint.X, (float)quadraticBezierShape.StartPoint.Y));
+                                    }
                                     path.QuadTo(
                                         new SKPoint((float)quadraticBezierShape.Control.X, (float)quadraticBezierShape.Control.Y),
                                         new SKPoint((float)quadraticBezierShape.EndPoint.X, (float)quadraticBezierShape.EndPoint.Y));
@@ -465,10 +458,6 @@ namespace SimpleDraw.ViewModels
                                 if (segmentResult is PointViewModel resultPoint)
                                 {
                                     return resultPoint;
-                                }
-                                else
-                                {
-                                    return pathShape;
                                 }
                             }
                         }
