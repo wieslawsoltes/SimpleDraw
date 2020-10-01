@@ -103,10 +103,6 @@ namespace SimpleDraw.ViewModels
 
             switch (_state)
             {
-                case State.None:
-                    {
-                    }
-                    break;
                 case State.Selected:
                     {
                         _state = State.None;
@@ -172,10 +168,6 @@ namespace SimpleDraw.ViewModels
 
             switch (_state)
             {
-                case State.None:
-                    {
-                    }
-                    break;
                 case State.Selected:
                     {
                         double deltaX = x - _previousX;
