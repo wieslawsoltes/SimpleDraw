@@ -221,17 +221,44 @@ namespace SimpleDraw.ViewModels
                             _itemsCanvasAdapter.Items = _figure.Segments;
                             _itemsCanvasAdapter.Decorators = _figure.Segments;
 
+                            bool move = false;
+
                             if (_mode == PathToolMode.Move)
                             {
+                                switch (_previousMode)
+                                {
+                                    case PathToolMode.Line:
+                                        {
+                                            _lineShapeTool?.Pressed(_itemsCanvasAdapter, x, y, ToolPointerType.Right, ToolKeyModifiers.None);
+                                        }
+                                        break;
+                                    case PathToolMode.CubicBezier:
+                                        {
+                                            _cubicBezierShapeTool?.Pressed(_itemsCanvasAdapter, x, y, ToolPointerType.Right, ToolKeyModifiers.None);
+                                        }
+                                        break;
+                                    case PathToolMode.QuadraticBezier:
+                                        {
+                                            _quadraticBezierShapeTool?.Pressed(_itemsCanvasAdapter, x, y, ToolPointerType.Right, ToolKeyModifiers.None);
+                                        }
+                                        break;
+                                }
+
                                 _figure = new FigureViewModel()
                                 {
                                     Segments = new ObservableCollection<ViewModelBase>(),
                                     IsClosed = _isClosed
                                 };
 
+                                _itemsCanvasAdapter.Figure = _figure;
+                                _itemsCanvasAdapter.Items = _figure.Segments;
+                                _itemsCanvasAdapter.Decorators = _figure.Segments;
+
                                 _path.Figures.Add(_figure);
 
                                 _mode = _previousMode;
+
+                                move = true;
                             }
 
                             switch (_mode)
@@ -239,19 +266,28 @@ namespace SimpleDraw.ViewModels
                                 case PathToolMode.Line:
                                     {
                                         _lineShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
-                                        _lineShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
+                                        if (!move)
+                                        {
+                                            _lineShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
+                                        }
                                     }
                                     break;
                                 case PathToolMode.CubicBezier:
                                     {
                                         _cubicBezierShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
-                                        _cubicBezierShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
+                                        if (!move)
+                                        {
+                                            _cubicBezierShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers); 
+                                        }
                                     }
                                     break;
                                 case PathToolMode.QuadraticBezier:
                                     {
                                         _quadraticBezierShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
-                                        _quadraticBezierShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers);
+                                        if (!move)
+                                        {
+                                            _quadraticBezierShapeTool?.Pressed(_itemsCanvasAdapter, x, y, pointerType, keyModifiers); 
+                                        }
                                     }
                                     break;
                             }
