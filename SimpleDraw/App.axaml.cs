@@ -113,7 +113,7 @@ namespace SimpleDraw
                         Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
                         IsStroked = true,
                         HitRadius = 6,
-                        TryToConnect = true
+                        TryToConnect = false
                     },
                     CubicBezierShapeTool = new CubicBezierShapeToolViewModel()
                     {
@@ -122,7 +122,7 @@ namespace SimpleDraw
                         IsStroked = true,
                         IsFilled = false,
                         HitRadius = 6,
-                        TryToConnect = true
+                        TryToConnect = false
                     },
                     QuadraticBezierShapeTool = new QuadraticBezierShapeToolViewModel()
                     {
@@ -131,7 +131,7 @@ namespace SimpleDraw
                         IsStroked = true,
                         IsFilled = false,
                         HitRadius = 6,
-                        TryToConnect = true
+                        TryToConnect = false
                     }
                 },
                 new RectangleToolViewModel()
