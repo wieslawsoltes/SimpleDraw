@@ -179,7 +179,7 @@ namespace SimpleDraw.Controls
                     {
                         if (e.KeyModifiers == KeyModifiers.None)
                         {
-                            if (canvas.Tool is PathToolViewModel pathTool)
+                            if (canvas.Tool is PathToolViewModel pathTool && pathTool.Mode != PathToolMode.CubicBezier)
                             {
                                 pathTool.PreviousMode = pathTool.Mode;
                                 pathTool.Mode = PathToolMode.CubicBezier;
@@ -224,7 +224,7 @@ namespace SimpleDraw.Controls
                     {
                         if (e.KeyModifiers == KeyModifiers.None)
                         {
-                            if (canvas.Tool is PathToolViewModel pathTool)
+                            if (canvas.Tool is PathToolViewModel pathTool && pathTool.Mode != PathToolMode.Line)
                             {
                                 pathTool.PreviousMode = pathTool.Mode;
                                 pathTool.Mode = PathToolMode.Line;
@@ -273,7 +273,7 @@ namespace SimpleDraw.Controls
                     {
                         if (e.KeyModifiers == KeyModifiers.None)
                         {
-                            if (canvas.Tool is PathToolViewModel pathTool)
+                            if (canvas.Tool is PathToolViewModel pathTool && pathTool.Mode != PathToolMode.QuadraticBezier)
                             {
                                 pathTool.PreviousMode = pathTool.Mode;
                                 pathTool.Mode = PathToolMode.QuadraticBezier;
