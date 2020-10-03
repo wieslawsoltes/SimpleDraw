@@ -7,7 +7,7 @@ using SkiaSharp;
 
 namespace SimpleDraw.Skia
 {
-    internal static class HitTest
+    internal static class SkiaHitTest
     {
         public static SKRect GetBounds(LineShapeViewModel lineShape)
         {

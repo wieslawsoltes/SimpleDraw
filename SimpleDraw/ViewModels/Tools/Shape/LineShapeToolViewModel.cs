@@ -60,7 +60,7 @@ namespace SimpleDraw.ViewModels.Tools.Shape
 
                             if (_tryToConnect)
                             {
-                                var result = HitTest.Contains(canvas.Items, x, y, _hitRadius);
+                                var result = SkiaHitTest.Contains(canvas.Items, x, y, _hitRadius);
                                 if (result is PointViewModel point)
                                 {
                                     start = point;
@@ -88,7 +88,7 @@ namespace SimpleDraw.ViewModels.Tools.Shape
 
                             if (_tryToConnect)
                             {
-                                var result = HitTest.Contains(canvas.Items, x, y, _hitRadius);
+                                var result = SkiaHitTest.Contains(canvas.Items, x, y, _hitRadius);
                                 if (result is PointViewModel point)
                                 {
                                     end = point;

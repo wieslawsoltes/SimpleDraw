@@ -270,7 +270,7 @@ namespace SimpleDraw.ViewModels.Containers
         {
             if (_selected.Count > 0)
             {
-                var bounds = HitTest.GetBounds(_selected);
+                var bounds = SkiaHitTest.GetBounds(_selected);
                 if (!bounds.IsEmpty)
                 {
                     if (!_decorators.Contains(_rectangleBounds))

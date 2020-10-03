@@ -38,7 +38,7 @@ namespace SimpleDraw.ViewModels.Tools
             {
                 case State.None:
                     {
-                        var result = HitTest.Contains(canvas.Items, x, y, _hitRadius);
+                        var result = SkiaHitTest.Contains(canvas.Items, x, y, _hitRadius);
                         if (result != null)
                         {
                             if (keyModifiers.HasFlag(ToolKeyModifiers.Control))
@@ -121,7 +121,7 @@ namespace SimpleDraw.ViewModels.Tools
                             for (int i = canvas.Items.Count - 1; i >= 0; i--)
                             {
                                 var shape = canvas.Items[i];
-                                var result = HitTest.Intersects(shape, rect);
+                                var result = SkiaHitTest.Intersects(shape, rect);
                                 if (result != null)
                                 {
                                     if (canvas.Selected.Contains(result))
@@ -145,7 +145,7 @@ namespace SimpleDraw.ViewModels.Tools
                             for (int i = canvas.Items.Count - 1; i >= 0; i--)
                             {
                                 var shape = canvas.Items[i];
-                                var result = HitTest.Intersects(shape, rect);
+                                var result = SkiaHitTest.Intersects(shape, rect);
                                 if (result != null)
                                 {
                                     canvas.Selected.Add(result);
