@@ -113,7 +113,7 @@ namespace SimpleDraw.ViewModels
                         canvas.RemoveSelectionDecorator();
                         canvas.RemoveSelectionBounds();
 
-                        var rect = HitTest.ToSKRect(_pressedX, _pressedY, x, y);
+                        var rect = SkiaRenderer.ToSKRect(_pressedX, _pressedY, x, y);
                         if (keyModifiers.HasFlag(ToolKeyModifiers.Control))
                         {
                             for (int i = canvas.Items.Count - 1; i >= 0; i--)
