@@ -1,11 +1,9 @@
 ﻿using System;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Dialogs;
 using Avalonia.Headless;
 using Avalonia.ReactiveUI;
-using Avalonia.Threading;
 
 namespace SimpleDraw
 {
@@ -37,6 +35,10 @@ namespace SimpleDraw
                 .LogToDebug()
                 .UseManagedSystemDialogs()
                 .UseSkia()
+                .With(new Win32PlatformOptions()
+                { 
+                    AllowEglInitialization = true 
+                })
                 .UseReactiveUI();
     }
 }
