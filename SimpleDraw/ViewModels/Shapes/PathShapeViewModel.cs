@@ -5,7 +5,7 @@ using ReactiveUI;
 
 namespace SimpleDraw.ViewModels
 {
-    public enum PathFillRule
+    public enum FillRule
     {
         EvenOdd = 0,
         NonZero = 1
@@ -17,7 +17,7 @@ namespace SimpleDraw.ViewModels
         private ObservableCollection<FigureViewModel> _figures;
         private bool _isStroked;
         private bool _isFilled;
-        private PathFillRule _fillRule;
+        private FillRule _fillRule;
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public ObservableCollection<FigureViewModel> Figures
@@ -41,7 +41,7 @@ namespace SimpleDraw.ViewModels
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
-        public PathFillRule FillRule
+        public FillRule FillRule
         {
             get => _fillRule;
             set => this.RaiseAndSetIfChanged(ref _fillRule, value);

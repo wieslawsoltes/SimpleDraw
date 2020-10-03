@@ -1,7 +1,8 @@
 ﻿using System;
+using SimpleDraw.ViewModels;
 using SkiaSharp;
 
-namespace SimpleDraw.ViewModels
+namespace SimpleDraw.Skia
 {
     internal static class SkiaRenderer
     {
@@ -77,7 +78,7 @@ namespace SimpleDraw.ViewModels
 
         public static SKPath ToPath(PathShapeViewModel pathShape)
         {
-            var path = new SKPath() { FillType = pathShape.FillRule == PathFillRule.EvenOdd ? SKPathFillType.EvenOdd : SKPathFillType.Winding };
+            var path = new SKPath() { FillType = pathShape.FillRule == FillRule.EvenOdd ? SKPathFillType.EvenOdd : SKPathFillType.Winding };
 
             foreach (var figure in pathShape.Figures)
             {

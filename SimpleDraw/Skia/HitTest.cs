@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using SimpleDraw.ViewModels;
 using SkiaSharp;
 
-namespace SimpleDraw.ViewModels
+namespace SimpleDraw.Skia
 {
     internal static class HitTest
     {
@@ -313,12 +314,6 @@ namespace SimpleDraw.ViewModels
                                 {
                                     return resultPoint;
                                 }
-#if false
-                                else if (segmentResult != null)
-                                {
-                                    return segmentResult;
-                                }
-#endif
                             }
                         }
 

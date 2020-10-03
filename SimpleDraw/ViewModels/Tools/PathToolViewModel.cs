@@ -44,7 +44,7 @@ namespace SimpleDraw.ViewModels
         private bool _tryToConnect;
         private bool _isStroked;
         private bool _isFilled;
-        private PathFillRule _fillRule;
+        private FillRule _fillRule;
         private bool _isClosed;
         private PathToolMode _previousMode;
         private PathToolMode _mode;
@@ -82,7 +82,7 @@ namespace SimpleDraw.ViewModels
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
-        public PathFillRule FillRule
+        public FillRule FillRule
         {
             get => _fillRule;
             set => this.RaiseAndSetIfChanged(ref _fillRule, value);

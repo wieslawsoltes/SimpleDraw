@@ -1,32 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Avalonia;
-using Avalonia.Media;
-using Avalonia.Media.Immutable;
 using SimpleDraw.ViewModels;
+using A = Avalonia;
+using AM = Avalonia.Media;
+using AMI = Avalonia.Media.Immutable;
 
-namespace SimpleDraw.Renderer
+namespace SimpleDraw.Avalonia
 {
     internal static class AvaloniaRenderer
     {
-        public static Color ToColor(ColorViewModel color)
+        public static AM.Color ToColor(ColorViewModel color)
         {
-            return new Color(color.A, color.R, color.G, color.B);
+            return new AM.Color(color.A, color.R, color.G, color.B);
         }
 
-        public static ImmutableGradientStop ToGradientStop(GradientStopViewModel gradientStop)
+        public static AMI.ImmutableGradientStop ToGradientStop(GradientStopViewModel gradientStop)
         {
             if (gradientStop == null)
             {
                 return default;
             }
-            return new ImmutableGradientStop(gradientStop.Offset, ToColor(gradientStop.Color));
+            return new AMI.ImmutableGradientStop(gradientStop.Offset, ToColor(gradientStop.Color));
         }
 
-        public static IReadOnlyList<ImmutableGradientStop> ToGradientStops(ObservableCollection<GradientStopViewModel> gradientStops)
+        public static IReadOnlyList<AMI.ImmutableGradientStop> ToGradientStops(ObservableCollection<GradientStopViewModel> gradientStops)
         {
-            var result = new List<ImmutableGradientStop>();
+            var result = new List<AMI.ImmutableGradientStop>();
             foreach (var gradientStop in gradientStops)
             {
                 result.Add(ToGradientStop(gradientStop));
@@ -34,35 +34,35 @@ namespace SimpleDraw.Renderer
             return result;
         }
 
-        public static Avalonia.Media.GradientSpreadMethod ToGradientSpreadMethod(ViewModels.GradientSpreadMethod spreadMethod)
+        public static AM.GradientSpreadMethod ToGradientSpreadMethod(GradientSpreadMethod spreadMethod)
         {
             return spreadMethod switch
             {
-                ViewModels.GradientSpreadMethod.Reflect => Avalonia.Media.GradientSpreadMethod.Reflect,
-                ViewModels.GradientSpreadMethod.Repeat => Avalonia.Media.GradientSpreadMethod.Repeat,
-                _ => Avalonia.Media.GradientSpreadMethod.Pad,
+                GradientSpreadMethod.Reflect => AM.GradientSpreadMethod.Reflect,
+                GradientSpreadMethod.Repeat => AM.GradientSpreadMethod.Repeat,
+                _ => AM.GradientSpreadMethod.Pad,
             };
         }
 
-        public static Point ToPoint(PointViewModel point)
+        public static A.Point ToPoint(PointViewModel point)
         {
             if (point == null)
             {
                 return default;
             }
-            return new Point(point.X, point.Y);
+            return new A.Point(point.X, point.Y);
         }
 
-        public static Avalonia.RelativeUnit ToRelativeUnit(ViewModels.RelativeUnit relativeUnit)
+        public static A.RelativeUnit ToRelativeUnit(RelativeUnit relativeUnit)
         {
             return relativeUnit switch
             {
-                ViewModels.RelativeUnit.Absolute => Avalonia.RelativeUnit.Absolute,
-                _ => Avalonia.RelativeUnit.Relative,
+                RelativeUnit.Absolute => A.RelativeUnit.Absolute,
+                _ => A.RelativeUnit.Relative,
             };
         }
 
-        public static RelativePoint ToRelativePoint(RelativePointViewModel relativePoint)
+        public static A.RelativePoint ToRelativePoint(RelativePointViewModel relativePoint)
         {
             if (relativePoint == null)
             {
@@ -70,17 +70,17 @@ namespace SimpleDraw.Renderer
             }
             var point = ToPoint(relativePoint.Point);
             var unit = ToRelativeUnit(relativePoint.Unit);
-            return new RelativePoint(point, unit);
+            return new A.RelativePoint(point, unit);
         }
 
-        public static IBrush ToBrush(BrushViewModel brush)
+        public static AM.IBrush ToBrush(BrushViewModel brush)
         {
             switch (brush)
             {
                 case SolidColorBrushViewModel solidColorBrush:
                     {
                         var color = ToColor(solidColorBrush.Color);
-                        return new ImmutableSolidColorBrush(color);
+                        return new AMI.ImmutableSolidColorBrush(color);
                     }
                 case LinearGradientBrushViewModel linearGradientBrush:
                     {
@@ -88,7 +88,7 @@ namespace SimpleDraw.Renderer
                         var spreadMethod = ToGradientSpreadMethod(linearGradientBrush.SpreadMethod);
                         var startPoint = ToRelativePoint(linearGradientBrush.StartPoint);
                         var endPoint = ToRelativePoint(linearGradientBrush.EndPoint);
-                        return new ImmutableLinearGradientBrush(gradientStops, 1, spreadMethod, startPoint, endPoint);
+                        return new AMI.ImmutableLinearGradientBrush(gradientStops, 1, spreadMethod, startPoint, endPoint);
                     }
                 case RadialGradientBrushViewModel radialGradientBrush:
                     {
@@ -96,43 +96,43 @@ namespace SimpleDraw.Renderer
                         var spreadMethod = ToGradientSpreadMethod(radialGradientBrush.SpreadMethod);
                         var center = ToRelativePoint(radialGradientBrush.Center);
                         var gradientOrigin = ToRelativePoint(radialGradientBrush.GradientOrigin);
-                        return new ImmutableRadialGradientBrush(gradientStops, 1, spreadMethod, center, gradientOrigin, radialGradientBrush.Radius);
+                        return new AMI.ImmutableRadialGradientBrush(gradientStops, 1, spreadMethod, center, gradientOrigin, radialGradientBrush.Radius);
                     }
                 default:
                     return default;
             }
         }
 
-        public static ImmutableDashStyle ToDashStyle(DashStyleViewModel dashStyle)
+        public static AMI.ImmutableDashStyle ToDashStyle(DashStyleViewModel dashStyle)
         {
             if (dashStyle == null || dashStyle.Dashes == null)
             {
                 return default;
             }
-            return new ImmutableDashStyle(dashStyle.Dashes, dashStyle.Offset);
+            return new AMI.ImmutableDashStyle(dashStyle.Dashes, dashStyle.Offset);
         }
 
-        public static Avalonia.Media.PenLineCap ToPenLineCap(ViewModels.PenLineCap lineCap)
+        public static AM.PenLineCap ToPenLineCap(PenLineCap lineCap)
         {
             return lineCap switch
             {
-                ViewModels.PenLineCap.Round => Avalonia.Media.PenLineCap.Round,
-                ViewModels.PenLineCap.Square => Avalonia.Media.PenLineCap.Square,
-                _ => Avalonia.Media.PenLineCap.Flat,
+                PenLineCap.Round => AM.PenLineCap.Round,
+                PenLineCap.Square => AM.PenLineCap.Square,
+                _ => AM.PenLineCap.Flat,
             };
         }
 
-        public static Avalonia.Media.PenLineJoin ToPenLineJoin(ViewModels.PenLineJoin lineJoin)
+        public static AM.PenLineJoin ToPenLineJoin(PenLineJoin lineJoin)
         {
             return lineJoin switch
             {
-                ViewModels.PenLineJoin.Bevel => Avalonia.Media.PenLineJoin.Bevel,
-                ViewModels.PenLineJoin.Round => Avalonia.Media.PenLineJoin.Round,
-                _ => Avalonia.Media.PenLineJoin.Miter,
+                PenLineJoin.Bevel => AM.PenLineJoin.Bevel,
+                PenLineJoin.Round => AM.PenLineJoin.Round,
+                _ => AM.PenLineJoin.Miter,
             };
         }
 
-        public static ImmutablePen ToPen(PenViewModel pen)
+        public static AMI.ImmutablePen ToPen(PenViewModel pen)
         {
             if (pen == null)
             {
@@ -142,32 +142,32 @@ namespace SimpleDraw.Renderer
             var dashStyle = ToDashStyle(pen.DashStyle);
             var lineCap = ToPenLineCap(pen.LineCap);
             var lineJoin = ToPenLineJoin(pen.LineJoin);
-            return new ImmutablePen(brush, pen.Thickness, dashStyle, lineCap, lineJoin, pen.MiterLimit);
+            return new AMI.ImmutablePen(brush, pen.Thickness, dashStyle, lineCap, lineJoin, pen.MiterLimit);
         }
 
-        public static Rect ToRect(RectangleShapeViewModel rectangleShape)
+        public static A.Rect ToRect(RectangleShapeViewModel rectangleShape)
         {
             var x = Math.Min(rectangleShape.TopLeft.X, rectangleShape.BottomRight.X);
             var y = Math.Min(rectangleShape.TopLeft.Y, rectangleShape.BottomRight.Y);
             var width = Math.Abs(rectangleShape.TopLeft.X - rectangleShape.BottomRight.X);
             var height = Math.Abs(rectangleShape.TopLeft.Y - rectangleShape.BottomRight.Y);
-            return new Rect(x, y, width, height);
+            return new A.Rect(x, y, width, height);
         }
 
-        public static Rect ToRect(EllipseShapeViewModel ellipseShape)
+        public static A.Rect ToRect(EllipseShapeViewModel ellipseShape)
         {
             var x = Math.Min(ellipseShape.TopLeft.X, ellipseShape.BottomRight.X);
             var y = Math.Min(ellipseShape.TopLeft.Y, ellipseShape.BottomRight.Y);
             var width = Math.Abs(ellipseShape.TopLeft.X - ellipseShape.BottomRight.X);
             var height = Math.Abs(ellipseShape.TopLeft.Y - ellipseShape.BottomRight.Y);
-            return new Rect(x, y, width, height);
+            return new A.Rect(x, y, width, height);
         }
 
-        public static Geometry ToGeometry(CubicBezierShapeViewModel cubicBezierShape)
+        public static AM.Geometry ToGeometry(CubicBezierShapeViewModel cubicBezierShape)
         {
-            var geometry = new StreamGeometry();
+            var geometry = new AM.StreamGeometry();
             using var geometryContext = geometry.Open();
-            geometryContext.SetFillRule(FillRule.EvenOdd);
+            geometryContext.SetFillRule(AM.FillRule.EvenOdd);
             geometryContext.BeginFigure(ToPoint(cubicBezierShape.StartPoint), true);
             geometryContext.CubicBezierTo(
                 ToPoint(cubicBezierShape.Point1),
@@ -177,11 +177,11 @@ namespace SimpleDraw.Renderer
             return geometry;
         }
 
-        public static Geometry ToGeometry(QuadraticBezierShapeViewModel quadraticBezierShape)
+        public static AM.Geometry ToGeometry(QuadraticBezierShapeViewModel quadraticBezierShape)
         {
-            var geometry = new StreamGeometry();
+            var geometry = new AM.StreamGeometry();
             using var geometryContext = geometry.Open();
-            geometryContext.SetFillRule(FillRule.EvenOdd);
+            geometryContext.SetFillRule(AM.FillRule.EvenOdd);
             geometryContext.BeginFigure(ToPoint(quadraticBezierShape.StartPoint), true);
             geometryContext.QuadraticBezierTo(
                 ToPoint(quadraticBezierShape.Control),
@@ -190,13 +190,13 @@ namespace SimpleDraw.Renderer
             return geometry;
         }
 
-        public static Geometry ToGeometry(PathShapeViewModel pathShape)
+        public static AM.Geometry ToGeometry(PathShapeViewModel pathShape)
         {
-            var geometry = new StreamGeometry();
+            var geometry = new AM.StreamGeometry();
 
             using var geometryContext = geometry.Open();
 
-            geometryContext.SetFillRule(pathShape.FillRule == PathFillRule.EvenOdd ? FillRule.EvenOdd : FillRule.NonZero);
+            geometryContext.SetFillRule(pathShape.FillRule == FillRule.EvenOdd ? AM.FillRule.EvenOdd : AM.FillRule.NonZero);
 
             foreach (var figure in pathShape.Figures)
             {
@@ -253,32 +253,32 @@ namespace SimpleDraw.Renderer
             return geometry;
         }
 
-        public static Geometry ToGeometry(RectangleShapeViewModel rectangleShape)
+        public static AM.Geometry ToGeometry(RectangleShapeViewModel rectangleShape)
         {
             var rect = ToRect(rectangleShape);
-            var geometry = new RectangleGeometry(rect);
+            var geometry = new AM.RectangleGeometry(rect);
             return geometry;
         }
 
-        public static Geometry ToGeometry(EllipseShapeViewModel ellipseShape)
+        public static AM.Geometry ToGeometry(EllipseShapeViewModel ellipseShape)
         {
             var rect = ToRect(ellipseShape);
-            var geometry = new EllipseGeometry(rect);
+            var geometry = new AM.EllipseGeometry(rect);
             return geometry;
         }
 
-        public static void Render(DrawingContext context, LineShapeViewModel lineShape)
+        public static void Render(AM.DrawingContext context, LineShapeViewModel lineShape)
         {
             if (lineShape.IsStroked)
             {
-                var p1 = new Point(lineShape.StartPoint.X, lineShape.StartPoint.Y);
-                var p2 = new Point(lineShape.Point.X, lineShape.Point.Y);
+                var p1 = new A.Point(lineShape.StartPoint.X, lineShape.StartPoint.Y);
+                var p2 = new A.Point(lineShape.Point.X, lineShape.Point.Y);
                 var pen = ToPen(lineShape.Pen);
                 context.DrawLine(pen, p1, p2);
             }
         }
 
-        public static void Render(DrawingContext context, CubicBezierShapeViewModel cubicBezierShape)
+        public static void Render(AM.DrawingContext context, CubicBezierShapeViewModel cubicBezierShape)
         {
             if (cubicBezierShape.IsStroked || cubicBezierShape.IsFilled)
             {
@@ -287,12 +287,12 @@ namespace SimpleDraw.Renderer
                 var pen = ToPen(cubicBezierShape.Pen);
                 context.DrawGeometry(
                     cubicBezierShape.IsFilled ? brush : default,
-                    cubicBezierShape.IsStroked ? pen : default(IPen),
+                    cubicBezierShape.IsStroked ? pen : default(AM.IPen),
                     geometry);
             }
         }
 
-        public static void Render(DrawingContext context, QuadraticBezierShapeViewModel quadraticBezierShape)
+        public static void Render(AM.DrawingContext context, QuadraticBezierShapeViewModel quadraticBezierShape)
         {
             if (quadraticBezierShape.IsStroked || quadraticBezierShape.IsFilled)
             {
@@ -301,12 +301,12 @@ namespace SimpleDraw.Renderer
                 var pen = ToPen(quadraticBezierShape.Pen);
                 context.DrawGeometry(
                     quadraticBezierShape.IsFilled ? brush : default,
-                    quadraticBezierShape.IsStroked ? pen : default(IPen),
+                    quadraticBezierShape.IsStroked ? pen : default(AM.IPen),
                     geometry);
             }
         }
 
-        public static void Render(DrawingContext context, RectangleShapeViewModel rectangleShape)
+        public static void Render(AM.DrawingContext context, RectangleShapeViewModel rectangleShape)
         {
             if (rectangleShape.IsStroked || rectangleShape.IsFilled)
             {
@@ -315,14 +315,14 @@ namespace SimpleDraw.Renderer
                 var pen = ToPen(rectangleShape.Pen);
                 context.DrawRectangle(
                     rectangleShape.IsFilled ? brush : default,
-                    rectangleShape.IsStroked ? pen : default(IPen),
+                    rectangleShape.IsStroked ? pen : default(AM.IPen),
                     rect,
                     rectangleShape.RadiusX,
                     rectangleShape.RadiusY);
             }
         }
 
-        public static void Render(DrawingContext context, EllipseShapeViewModel ellipseShape)
+        public static void Render(AM.DrawingContext context, EllipseShapeViewModel ellipseShape)
         {
             if (ellipseShape.IsStroked || ellipseShape.IsFilled)
             {
@@ -331,12 +331,12 @@ namespace SimpleDraw.Renderer
                 var pen = ToPen(ellipseShape.Pen);
                 context.DrawGeometry(
                     ellipseShape.IsFilled ? brush : default,
-                    ellipseShape.IsStroked ? pen : default(IPen),
+                    ellipseShape.IsStroked ? pen : default(AM.IPen),
                     geometry);
             }
         }
 
-        public static void Render(DrawingContext context, PathShapeViewModel pathShape)
+        public static void Render(AM.DrawingContext context, PathShapeViewModel pathShape)
         {
             if (pathShape.IsStroked || pathShape.IsFilled)
             {
@@ -345,12 +345,12 @@ namespace SimpleDraw.Renderer
                 var pen = ToPen(pathShape.Pen);
                 context.DrawGeometry(
                     pathShape.IsFilled ? brush : default,
-                    pathShape.IsStroked ? pen : default(IPen),
+                    pathShape.IsStroked ? pen : default(AM.IPen),
                     geometry);
             }
         }
 
-        public static void Render(DrawingContext context, ShapeBaseViewModel shape)
+        public static void Render(AM.DrawingContext context, ShapeBaseViewModel shape)
         {
             switch (shape)
             {
@@ -389,7 +389,7 @@ namespace SimpleDraw.Renderer
             }
         }
 
-        public static void Render(DrawingContext context, ObservableCollection<ViewModelBase> items)
+        public static void Render(AM.DrawingContext context, ObservableCollection<ViewModelBase> items)
         {
             foreach (var item in items)
             {
@@ -409,7 +409,7 @@ namespace SimpleDraw.Renderer
             }
         }
 
-        public static void Render(DrawingContext context, CanvasViewModel canvas)
+        public static void Render(AM.DrawingContext context, CanvasViewModel canvas)
         {
             Render(context, canvas.Items);
             Render(context, canvas.Decorators);
