@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using ReactiveUI;
+using SimpleDraw.ViewModels.Primitives;
 
-namespace SimpleDraw.ViewModels
+namespace SimpleDraw.ViewModels.Shapes
 {
     [DataContract(IsReference = true)]
     public class QuadraticBezierShapeViewModel : ShapeBaseViewModel

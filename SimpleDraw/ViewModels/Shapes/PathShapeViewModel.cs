@@ -2,8 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using ReactiveUI;
+using SimpleDraw.ViewModels.Containers;
 
-namespace SimpleDraw.ViewModels
+namespace SimpleDraw.ViewModels.Shapes
 {
     public enum FillRule
     {

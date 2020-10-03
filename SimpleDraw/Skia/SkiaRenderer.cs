@@ -1,5 +1,6 @@
 ﻿using System;
-using SimpleDraw.ViewModels;
+using SimpleDraw.ViewModels.Primitives;
+using SimpleDraw.ViewModels.Shapes;
 using SkiaSharp;
 
 namespace SimpleDraw.Skia

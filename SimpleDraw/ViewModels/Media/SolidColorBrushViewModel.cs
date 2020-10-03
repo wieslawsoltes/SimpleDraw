@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using ReactiveUI;
 
-namespace SimpleDraw.ViewModels
+namespace SimpleDraw.ViewModels.Media
 {
     [DataContract(IsReference = true)]
     public class SolidColorBrushViewModel : BrushViewModel

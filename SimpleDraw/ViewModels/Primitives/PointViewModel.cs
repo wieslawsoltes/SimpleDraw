@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using ReactiveUI;
 
-namespace SimpleDraw.ViewModels
+namespace SimpleDraw.ViewModels.Primitives
 {
     [DataContract(IsReference = true)]
     public class PointViewModel : ViewModelBase

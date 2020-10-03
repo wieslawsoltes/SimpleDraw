@@ -2,8 +2,12 @@
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using ReactiveUI;
+using SimpleDraw.ViewModels.Containers;
+using SimpleDraw.ViewModels.Media;
+using SimpleDraw.ViewModels.Shapes;
+using SimpleDraw.ViewModels.Tools.Shape;
 
-namespace SimpleDraw.ViewModels
+namespace SimpleDraw.ViewModels.Tools
 {
     internal class ItemsCanvasAdapter : IItemsCanvas
     {
@@ -48,7 +52,7 @@ namespace SimpleDraw.ViewModels
         private bool _isClosed;
         private PathToolMode _previousMode;
         private PathToolMode _mode;
-        private ItemsCanvasAdapter _itemsCanvasAdapter;
+        private readonly ItemsCanvasAdapter _itemsCanvasAdapter;
         private ShapeToolViewModel _lineShapeTool;
         private ShapeToolViewModel _cubicBezierShapeTool;
         private ShapeToolViewModel _quadraticBezierShapeTool;

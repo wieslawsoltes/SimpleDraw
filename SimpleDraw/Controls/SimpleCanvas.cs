@@ -5,8 +5,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
-using SimpleDraw.Renderer;
-using SimpleDraw.ViewModels;
+using SimpleDraw.Avalonia;
+using SimpleDraw.ViewModels.Containers;
+using SimpleDraw.ViewModels.Tools;
 
 namespace SimpleDraw.Controls
 {

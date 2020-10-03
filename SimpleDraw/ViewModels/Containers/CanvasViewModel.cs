@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using ReactiveUI;
+using SimpleDraw.Skia;
+using SimpleDraw.ViewModels.Media;
+using SimpleDraw.ViewModels.Primitives;
+using SimpleDraw.ViewModels.Shapes;
+using SimpleDraw.ViewModels.Tools;
 
-namespace SimpleDraw.ViewModels
+namespace SimpleDraw.ViewModels.Containers
 {
     public delegate void InvalidateEventHandler(object sender, EventArgs e);
 
@@ -18,9 +23,9 @@ namespace SimpleDraw.ViewModels
         private ObservableCollection<ViewModelBase> _decorators;
         private ToolBaseViewModel _tool;
         private ObservableCollection<ToolBaseViewModel> _tools;
-        private ObservableCollection<ViewModelBase> _copy;
-        private RectangleShapeViewModel _rectangleSelection;
-        private RectangleShapeViewModel _rectangleBounds;
+        private readonly ObservableCollection<ViewModelBase> _copy;
+        private readonly RectangleShapeViewModel _rectangleSelection;
+        private readonly RectangleShapeViewModel _rectangleBounds;
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
         public double Width

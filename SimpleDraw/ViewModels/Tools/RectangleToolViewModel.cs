@@ -1,8 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using ReactiveUI;
+using SimpleDraw.Skia;
+using SimpleDraw.ViewModels.Containers;
+using SimpleDraw.ViewModels.Media;
+using SimpleDraw.ViewModels.Primitives;
+using SimpleDraw.ViewModels.Shapes;
 
-namespace SimpleDraw.ViewModels
+namespace SimpleDraw.ViewModels.Tools
 {
     [DataContract(IsReference = true)]
     public class RectangleToolViewModel : ToolBaseViewModel

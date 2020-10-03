@@ -1,20 +1,21 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using ReactiveUI;
 
-namespace SimpleDraw.ViewModels
+namespace SimpleDraw.ViewModels.Media
 {
     [DataContract(IsReference = true)]
-    public class GradientStopViewModel : ViewModelBase
+    public class DashStyleViewModel : ViewModelBase
     {
-        private ColorViewModel _color;
+        private ObservableCollection<double> _dashes;
         private double _offset;
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
-        public ColorViewModel Color
+        public ObservableCollection<double> Dashes
         {
-            get => _color;
-            set => this.RaiseAndSetIfChanged(ref _color, value);
+            get => _dashes;
+            set => this.RaiseAndSetIfChanged(ref _dashes, value);
         }
 
         [DataMember(IsRequired = false, EmitDefaultValue = true)]
@@ -24,26 +25,33 @@ namespace SimpleDraw.ViewModels
             set => this.RaiseAndSetIfChanged(ref _offset, value);
         }
 
-        public GradientStopViewModel()
+        public DashStyleViewModel()
         {
         }
 
-        public GradientStopViewModel(ColorViewModel color, double offset)
+        public DashStyleViewModel(ObservableCollection<double> dashes, double offset)
         {
-            _color = color;
+            _dashes = dashes;
             _offset = offset;
         }
 
-        public GradientStopViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
+        public DashStyleViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
         {
             if (shared.TryGetValue(this, out var value))
             {
-                return value as GradientStopViewModel;
+                return value as DashStyleViewModel;
             }
 
-            var copy = new GradientStopViewModel()
+            var dashes = new ObservableCollection<double>();
+
+            foreach (var dash in _dashes)
             {
-                Color = _color?.CloneSelf(shared),
+                dashes.Add(dash);
+            }
+
+            var copy = new DashStyleViewModel()
+            {
+                Dashes = dashes,
                 Offset = _offset
             };
 

@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace SimpleDraw.ViewModels
+namespace SimpleDraw.ViewModels.Containers
 {
     public interface IItemsCanvas
     {

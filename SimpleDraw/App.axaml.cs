@@ -5,6 +5,11 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Newtonsoft.Json;
 using SimpleDraw.ViewModels;
+using SimpleDraw.ViewModels.Containers;
+using SimpleDraw.ViewModels.Media;
+using SimpleDraw.ViewModels.Shapes;
+using SimpleDraw.ViewModels.Tools;
+using SimpleDraw.ViewModels.Tools.Shape;
 using SimpleDraw.Views;
 
 namespace SimpleDraw
@@ -103,7 +108,7 @@ namespace SimpleDraw
                     IsStroked = true,
                     IsFilled = true,
                     HitRadius = 6,
-                    FillRule = PathFillRule.EvenOdd,
+                    FillRule = FillRule.EvenOdd,
                     IsClosed = true,
                     PreviousMode = PathToolMode.Line,
                     Mode = PathToolMode.Line,

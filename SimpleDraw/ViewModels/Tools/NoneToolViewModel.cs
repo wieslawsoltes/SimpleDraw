@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
+using SimpleDraw.ViewModels.Containers;
 
-namespace SimpleDraw.ViewModels
+namespace SimpleDraw.ViewModels.Tools
 {
     [DataContract(IsReference = true)]
     public class NoneToolViewModel : ToolBaseViewModel

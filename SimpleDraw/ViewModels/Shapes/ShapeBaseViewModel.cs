@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using ReactiveUI;
+using SimpleDraw.ViewModels.Media;
 
-namespace SimpleDraw.ViewModels
+namespace SimpleDraw.ViewModels.Shapes
 {
     [DataContract(IsReference = true)]
     public abstract class ShapeBaseViewModel : ViewModelBase

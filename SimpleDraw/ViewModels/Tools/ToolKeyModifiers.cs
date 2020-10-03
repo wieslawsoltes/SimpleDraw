@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SimpleDraw.ViewModels
+namespace SimpleDraw.ViewModels.Tools
 {
     [Flags]
     public enum ToolKeyModifiers

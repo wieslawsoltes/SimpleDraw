@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using SimpleDraw.ViewModels;
+using SimpleDraw.ViewModels.Containers;
+using SimpleDraw.ViewModels.Media;
+using SimpleDraw.ViewModels.Primitives;
+using SimpleDraw.ViewModels.Shapes;
 using A = Avalonia;
 using AM = Avalonia.Media;
 using AMI = Avalonia.Media.Immutable;

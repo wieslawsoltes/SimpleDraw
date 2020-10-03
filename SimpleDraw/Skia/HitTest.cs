@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using SimpleDraw.ViewModels;
+using SimpleDraw.ViewModels.Containers;
+using SimpleDraw.ViewModels.Primitives;
+using SimpleDraw.ViewModels.Shapes;
 using SkiaSharp;
 
 namespace SimpleDraw.Skia

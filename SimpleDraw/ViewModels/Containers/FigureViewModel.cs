@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using ReactiveUI;
 
-namespace SimpleDraw.ViewModels
+namespace SimpleDraw.ViewModels.Containers
 {
     [DataContract(IsReference = true)]
     public class FigureViewModel : ViewModelBase

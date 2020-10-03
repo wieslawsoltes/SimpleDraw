@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace SimpleDraw.ViewModels
+namespace SimpleDraw.ViewModels.Media
 {
     [DataContract(IsReference = true)]
     public abstract class BrushViewModel : ViewModelBase

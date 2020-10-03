@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using ReactiveUI;
+using SimpleDraw.ViewModels.Primitives;
 
-namespace SimpleDraw.ViewModels
+namespace SimpleDraw.ViewModels.Media
 {
     [DataContract(IsReference = true)]
     public class RelativePointViewModel : ViewModelBase

@@ -1,4 +1,4 @@
-﻿namespace SimpleDraw.ViewModels
+﻿namespace SimpleDraw.ViewModels.Tools
 {
     public enum ToolPointerType
     {

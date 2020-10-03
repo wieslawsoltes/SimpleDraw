@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using ReactiveUI;
+using SimpleDraw.ViewModels.Containers;
+using SimpleDraw.ViewModels.Tools.Shape;
 
-namespace SimpleDraw.ViewModels
+namespace SimpleDraw.ViewModels.Tools
 {
     [DataContract(IsReference = true)]
     public class LineToolViewModel : ToolBaseViewModel
