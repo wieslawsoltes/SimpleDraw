@@ -364,7 +364,7 @@ namespace SimpleDraw.Controls
         public void New()
         {
             var window = this.VisualRoot as Window;
-            var canvasNew = App.Create();
+            var canvasNew = AvaloniaApp.Create();
             Load(window, canvasNew);
         }
 
@@ -381,7 +381,7 @@ namespace SimpleDraw.Controls
                 var path = result.FirstOrDefault();
                 if (path != null)
                 {
-                    var canvasOpen = App.Open(path);
+                    var canvasOpen = AvaloniaApp.Open(path);
                     if (canvasOpen != null)
                     {
                         Load(window, canvasOpen);
@@ -402,7 +402,7 @@ namespace SimpleDraw.Controls
             var path = await dlg.ShowAsync(window);
             if (path != null)
             {
-                App.Save(path, canvas);
+                AvaloniaApp.Save(path, canvas);
             }
         }
 

@@ -1,8 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Markup.Xaml;
 using Newtonsoft.Json;
 using SimpleDraw.ViewModels;
 using SimpleDraw.ViewModels.Containers;
@@ -10,11 +7,10 @@ using SimpleDraw.ViewModels.Media;
 using SimpleDraw.ViewModels.Shapes;
 using SimpleDraw.ViewModels.Tools;
 using SimpleDraw.ViewModels.Tools.Shape;
-using SimpleDraw.Views;
 
 namespace SimpleDraw
 {
-    public class App : Application
+    public static class AvaloniaApp
     {
         public static CanvasViewModel Open(string path)
         {
@@ -141,16 +137,19 @@ namespace SimpleDraw
                 },
                 new RectangleToolViewModel()
                 {
+#if true
                     Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
-                    //Brush = new LinearGradientBrushViewModel(
-                    //    new ObservableCollection<GradientStopViewModel>()
-                    //    {
-                    //        new GradientStopViewModel(new ColorViewModel(255, 0, 0, 0), 0),
-                    //        new GradientStopViewModel(new ColorViewModel(255, 255, 255, 255), 1),
-                    //    },
-                    //    GradientSpreadMethod.Pad,
-                    //    new RelativePointViewModel(0, 0, ViewModels.RelativeUnit.Relative),
-                    //    new RelativePointViewModel(1, 1, ViewModels.RelativeUnit.Relative)),
+#else
+                    Brush = new LinearGradientBrushViewModel(
+                        new ObservableCollection<GradientStopViewModel>()
+                        {
+                            new GradientStopViewModel(new ColorViewModel(255, 0, 0, 0), 0),
+                            new GradientStopViewModel(new ColorViewModel(255, 255, 255, 255), 1),
+                        },
+                        GradientSpreadMethod.Pad,
+                        new RelativePointViewModel(0, 0, ViewModels.RelativeUnit.Relative),
+                        new RelativePointViewModel(1, 1, ViewModels.RelativeUnit.Relative)),
+#endif
                     Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
                     IsStroked = true,
                     IsFilled = true,
@@ -175,29 +174,5 @@ namespace SimpleDraw
             return canvas;
         }
 
-        public override void Initialize()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
-
-        public override void OnFrameworkInitializationCompleted()
-        {
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                var canvas = Open("canvas.json") ?? Create();
-
-                desktop.MainWindow = new MainWindow
-                {
-                    DataContext = canvas
-                };
-
-                desktop.Exit += (sender, e) =>
-                {
-                    Save("canvas.json", desktop.MainWindow.DataContext as CanvasViewModel);
-                };
-            }
-
-            base.OnFrameworkInitializationCompleted();
-        }
     }
 }

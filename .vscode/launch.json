@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/SimpleDraw/bin/Debug/netcoreapp3.1/SimpleDraw.dll",
+            "program": "${workspaceFolder}/SimpleDraw.Desktop/bin/Debug/netcoreapp3.1/SimpleDraw.Desktop.dll",
             "args": [ ],
-            "cwd": "${workspaceFolder}/SimpleDraw",
+            "cwd": "${workspaceFolder}/SimpleDraw.Desktop",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false
@@ -23,9 +23,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/SimpleDraw/bin/Debug/netcoreapp3.1/SimpleDraw.dll",
+            "program": "${workspaceFolder}/SimpleDraw.Desktop/bin/Debug/netcoreapp3.1/SimpleDraw.Desktop.dll",
             "args": [ "--headless" ],
-            "cwd": "${workspaceFolder}/SimpleDraw",
+            "cwd": "${workspaceFolder}/SimpleDraw.Desktop",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false
@@ -36,9 +36,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/SimpleDraw/bin/Debug/netcoreapp3.1/SimpleDraw.dll",
+            "program": "${workspaceFolder}/SimpleDraw.Desktop/bin/Debug/netcoreapp3.1/SimpleDraw.Desktop.dll",
             "args": [ "--vnc" ],
-            "cwd": "${workspaceFolder}/SimpleDraw",
+            "cwd": "${workspaceFolder}/SimpleDraw.Desktop",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false
