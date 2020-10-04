@@ -275,8 +275,8 @@ namespace SimpleDraw.Avalonia
         {
             if (lineShape.IsStroked)
             {
-                var p1 = new A.Point(lineShape.StartPoint.X, lineShape.StartPoint.Y);
-                var p2 = new A.Point(lineShape.Point.X, lineShape.Point.Y);
+                var p1 = ToPoint(lineShape.StartPoint);
+                var p2 = ToPoint(lineShape.Point);
                 var pen = ToPen(lineShape.Pen);
                 context.DrawLine(pen, p1, p2);
             }
