@@ -8,46 +8,11 @@ using SimpleDraw.ViewModels.Shapes;
 using SimpleDraw.ViewModels.Tools;
 using SimpleDraw.ViewModels.Tools.Shape;
 
-namespace SimpleDraw
+namespace SimpleDraw.Avalonia
 {
-    public static class AvaloniaApp
+    public class AvaloniaSimpleDrawApp : ISimpleDrawApplication
     {
-        public static CanvasViewModel Open(string path)
-        {
-            if (!File.Exists(path))
-            {
-                return null;
-            }
-
-            var json = File.ReadAllText(path);
-
-            var canvas = JsonConvert.DeserializeObject<CanvasViewModel>(json, new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented,
-                TypeNameHandling = TypeNameHandling.Objects,
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-                NullValueHandling = NullValueHandling.Ignore,
-            });
-
-            return canvas;
-        }
-
-        public static void Save(string path, CanvasViewModel canvas)
-        {
-            var json = JsonConvert.SerializeObject(canvas, new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented,
-                TypeNameHandling = TypeNameHandling.Objects,
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-                NullValueHandling = NullValueHandling.Ignore,
-            });
-
-            File.WriteAllText(path, json);
-        }
-
-        public static CanvasViewModel Create()
+        public CanvasViewModel New()
         {
             var canvas = new CanvasViewModel()
             {
@@ -173,5 +138,41 @@ namespace SimpleDraw
 
             return canvas;
         }
+
+        public CanvasViewModel Open(string path)
+        {
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            var json = File.ReadAllText(path);
+
+            var canvas = JsonConvert.DeserializeObject<CanvasViewModel>(json, new JsonSerializerSettings()
+            {
+                Formatting = Formatting.Indented,
+                TypeNameHandling = TypeNameHandling.Objects,
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                NullValueHandling = NullValueHandling.Ignore,
+            });
+
+            return canvas;
+        }
+
+        public void Save(string path, CanvasViewModel canvas)
+        {
+            var json = JsonConvert.SerializeObject(canvas, new JsonSerializerSettings()
+            {
+                Formatting = Formatting.Indented,
+                TypeNameHandling = TypeNameHandling.Objects,
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                NullValueHandling = NullValueHandling.Ignore,
+            });
+
+            File.WriteAllText(path, json);
+        }
+
     }
 }

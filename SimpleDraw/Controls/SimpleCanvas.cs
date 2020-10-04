@@ -13,6 +13,8 @@ namespace SimpleDraw.Controls
 {
     public class SimpleCanvas : Canvas
     {
+        public static ISimpleDrawApplication App { get; set; }
+
         public static readonly StyledProperty<IInputElement> InputSourceProperty =
             AvaloniaProperty.Register<SimpleCanvas, IInputElement>(nameof(InputSource));
 
@@ -364,7 +366,7 @@ namespace SimpleDraw.Controls
         public void New()
         {
             var window = this.VisualRoot as Window;
-            var canvasNew = AvaloniaApp.Create();
+            var canvasNew = App.New();
             Load(window, canvasNew);
         }
 
@@ -381,7 +383,7 @@ namespace SimpleDraw.Controls
                 var path = result.FirstOrDefault();
                 if (path != null)
                 {
-                    var canvasOpen = AvaloniaApp.Open(path);
+                    var canvasOpen = App.Open(path);
                     if (canvasOpen != null)
                     {
                         Load(window, canvasOpen);
@@ -402,7 +404,7 @@ namespace SimpleDraw.Controls
             var path = await dlg.ShowAsync(window);
             if (path != null)
             {
-                AvaloniaApp.Save(path, canvas);
+                App.Save(path, canvas);
             }
         }
 
