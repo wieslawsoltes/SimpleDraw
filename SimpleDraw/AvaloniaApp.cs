@@ -173,6 +173,5 @@ namespace SimpleDraw
 
             return canvas;
         }
-
     }
 }
