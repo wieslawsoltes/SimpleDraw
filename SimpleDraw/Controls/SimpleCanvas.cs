@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
@@ -12,6 +13,7 @@ using SimpleDraw.Avalonia;
 using SimpleDraw.Skia;
 using SimpleDraw.ViewModels.Containers;
 using SimpleDraw.ViewModels.Tools;
+using SkiaSharp;
 
 namespace SimpleDraw.Controls
 {
@@ -208,6 +210,11 @@ namespace SimpleDraw.Controls
                         if (e.KeyModifiers == KeyModifiers.None)
                         {
                             canvas.SetTool("Ellipse");
+                        }
+
+                        if (e.KeyModifiers == KeyModifiers.Control)
+                        {
+                            await Export(canvas);
                         }
                     }
                     break;
@@ -409,6 +416,28 @@ namespace SimpleDraw.Controls
             if (path != null)
             {
                 App.Save(path, canvas);
+            }
+        }
+
+        public async Task Export(CanvasViewModel canvas)
+        {
+            var dlg = new SaveFileDialog() { Title = "Save" };
+            dlg.Filters.Add(new FileDialogFilter() { Name = "Skp", Extensions = { "skp" } });
+            dlg.Filters.Add(new FileDialogFilter() { Name = "All", Extensions = { "*" } });
+            dlg.InitialFileName = "canvas";
+            dlg.DefaultExtension = "skp";
+
+            var window = this.VisualRoot as Window;
+            var path = await dlg.ShowAsync(window);
+            if (path != null)
+            {
+                using var skPictureRecorder = new SKPictureRecorder();
+                var cullRect = SKRect.Create((float)this.Bounds.X, (float)this.Bounds.Y, (float)this.Bounds.Width, (float)this.Bounds.Height);
+                using var skCanvas = skPictureRecorder.BeginRecording(cullRect);
+                SkiaRenderer.Render(skCanvas, canvas);
+                using var skPicture = skPictureRecorder.EndRecording();
+                using var stream = File.Create(path);
+                skPicture.Serialize(stream);
             }
         }
 
