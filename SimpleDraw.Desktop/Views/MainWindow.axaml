@@ -17,6 +17,8 @@
                 <MenuItem Header="Open..." InputGesture="Ctrl+O" Command="{Binding #simpleCanvas.Open}"/>
                 <MenuItem Header="Save As..." InputGesture="Ctrl+S" Command="{Binding #simpleCanvas.Save}" CommandParameter="{Binding}"/>
                 <Separator/>
+                <MenuItem Header="_Export..." InputGesture="Ctrl+E" Command="{Binding #simpleCanvas.Export}" CommandParameter="{Binding}"/>
+                <Separator/>
                 <MenuItem Header="E_xit" InputGesture="Alt+F4" Command="{Binding #simpleCanvas.Exit}"/>
             </MenuItem>
             <MenuItem Header="_Edit">
