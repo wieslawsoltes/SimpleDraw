@@ -51,15 +51,21 @@
         <Grid x:Name="inputGrid" Background="Transparent" Grid.Column="0" Grid.Row="1">
             <controls:SimpleCanvas x:Name="simpleCanvas" InputSource="{Binding #inputGrid}" Background="WhiteSmoke" Width="{Binding Width}" Height="{Binding Height}"/>
         </Grid>
-        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Items:" Margin="2"/>
-                <TextBlock Text="{Binding Items.Count}" Margin="2"/>
+        <Grid ColumnDefinitions="Auto,*" Grid.Column="0" Grid.Row="2">
+            <StackPanel Orientation="Horizontal" Grid.Column="0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Items:" Margin="2"/>
+                    <TextBlock Text="{Binding Items.Count}" Margin="2"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Selected:" Margin="2"/>
+                    <TextBlock Text="{Binding Selected.Count}" Margin="2"/>
+                </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Selected:" Margin="2"/>
-                <TextBlock Text="{Binding Selected.Count}" Margin="2"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+                <CheckBox Content="CustomDraw" IsChecked="{Binding #simpleCanvas.CustomDraw}" Margin="2"/>
             </StackPanel>
-        </StackPanel>
+        </Grid>
+
     </Grid>
 </Window>
