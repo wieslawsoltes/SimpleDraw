@@ -11,42 +11,42 @@ namespace SimpleDraw.Skia
     {
         public static SKRect GetBounds(LineShapeViewModel lineShape)
         {
-            var path = SkiaRenderer.ToPath(lineShape);
+            var path = SkiaRenderer.ToSKPath(lineShape);
             var bounds = path.ComputeTightBounds();
             return bounds;
         }
 
         public static SKRect GetBounds(CubicBezierShapeViewModel cubicBezierShape)
         {
-            var path = SkiaRenderer.ToPath(cubicBezierShape);
+            var path = SkiaRenderer.ToSKPath(cubicBezierShape);
             var bounds = path.ComputeTightBounds();
             return bounds;
         }
 
         public static SKRect GetBounds(QuadraticBezierShapeViewModel quadraticBezierShape)
         {
-            var path = SkiaRenderer.ToPath(quadraticBezierShape);
+            var path = SkiaRenderer.ToSKPath(quadraticBezierShape);
             var bounds = path.ComputeTightBounds();
             return bounds;
         }
 
         public static SKRect GetBounds(PathShapeViewModel pathShape)
         {
-            var path = SkiaRenderer.ToPath(pathShape);
+            var path = SkiaRenderer.ToSKPath(pathShape);
             var bounds = path.ComputeTightBounds();
             return bounds;
         }
 
         public static SKRect GetBounds(RectangleShapeViewModel rectangleShape)
         {
-            var path = SkiaRenderer.ToPath(rectangleShape);
+            var path = SkiaRenderer.ToSKPath(rectangleShape);
             var bounds = path.ComputeTightBounds();
             return bounds;
         }
 
         public static SKRect GetBounds(EllipseShapeViewModel ellipseShape)
         {
-            var path = SkiaRenderer.ToPath(ellipseShape);
+            var path = SkiaRenderer.ToSKPath(ellipseShape);
             var bounds = path.ComputeTightBounds();
             return bounds;
         }
