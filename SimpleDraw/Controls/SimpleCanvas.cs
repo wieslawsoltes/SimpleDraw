@@ -24,10 +24,19 @@ namespace SimpleDraw.Controls
         public static readonly StyledProperty<IInputElement> InputSourceProperty =
             AvaloniaProperty.Register<SimpleCanvas, IInputElement>(nameof(InputSource));
 
+        public static readonly StyledProperty<bool> CustomDrawProperty =
+            AvaloniaProperty.Register<SimpleCanvas, bool>(nameof(CustomDraw));
+
         public IInputElement InputSource
         {
             get => GetValue(InputSourceProperty);
             set => SetValue(InputSourceProperty, value);
+        }
+
+        public bool CustomDraw
+        {
+            get => GetValue(CustomDrawProperty);
+            set => SetValue(CustomDrawProperty, value);
         }
 
         private ToolPointerType ToToolPointerType(PointerUpdateKind pointerUpdateKind)
@@ -455,11 +464,15 @@ namespace SimpleDraw.Controls
             {
                 return;
             }
-#if true
-            AvaloniaRenderer.Render(context, canvas);
-#else
-            context.Custom(new SkiaCustomDraw(canvas, this.Bounds));
-#endif
+
+            if (CustomDraw)
+            {
+                context.Custom(new SkiaCustomDraw(canvas, this.Bounds));
+            }
+            else
+            {
+                AvaloniaRenderer.Render(context, canvas);
+            }
         }
 
         private class SkiaCustomDraw : ICustomDrawOperation
