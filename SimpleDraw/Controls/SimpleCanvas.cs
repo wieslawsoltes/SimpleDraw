@@ -5,7 +5,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
+using Avalonia.Platform;
+using Avalonia.Rendering.SceneGraph;
+using Avalonia.Skia;
 using SimpleDraw.Avalonia;
+using SimpleDraw.Skia;
 using SimpleDraw.ViewModels.Containers;
 using SimpleDraw.ViewModels.Tools;
 
@@ -422,8 +426,43 @@ namespace SimpleDraw.Controls
             {
                 return;
             }
-
+#if true
             AvaloniaRenderer.Render(context, canvas);
+#else
+            context.Custom(new SkiaCustomDraw(canvas, this.Bounds));
+#endif
+        }
+
+        private class SkiaCustomDraw : ICustomDrawOperation
+        {
+            private readonly Rect _bounds;
+            private readonly CanvasViewModel _canvas;
+
+            public SkiaCustomDraw(CanvasViewModel canvas, Rect bounds)
+            {
+                _canvas = canvas;
+                _bounds = bounds;
+            }
+
+            public Rect Bounds => _bounds;
+
+            public void Dispose()
+            {
+            }
+
+            public bool Equals(ICustomDrawOperation other) => false;
+
+            public bool HitTest(Point p) => false;
+
+            public void Render(IDrawingContextImpl context)
+            {
+                var skCanvas = (context as ISkiaDrawingContextImpl)?.SkCanvas;
+                if (skCanvas == null)
+                {
+                    return;
+                }
+                SkiaRenderer.Render(skCanvas, _canvas);
+            }
         }
     }
 }
