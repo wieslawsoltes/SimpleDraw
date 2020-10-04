@@ -173,6 +173,5 @@ namespace SimpleDraw.Avalonia
 
             File.WriteAllText(path, json);
         }
-
     }
 }
