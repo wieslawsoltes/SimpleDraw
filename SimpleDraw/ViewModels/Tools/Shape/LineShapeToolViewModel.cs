@@ -47,6 +47,23 @@ namespace SimpleDraw.ViewModels.Tools.Shape
             set => this.RaiseAndSetIfChanged(ref _tryToConnect, value);
         }
 
+        private void TryToHover(IItemsCanvas canvas, double x, double y)
+        {
+            if (_tryToConnect)
+            {
+                var result = SkiaHitTest.Contains(canvas.Items, x, y, _hitRadius);
+                if (result is PointViewModel point)
+                {
+                    canvas.Hovered.Add(point);
+                }
+            }
+        }
+
+        private void ResetHover(IItemsCanvas canvas)
+        {
+            canvas.Hovered.Clear();
+        }
+
         public override void Pressed(IItemsCanvas canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
             switch (_state)
@@ -57,6 +74,8 @@ namespace SimpleDraw.ViewModels.Tools.Shape
                         {
                             var shared = new Dictionary<ViewModelBase, ViewModelBase>();
                             var start = default(PointViewModel);
+
+                            ResetHover(canvas);
 
                             if (_tryToConnect)
                             {
@@ -86,6 +105,8 @@ namespace SimpleDraw.ViewModels.Tools.Shape
                         {
                             var end = default(PointViewModel);
 
+                            ResetHover(canvas);
+
                             if (_tryToConnect)
                             {
                                 var result = SkiaHitTest.Contains(canvas.Items, x, y, _hitRadius);
@@ -110,6 +131,7 @@ namespace SimpleDraw.ViewModels.Tools.Shape
 
                         if (pointerType == ToolPointerType.Right)
                         {
+                            ResetHover(canvas);
                             canvas.Decorators.Remove(_line);
                             canvas.Invalidate();
                             _line = null;
@@ -130,12 +152,17 @@ namespace SimpleDraw.ViewModels.Tools.Shape
             {
                 case LineState.StartPoint:
                     {
+                        ResetHover(canvas);
+                        TryToHover(canvas, x, y);
+                        canvas.Invalidate();
                     }
                     break;
                 case LineState.Point:
                     {
                         if (pointerType == ToolPointerType.None)
                         {
+                            ResetHover(canvas);
+                            TryToHover(canvas, x, y);
                             _line.Point.X = x;
                             _line.Point.Y = y;
                             canvas.Invalidate();

@@ -11,6 +11,12 @@ namespace SimpleDraw.Skia
 {
     internal static class SkiaRenderer
     {
+        public static BrushViewModel PointBrush = new SolidColorBrushViewModel(new ColorViewModel(128, 255, 0, 0));
+
+        public static PenViewModel PointPen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(128, 255, 0, 0)), 1);
+
+        public static double PointRadius = 4;
+
         public static SKColor ToSKColor(ColorViewModel color)
         {
             return new SKColor(color.R, color.G, color.B, color.A);
@@ -466,12 +472,32 @@ namespace SimpleDraw.Skia
             }
         }
 
+        public static void Render(SKCanvas context, PointViewModel point)
+        {
+            var rect = SKRect.Create(
+                (float)(point.X - PointRadius),
+                (float)(point.Y - PointRadius),
+                (float)(PointRadius + PointRadius),
+                (float)(PointRadius + PointRadius));
+            var path = new SKPath() { FillType = SKPathFillType.Winding };
+            path.AddOval(rect);
+            var brush = ToSKPaint(PointBrush);
+            var pen = ToSKPaint(PointPen);
+            context.DrawPath(path, brush);
+            context.DrawPath(path, pen);
+        }
+
         public static void Render(SKCanvas context, ObservableCollection<ViewModelBase> items)
         {
             foreach (var item in items)
             {
                 switch (item)
                 {
+                    case PointViewModel point:
+                        {
+                            Render(context, point);
+                        }
+                        break;
                     case GroupViewModel group:
                         {
                             Render(context, group.Items);
@@ -489,6 +515,7 @@ namespace SimpleDraw.Skia
         public static void Render(SKCanvas context, CanvasViewModel canvas)
         {
             Render(context, canvas.Items);
+            Render(context, canvas.Hovered);
             Render(context, canvas.Decorators);
         }
     }

@@ -19,6 +19,7 @@ namespace SimpleDraw.ViewModels.Containers
         private double _width;
         private double _height;
         private ObservableCollection<ViewModelBase> _items;
+        private ObservableCollection<ViewModelBase> _hovered;
         private ObservableCollection<ViewModelBase> _selected;
         private ObservableCollection<ViewModelBase> _decorators;
         private ToolBaseViewModel _tool;
@@ -46,6 +47,13 @@ namespace SimpleDraw.ViewModels.Containers
         {
             get => _items;
             set => this.RaiseAndSetIfChanged(ref _items, value);
+        }
+
+        [IgnoreDataMember]
+        public ObservableCollection<ViewModelBase> Hovered
+        {
+            get => _hovered;
+            set => this.RaiseAndSetIfChanged(ref _hovered, value);
         }
 
         [IgnoreDataMember]
@@ -80,6 +88,8 @@ namespace SimpleDraw.ViewModels.Containers
 
         public CanvasViewModel()
         {
+            _hovered = new ObservableCollection<ViewModelBase>();
+
             _selected = new ObservableCollection<ViewModelBase>();
 
             _decorators = new ObservableCollection<ViewModelBase>();
@@ -320,6 +330,7 @@ namespace SimpleDraw.ViewModels.Containers
                 _items.Remove(item);
             }
 
+            _hovered.Clear();
             _selected.Clear();
 
             UpdateSelectionBounds();
@@ -345,6 +356,7 @@ namespace SimpleDraw.ViewModels.Containers
         {
             var shared = new Dictionary<ViewModelBase, ViewModelBase>();
 
+            _hovered.Clear();
             _selected.Clear();
 
             foreach (var item in _copy)
@@ -365,6 +377,7 @@ namespace SimpleDraw.ViewModels.Containers
                 _items.Remove(item);
             }
 
+            _hovered.Clear();
             _selected.Clear();
 
             UpdateSelectionBounds();
@@ -373,6 +386,7 @@ namespace SimpleDraw.ViewModels.Containers
 
         public void SelectAll()
         {
+            _hovered.Clear();
             _selected.Clear();
 
             foreach (var item in _items)
@@ -403,6 +417,7 @@ namespace SimpleDraw.ViewModels.Containers
 
             _items.Add(group);
 
+            _hovered.Clear();
             _selected.Clear();
             _selected.Add(group);
 
@@ -431,6 +446,7 @@ namespace SimpleDraw.ViewModels.Containers
 
             if (update)
             {
+                _hovered.Clear();
                 _selected.Clear();
 
                 foreach (var item in ungrouped)

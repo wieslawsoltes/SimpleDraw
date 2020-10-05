@@ -19,6 +19,10 @@ namespace SimpleDraw.ViewModels.Tools
 
         public ObservableCollection<ViewModelBase> Items { get; set; }
 
+        public ObservableCollection<ViewModelBase> Hovered { get; set; }
+
+        public ObservableCollection<ViewModelBase> Selected { get; set; }
+
         public ObservableCollection<ViewModelBase> Decorators { get; set; }
 
         public void Invalidate()
@@ -188,6 +192,8 @@ namespace SimpleDraw.ViewModels.Tools
                             _itemsCanvasAdapter.Path = _path;
                             _itemsCanvasAdapter.Figure = _figure;
                             _itemsCanvasAdapter.Items = _figure.Segments;
+                            _itemsCanvasAdapter.Hovered = canvas.Hovered;
+                            _itemsCanvasAdapter.Selected = canvas.Selected;
                             _itemsCanvasAdapter.Decorators = _figure.Segments;
 
                             switch (_mode)
@@ -223,6 +229,8 @@ namespace SimpleDraw.ViewModels.Tools
                             _itemsCanvasAdapter.Path = _path;
                             _itemsCanvasAdapter.Figure = _figure;
                             _itemsCanvasAdapter.Items = _figure.Segments;
+                            _itemsCanvasAdapter.Hovered = canvas.Hovered;
+                            _itemsCanvasAdapter.Selected = canvas.Selected;
                             _itemsCanvasAdapter.Decorators = _figure.Segments;
 
                             bool move = false;
@@ -350,6 +358,8 @@ namespace SimpleDraw.ViewModels.Tools
                             _itemsCanvasAdapter.Path = _path;
                             _itemsCanvasAdapter.Figure = _figure;
                             _itemsCanvasAdapter.Items = _figure.Segments;
+                            _itemsCanvasAdapter.Hovered = canvas.Hovered;
+                            _itemsCanvasAdapter.Selected = canvas.Selected;
                             _itemsCanvasAdapter.Decorators = _figure.Segments;
 
                             switch (_mode)

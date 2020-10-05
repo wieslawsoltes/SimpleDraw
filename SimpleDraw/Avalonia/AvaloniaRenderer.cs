@@ -14,6 +14,12 @@ namespace SimpleDraw.Avalonia
 {
     internal static class AvaloniaRenderer
     {
+        public static BrushViewModel PointBrush = new SolidColorBrushViewModel(new ColorViewModel(128, 255, 0, 0));
+
+        public static PenViewModel PointPen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(128, 255, 0, 0)), 1);
+
+        public static double PointRadius = 4;
+
         public static AM.Color ToColor(ColorViewModel color)
         {
             return new AM.Color(color.A, color.R, color.G, color.B);
@@ -354,6 +360,19 @@ namespace SimpleDraw.Avalonia
             }
         }
 
+        public static void Render(AM.DrawingContext context, PointViewModel point)
+        {
+            var rect = new A.Rect(
+                point.X - PointRadius,
+                point.Y - PointRadius,
+                PointRadius + PointRadius,
+                PointRadius + PointRadius);
+            var geometry = new AM.EllipseGeometry(rect);
+            var brush = ToBrush(PointBrush);
+            var pen = ToPen(PointPen);
+            context.DrawGeometry(brush, pen, geometry);
+        }
+
         public static void Render(AM.DrawingContext context, ShapeBaseViewModel shape)
         {
             switch (shape)
@@ -399,6 +418,11 @@ namespace SimpleDraw.Avalonia
             {
                 switch (item)
                 {
+                    case PointViewModel point:
+                        {
+                            Render(context, point);
+                        }
+                        break;
                     case GroupViewModel group:
                         {
                             Render(context, group.Items);
@@ -416,6 +440,7 @@ namespace SimpleDraw.Avalonia
         public static void Render(AM.DrawingContext context, CanvasViewModel canvas)
         {
             Render(context, canvas.Items);
+            Render(context, canvas.Hovered);
             Render(context, canvas.Decorators);
         }
     }

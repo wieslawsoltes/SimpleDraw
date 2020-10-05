@@ -64,6 +64,25 @@ namespace SimpleDraw.ViewModels.Tools.Shape
             set => this.RaiseAndSetIfChanged(ref _tryToConnect, value);
         }
 
+        private void TryToHover(IItemsCanvas canvas, double x, double y)
+        {
+            ResetHover(canvas);
+
+            if (_tryToConnect)
+            {
+                var result = SkiaHitTest.Contains(canvas.Items, x, y, _hitRadius);
+                if (result is PointViewModel point)
+                {
+                    canvas.Hovered.Add(point);
+                }
+            }
+        }
+
+        private void ResetHover(IItemsCanvas canvas)
+        {
+            canvas.Hovered.Clear();
+        }
+
         public override void Pressed(IItemsCanvas canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
             switch (_state)
@@ -74,6 +93,8 @@ namespace SimpleDraw.ViewModels.Tools.Shape
                         {
                             var shared = new Dictionary<ViewModelBase, ViewModelBase>();
                             var topLeft = default(PointViewModel);
+
+                            ResetHover(canvas);
 
                             if (_tryToConnect)
                             {
@@ -105,6 +126,8 @@ namespace SimpleDraw.ViewModels.Tools.Shape
                         if (pointerType == ToolPointerType.Left)
                         {
                             var endPoint = default(PointViewModel);
+
+                            ResetHover(canvas);
 
                             if (_tryToConnect)
                             {
@@ -140,6 +163,8 @@ namespace SimpleDraw.ViewModels.Tools.Shape
                         {
                             var control = default(PointViewModel);
 
+                            ResetHover(canvas);
+
                             if (_tryToConnect)
                             {
                                 var result = SkiaHitTest.Contains(canvas.Items, x, y, _hitRadius);
@@ -164,6 +189,7 @@ namespace SimpleDraw.ViewModels.Tools.Shape
 
                         if (pointerType == ToolPointerType.Right)
                         {
+                            ResetHover(canvas);
                             canvas.Decorators.Remove(_quadraticBezier);
                             canvas.Invalidate();
                             _quadraticBezier = null;
@@ -184,12 +210,17 @@ namespace SimpleDraw.ViewModels.Tools.Shape
             {
                 case QuadraticBezierState.StartPoint:
                     {
+                        ResetHover(canvas);
+                        TryToHover(canvas, x, y);
+                        canvas.Invalidate();
                     }
                     break;
                 case QuadraticBezierState.EndPoint:
                     {
                         if (pointerType == ToolPointerType.None)
                         {
+                            ResetHover(canvas);
+                            TryToHover(canvas, x, y);
                             _quadraticBezier.Control.X = x;
                             _quadraticBezier.Control.Y = y;
                             _quadraticBezier.EndPoint.X = x;
@@ -202,6 +233,8 @@ namespace SimpleDraw.ViewModels.Tools.Shape
                     {
                         if (pointerType == ToolPointerType.None)
                         {
+                            ResetHover(canvas);
+                            TryToHover(canvas, x, y);
                             _quadraticBezier.Control.X = x;
                             _quadraticBezier.Control.Y = y;
                             canvas.Invalidate();

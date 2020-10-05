@@ -67,6 +67,23 @@ namespace SimpleDraw.ViewModels.Tools
         [IgnoreDataMember]
         public override string Name => "Ellipse";
 
+        private void TryToHover(IItemsCanvas canvas, double x, double y)
+        {
+            if (_tryToConnect)
+            {
+                var result = SkiaHitTest.Contains(canvas.Items, x, y, _hitRadius);
+                if (result is PointViewModel point)
+                {
+                    canvas.Hovered.Add(point);
+                }
+            }
+        }
+
+        private void ResetHover(IItemsCanvas canvas)
+        {
+            canvas.Hovered.Clear();
+        }
+
         public override void Pressed(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
             switch (_state)
@@ -77,6 +94,8 @@ namespace SimpleDraw.ViewModels.Tools
                         {
                             var shared = new Dictionary<ViewModelBase, ViewModelBase>();
                             var topLeft = default(PointViewModel);
+
+                            ResetHover(canvas);
 
                             if (_tryToConnect)
                             {
@@ -108,6 +127,8 @@ namespace SimpleDraw.ViewModels.Tools
                         {
                             var bottomRight = default(PointViewModel);
 
+                            ResetHover(canvas);
+
                             if (_tryToConnect)
                             {
                                 var result = SkiaHitTest.Contains(canvas.Items, x, y, _hitRadius);
@@ -132,6 +153,7 @@ namespace SimpleDraw.ViewModels.Tools
 
                         if (pointerType == ToolPointerType.Right)
                         {
+                            ResetHover(canvas);
                             canvas.Decorators.Remove(_ellipse);
                             canvas.Invalidate();
                             _ellipse = null;
@@ -150,10 +172,19 @@ namespace SimpleDraw.ViewModels.Tools
         {
             switch (_state)
             {
+                case EllipseState.TopLeft:
+                    {
+                        ResetHover(canvas);
+                        TryToHover(canvas, x, y);
+                        canvas.Invalidate();
+                    }
+                    break;
                 case EllipseState.BottomRight:
                     {
                         if (pointerType == ToolPointerType.None)
                         {
+                            ResetHover(canvas);
+                            TryToHover(canvas, x, y);
                             _ellipse.BottomRight.X = x;
                             _ellipse.BottomRight.Y = y;
                             canvas.Invalidate();

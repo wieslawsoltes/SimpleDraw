@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using ReactiveUI;
 using SimpleDraw.Skia;
 using SimpleDraw.ViewModels.Containers;
+using SimpleDraw.ViewModels.Primitives;
 
 namespace SimpleDraw.ViewModels.Tools
 {
@@ -12,6 +13,7 @@ namespace SimpleDraw.ViewModels.Tools
         private enum State { None, Selected, Move }
         private State _state = State.None;
         private double _hitRadius;
+        private bool _tryToConnect;
         private double _pressedX = double.NaN;
         private double _pressedY = double.NaN;
         private double _previousX = double.NaN;
@@ -24,8 +26,32 @@ namespace SimpleDraw.ViewModels.Tools
             set => this.RaiseAndSetIfChanged(ref _hitRadius, value);
         }
 
+        [DataMember(IsRequired = false, EmitDefaultValue = true)]
+        public bool TryToConnect
+        {
+            get => _tryToConnect;
+            set => this.RaiseAndSetIfChanged(ref _tryToConnect, value);
+        }
+
         [IgnoreDataMember]
         public override string Name => "Selection";
+
+        private void TryToHover(IItemsCanvas canvas, double x, double y)
+        {
+            if (_tryToConnect)
+            {
+                var result = SkiaHitTest.Contains(canvas.Items, x, y, _hitRadius);
+                if (result is PointViewModel point)
+                {
+                    canvas.Hovered.Add(point);
+                }
+            }
+        }
+
+        private void ResetHover(IItemsCanvas canvas)
+        {
+            canvas.Hovered.Clear();
+        }
 
         public override void Pressed(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
         {
@@ -38,6 +64,8 @@ namespace SimpleDraw.ViewModels.Tools
             {
                 case State.None:
                     {
+                        ResetHover(canvas);
+
                         var result = SkiaHitTest.Contains(canvas.Items, x, y, _hitRadius);
                         if (result != null)
                         {
@@ -85,11 +113,15 @@ namespace SimpleDraw.ViewModels.Tools
                     break;
                 case State.Selected:
                     {
+                        ResetHover(canvas);
+                        canvas.Invalidate();
                         _state = State.None;
                     }
                     break;
                 case State.Move:
                     {
+                        ResetHover(canvas);
+                        canvas.Invalidate();
                         _state = State.None;
                     }
                     break;
@@ -112,6 +144,7 @@ namespace SimpleDraw.ViewModels.Tools
                     break;
                 case State.Move:
                     {
+                        ResetHover(canvas);
                         canvas.RemoveSelectionDecorator();
                         canvas.RemoveSelectionBounds();
 
@@ -170,8 +203,16 @@ namespace SimpleDraw.ViewModels.Tools
 
             switch (_state)
             {
+                case State.None:
+                    {
+                        ResetHover(canvas);
+                        TryToHover(canvas, x, y);
+                        canvas.Invalidate();
+                    }
+                    break;
                 case State.Selected:
                     {
+                        ResetHover(canvas);
                         double deltaX = x - _previousX;
                         double deltaY = y - _previousY;
                         canvas.MoveSelected(deltaX, deltaY);
@@ -183,6 +224,7 @@ namespace SimpleDraw.ViewModels.Tools
                     break;
                 case State.Move:
                     {
+                        ResetHover(canvas);
                         canvas.MoveSelectionDecorator(x, y);
                         canvas.Invalidate();
                     }
@@ -199,7 +241,8 @@ namespace SimpleDraw.ViewModels.Tools
 
             var copy = new SelectionToolViewModel()
             {
-                HitRadius = _hitRadius
+                HitRadius = _hitRadius,
+                TryToConnect = _tryToConnect
             };
 
             shared[this] = copy;
