@@ -190,7 +190,6 @@ namespace SimpleDraw.ViewModels.Containers
                     case PointViewModel point:
                         {
                             points.Add(point);
-                            points.Add(point);
                         }
                         break;
                     case GroupViewModel group:
