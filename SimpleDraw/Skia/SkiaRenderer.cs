@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using SimpleDraw.ViewModels;
 using SimpleDraw.ViewModels.Containers;
@@ -512,10 +513,22 @@ namespace SimpleDraw.Skia
             }
         }
 
+        public static void RenderHovered(SKCanvas context, ObservableCollection<ViewModelBase> items)
+        {
+            var points = new HashSet<PointViewModel>();
+
+            CanvasViewModel.GetPoints(items, points);
+
+            foreach (var point in points)
+            {
+                Render(context, point);
+            }
+        }
+
         public static void Render(SKCanvas context, CanvasViewModel canvas)
         {
             Render(context, canvas.Items);
-            Render(context, canvas.Hovered);
+            RenderHovered(context, canvas.Hovered);
             Render(context, canvas.Decorators);
         }
     }
