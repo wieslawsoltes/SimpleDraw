@@ -437,10 +437,22 @@ namespace SimpleDraw.Avalonia
             }
         }
 
+        public static void RenderHovered(AM.DrawingContext context, ObservableCollection<ViewModelBase> items)
+        {
+            var points = new HashSet<PointViewModel>();
+
+            CanvasViewModel.GetPoints(items, points);
+
+            foreach (var point in points)
+            {
+                Render(context, point);
+            }
+        }
+
         public static void Render(AM.DrawingContext context, CanvasViewModel canvas)
         {
             Render(context, canvas.Items);
-            Render(context, canvas.Hovered);
+            RenderHovered(context, canvas.Hovered);
             Render(context, canvas.Decorators);
         }
     }
