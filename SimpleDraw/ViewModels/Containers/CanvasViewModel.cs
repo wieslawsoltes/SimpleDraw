@@ -181,7 +181,7 @@ namespace SimpleDraw.ViewModels.Containers
             return CloneSelf(shared);
         }
 
-        public void GetPoints(IList<ViewModelBase> items, HashSet<PointViewModel> points)
+        public static void GetPoints(IList<ViewModelBase> items, HashSet<PointViewModel> points)
         {
             foreach (var item in items)
             {
