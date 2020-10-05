@@ -41,9 +41,9 @@ namespace SimpleDraw.ViewModels.Tools
             if (_tryToConnect)
             {
                 var result = SkiaHitTest.Contains(canvas.Items, x, y, _hitRadius);
-                if (result is PointViewModel point)
+                if (result != null)
                 {
-                    canvas.Hovered.Add(point);
+                    canvas.Hovered.Add(result);
                 }
             }
         }
