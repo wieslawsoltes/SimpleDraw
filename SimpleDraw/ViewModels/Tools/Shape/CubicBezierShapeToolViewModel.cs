@@ -66,8 +66,6 @@ namespace SimpleDraw.ViewModels.Tools.Shape
 
         private void TryToHover(IItemsCanvas canvas, double x, double y)
         {
-            ResetHover(canvas);
-
             if (_tryToConnect)
             {
                 var result = SkiaHitTest.Contains(canvas.Items, x, y, _hitRadius);
