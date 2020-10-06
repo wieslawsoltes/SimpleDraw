@@ -528,12 +528,7 @@ namespace SimpleDraw.Skia
         public static void Render(SKCanvas context, CanvasViewModel canvas)
         {
             Render(context, canvas.Items);
-
-            if (canvas.Decorators.Count <= 0)
-            {
-                RenderHovered(context, canvas.Hovered);
-            }
-
+            RenderHovered(context, canvas.Hovered);
             Render(context, canvas.Decorators);
         }
     }
