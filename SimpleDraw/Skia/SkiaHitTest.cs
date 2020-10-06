@@ -317,6 +317,12 @@ namespace SimpleDraw.Skia
                                 {
                                     return resultPoint;
                                 }
+#if false
+                                else if (segmentResult != null)
+                                {
+                                    return segmentResult;
+                                }
+#endif
                             }
                         }
 
