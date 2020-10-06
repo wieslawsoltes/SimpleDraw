@@ -113,8 +113,8 @@ namespace SimpleDraw.Avalonia
                             new GradientStopViewModel(new ColorViewModel(255, 255, 255, 255), 1),
                         },
                         GradientSpreadMethod.Pad,
-                        new RelativePointViewModel(0, 0, ViewModels.RelativeUnit.Relative),
-                        new RelativePointViewModel(1, 1, ViewModels.RelativeUnit.Relative)),
+                        new RelativePointViewModel(0, 0, RelativeUnit.Relative),
+                        new RelativePointViewModel(1, 1, RelativeUnit.Relative)),
 #endif
                     Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
                     IsStroked = true,
