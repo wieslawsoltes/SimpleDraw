@@ -441,6 +441,27 @@ namespace SimpleDraw.ViewModels.Containers
                     _items.Remove(group);
                     update = true;
                 }
+
+                if (item is PathShapeViewModel pathShape)
+                {
+                    foreach (var figure in pathShape.Figures)
+                    {
+                        var groupFigure = new GroupViewModel()
+                        {
+                            Items = new ObservableCollection<ViewModelBase>()
+                        };
+
+                        foreach (var segment in figure.Segments)
+                        {
+                            groupFigure.Items.Add(segment);
+                        }
+
+                        ungrouped.Add(groupFigure);
+                    }
+
+                    _items.Remove(pathShape);
+                    update = true;
+                }
             }
 
             if (update)
