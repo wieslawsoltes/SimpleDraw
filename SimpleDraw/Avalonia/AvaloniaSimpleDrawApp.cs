@@ -80,7 +80,7 @@ namespace SimpleDraw.Avalonia
                         Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
                         IsStroked = true,
                         HitRadius = 6,
-                        TryToConnect = false
+                        TryToConnect = true
                     },
                     CubicBezierShapeTool = new CubicBezierShapeToolViewModel()
                     {
@@ -89,7 +89,7 @@ namespace SimpleDraw.Avalonia
                         IsStroked = true,
                         IsFilled = false,
                         HitRadius = 6,
-                        TryToConnect = false
+                        TryToConnect = true
                     },
                     QuadraticBezierShapeTool = new QuadraticBezierShapeToolViewModel()
                     {
@@ -98,7 +98,7 @@ namespace SimpleDraw.Avalonia
                         IsStroked = true,
                         IsFilled = false,
                         HitRadius = 6,
-                        TryToConnect = false
+                        TryToConnect = true
                     }
                 },
                 new RectangleToolViewModel()
