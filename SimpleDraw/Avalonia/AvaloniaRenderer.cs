@@ -452,7 +452,12 @@ namespace SimpleDraw.Avalonia
         public static void Render(AM.DrawingContext context, CanvasViewModel canvas)
         {
             Render(context, canvas.Items);
-            RenderHovered(context, canvas.Hovered);
+
+            if (canvas.Decorators.Count <= 0)
+            {
+                RenderHovered(context, canvas.Hovered);
+            }
+
             Render(context, canvas.Decorators);
         }
     }
