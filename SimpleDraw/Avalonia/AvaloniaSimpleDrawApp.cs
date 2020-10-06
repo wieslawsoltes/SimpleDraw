@@ -109,8 +109,8 @@ namespace SimpleDraw.Avalonia
                     Brush = new LinearGradientBrushViewModel(
                         new ObservableCollection<GradientStopViewModel>()
                         {
-                            new GradientStopViewModel(new ColorViewModel(255, 0, 0, 0), 0),
-                            new GradientStopViewModel(new ColorViewModel(255, 255, 255, 255), 1),
+                            new GradientStopViewModel(new ColorViewModel(255, 0, 255, 0), 0),
+                            new GradientStopViewModel(new ColorViewModel(255, 0, 0, 255), 1),
                         },
                         GradientSpreadMethod.Pad,
                         new RelativePointViewModel(0, 0, RelativeUnit.Relative),
