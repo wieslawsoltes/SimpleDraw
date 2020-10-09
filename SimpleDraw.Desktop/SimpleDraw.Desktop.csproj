@@ -25,6 +25,8 @@
     <PackageReference Include="Avalonia.Headless" Version="0.10.0-preview5" />
     <PackageReference Include="Avalonia.Headless.Vnc" Version="0.10.0-preview5" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.0-preview5" />
+    <PackageReference Include="SkiaSharp" Version="2.84.0-preview.4" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.84.0-preview.4" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
   <ItemGroup>
