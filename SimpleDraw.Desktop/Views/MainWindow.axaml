@@ -67,7 +67,7 @@
             </Grid.Background>
             <controls:SimpleCanvas x:Name="simpleCanvas" InputSource="{Binding #inputGrid}" Background="White" Width="{Binding Width}" Height="{Binding Height}"/>
         </Grid>
-        <Grid ColumnDefinitions="Auto,*" Grid.Column="0" Grid.Row="2">
+        <Grid ColumnDefinitions="Auto,*,Auto" Grid.Column="0" Grid.Row="2">
             <StackPanel Orientation="Horizontal" Grid.Column="0">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Items:" VerticalAlignment="Center" Margin="2"/>
@@ -78,8 +78,10 @@
                     <TextBlock Text="{Binding Selected.Count}" VerticalAlignment="Center" Margin="2"/>
                 </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="1">
                 <CheckBox Content="CustomDraw" IsChecked="{Binding #simpleCanvas.CustomDraw}" Margin="2" Padding="8,0,0,0" VerticalContentAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Column="2">
                 <TextBlock Text="Width:" VerticalAlignment="Center" Margin="2"/>
                 <TextBox Text="{Binding Width}" Margin="2"/>
                 <TextBlock Text="Height:" VerticalAlignment="Center" Margin="2"/>
