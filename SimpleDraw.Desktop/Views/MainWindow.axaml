@@ -79,7 +79,7 @@
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
-                <CheckBox Content="CustomDraw" IsChecked="{Binding #simpleCanvas.CustomDraw}" Margin="2"/>
+                <CheckBox Content="CustomDraw" IsChecked="{Binding #simpleCanvas.CustomDraw}" Padding="8,0,0,0" VerticalContentAlignment="Center"/>
             </StackPanel>
         </Grid>
 
