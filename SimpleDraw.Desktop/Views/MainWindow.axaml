@@ -48,8 +48,24 @@
                 <MenuItem Header="_Ellipse" InputGesture="E" Command="{Binding SetTool}" CommandParameter="Ellipse"/>
             </MenuItem>
         </Menu>
-        <Grid x:Name="inputGrid" Background="Transparent" Grid.Column="0" Grid.Row="1">
-            <controls:SimpleCanvas x:Name="simpleCanvas" InputSource="{Binding #inputGrid}" Background="WhiteSmoke" Width="{Binding Width}" Height="{Binding Height}"/>
+        <Grid x:Name="inputGrid" ClipToBounds="True" Grid.Column="0" Grid.Row="1">
+            <Grid.Background>
+                <VisualBrush TileMode="Tile" Stretch="None" AlignmentX="Left" AlignmentY="Top" SourceRect="0,0,20,20" DestinationRect="0,0,20,20">
+                    <VisualBrush.Visual>
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Vertical">
+                                <Rectangle Width="10" Height="10" Fill="DarkGray"/>
+                                <Rectangle Width="10" Height="10" Fill="LightGray"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical">
+                                <Rectangle Width="10" Height="10" Fill="LightGray"/>
+                                <Rectangle Width="10" Height="10" Fill="DarkGray"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Grid.Background>
+            <controls:SimpleCanvas x:Name="simpleCanvas" InputSource="{Binding #inputGrid}" Background="White" Width="{Binding Width}" Height="{Binding Height}"/>
         </Grid>
         <Grid ColumnDefinitions="Auto,*" Grid.Column="0" Grid.Row="2">
             <StackPanel Orientation="Horizontal" Grid.Column="0">
