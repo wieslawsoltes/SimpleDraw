@@ -70,12 +70,12 @@
         <Grid ColumnDefinitions="Auto,*" Grid.Column="0" Grid.Row="2">
             <StackPanel Orientation="Horizontal" Grid.Column="0">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Items:" Margin="2"/>
-                    <TextBlock Text="{Binding Items.Count}" Margin="2"/>
+                    <TextBlock Text="Items:" VerticalAlignment="Center" Margin="2"/>
+                    <TextBlock Text="{Binding Items.Count}" VerticalAlignment="Center" Margin="2"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Selected:" Margin="2"/>
-                    <TextBlock Text="{Binding Selected.Count}" Margin="2"/>
+                    <TextBlock Text="Selected:" VerticalAlignment="Center" Margin="2"/>
+                    <TextBlock Text="{Binding Selected.Count}" VerticalAlignment="Center" Margin="2"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
