@@ -40,7 +40,7 @@ namespace SimpleDraw.ViewModels.Tools
         {
             if (_tryToConnect)
             {
-                var result = SkiaHitTest.Contains(canvas.Items, x, y, _hitRadius);
+                var result = SkiaHitTest.Contains(canvas.Items, (_) => true, x, y, _hitRadius);
                 if (result != null)
                 {
                     canvas.Hovered.Add(result);
@@ -66,7 +66,7 @@ namespace SimpleDraw.ViewModels.Tools
                     {
                         ResetHover(canvas);
 
-                        var result = SkiaHitTest.Contains(canvas.Items, x, y, _hitRadius);
+                        var result = SkiaHitTest.Contains(canvas.Items, (_) => true, x, y, _hitRadius);
                         if (result != null)
                         {
                             if (keyModifiers.HasFlag(ToolKeyModifiers.Control))
@@ -154,7 +154,7 @@ namespace SimpleDraw.ViewModels.Tools
                             for (int i = canvas.Items.Count - 1; i >= 0; i--)
                             {
                                 var shape = canvas.Items[i];
-                                var result = SkiaHitTest.Intersects(shape, rect);
+                                var result = SkiaHitTest.Intersects(shape, (_) => true, rect);
                                 if (result != null)
                                 {
                                     if (canvas.Selected.Contains(result))
@@ -178,7 +178,7 @@ namespace SimpleDraw.ViewModels.Tools
                             for (int i = canvas.Items.Count - 1; i >= 0; i--)
                             {
                                 var shape = canvas.Items[i];
-                                var result = SkiaHitTest.Intersects(shape, rect);
+                                var result = SkiaHitTest.Intersects(shape, (_) => true, rect);
                                 if (result != null)
                                 {
                                     canvas.Selected.Add(result);

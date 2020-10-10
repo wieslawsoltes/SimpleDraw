@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SimpleDraw.ViewModels;
 using SimpleDraw.ViewModels.Containers;
 using SimpleDraw.ViewModels.Primitives;
@@ -189,7 +190,7 @@ namespace SimpleDraw.Skia
                 (float)(radius + radius));
         }
 
-        public static ViewModelBase Contains(PointViewModel point, SKRect hitRect)
+        private static ViewModelBase Contains(PointViewModel point, SKRect hitRect)
         {
             var result = hitRect.Contains((float)point.X, (float)point.Y);
             if (result)
@@ -199,8 +200,13 @@ namespace SimpleDraw.Skia
             return null;
         }
 
-        public static ViewModelBase Contains(ViewModelBase item, SKRect hitRect)
+        private static ViewModelBase Contains(ViewModelBase item, Predicate<ViewModelBase> filter, SKRect hitRect)
         {
+            if (!filter(item))
+            {
+                return null;
+            }
+
             switch (item)
             {
                 case PointViewModel point:
@@ -229,6 +235,7 @@ namespace SimpleDraw.Skia
                         {
                             return resultStartPoint;
                         }
+
 
                         var resultPoint = Contains(lineShape.Point, hitRect);
                         if (resultPoint != null)
@@ -312,7 +319,7 @@ namespace SimpleDraw.Skia
                         {
                             foreach (var segment in figure.Segments)
                             {
-                                var segmentResult = Contains(segment, hitRect);
+                                var segmentResult = Contains(segment, filter, hitRect);
                                 if (segmentResult is PointViewModel resultPoint)
                                 {
                                     return resultPoint;
@@ -383,15 +390,15 @@ namespace SimpleDraw.Skia
             return null;
         }
 
-        public static ViewModelBase Contains(IList<ViewModelBase> items, double x, double y, double hitRadius)
+        public static ViewModelBase Contains(IList<ViewModelBase> items, Predicate<ViewModelBase> filter, double x, double y, double hitRadius)
         {
             var hitRect = Expand(new SKPoint((float)x, (float)y), hitRadius);
 
             for (int i = items.Count - 1; i >= 0; i--)
             {
                 var item = items[i];
-                var result = Contains(item, hitRect);
-                if (result != null)
+                var result = Contains(item, filter, hitRect);
+                if (result != null && filter(result))
                 {
                     return result;
                 }
@@ -399,26 +406,31 @@ namespace SimpleDraw.Skia
             return null;
         }
 
-        public static ViewModelBase Intersects(PointViewModel point, SKRect rect)
+        private static bool Intersects(PointViewModel point, SKRect rect)
         {
             var result = rect.Contains(new SKPoint((float)point.X, (float)point.Y));
             if (result)
             {
-                return point;
+                return true;
             }
-            return null;
+            return false;
         }
 
-        public static ViewModelBase Intersects(ViewModelBase item, SKRect rect)
+        public static ViewModelBase Intersects(ViewModelBase item, Predicate<ViewModelBase> filter, SKRect rect)
         {
+            if (!filter(item))
+            {
+                return null;
+            }
+
             switch (item)
             {
                 case PointViewModel point:
                     {
                         var result = Intersects(point, rect);
-                        if (result != null)
+                        if (result)
                         {
-                            return result;
+                            return point;
                         }
                     }
                     break;

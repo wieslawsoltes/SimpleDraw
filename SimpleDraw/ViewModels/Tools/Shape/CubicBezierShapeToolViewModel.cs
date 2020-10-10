@@ -68,7 +68,7 @@ namespace SimpleDraw.ViewModels.Tools.Shape
         {
             if (_tryToConnect)
             {
-                var result = SkiaHitTest.Contains(canvas.Items, x, y, _hitRadius);
+                var result = SkiaHitTest.Contains(canvas.Items, (_) => true, x, y, _hitRadius);
                 if (result != null)
                 {
                     canvas.Hovered.Add(result);
@@ -96,7 +96,7 @@ namespace SimpleDraw.ViewModels.Tools.Shape
 
                             if (_tryToConnect)
                             {
-                                var result = SkiaHitTest.Contains(canvas.Items, x, y, _hitRadius);
+                                var result = SkiaHitTest.Contains(canvas.Items, (_) => true, x, y, _hitRadius);
                                 if (result is PointViewModel point)
                                 {
                                     topLeft = point;
@@ -130,7 +130,7 @@ namespace SimpleDraw.ViewModels.Tools.Shape
 
                             if (_tryToConnect)
                             {
-                                var result = SkiaHitTest.Contains(canvas.Items, x, y, _hitRadius);
+                                var result = SkiaHitTest.Contains(canvas.Items, (_) => true, x, y, _hitRadius);
                                 if (result is PointViewModel point)
                                 {
                                     point3 = point;
@@ -166,7 +166,7 @@ namespace SimpleDraw.ViewModels.Tools.Shape
 
                             if (_tryToConnect)
                             {
-                                var result = SkiaHitTest.Contains(canvas.Items, x, y, _hitRadius);
+                                var result = SkiaHitTest.Contains(canvas.Items, (_) => true, x, y, _hitRadius);
                                 if (result is PointViewModel point)
                                 {
                                     point2 = point;
@@ -203,7 +203,7 @@ namespace SimpleDraw.ViewModels.Tools.Shape
 
                             if (_tryToConnect)
                             {
-                                var result = SkiaHitTest.Contains(canvas.Items, x, y, _hitRadius);
+                                var result = SkiaHitTest.Contains(canvas.Items, (_) => true, x, y, _hitRadius);
                                 if (result is PointViewModel point)
                                 {
                                     point1 = point;
