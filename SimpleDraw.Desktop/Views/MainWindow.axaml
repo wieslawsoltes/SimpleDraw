@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="650"
         Width="1200" Height="670"
-        WindowState="Normal" WindowStartupLocation="CenterScreen"
+        WindowState="Maximized" WindowStartupLocation="CenterScreen"
         x:Class="SimpleDraw.Views.MainWindow"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/icon.ico"
         Title="SimpleDraw">
     <Grid ColumnDefinitions="*" RowDefinitions="Auto,*,Auto">
         <Menu Grid.Column="0" Grid.Row="0">
