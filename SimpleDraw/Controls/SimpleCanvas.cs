@@ -467,7 +467,18 @@ namespace SimpleDraw.Controls
 
             if (CustomDraw)
             {
-                context.Custom(new SkiaCustomDraw(canvas, this.Bounds));
+                if (InputSource != null)
+                {
+                    var translated = this.TranslatePoint(new Point(0, 0), InputSource);
+                    var position = new Point(-translated.Value.X, -translated.Value.Y);
+                    var bounds = new Rect(position, InputSource.Bounds.Size);
+                    context.Custom(new SkiaCustomDraw(canvas, bounds));
+                }
+                else
+                {
+                    var bounds = new Rect(new Point(0, 0), this.Bounds.Size);
+                    context.Custom(new SkiaCustomDraw(canvas, bounds));
+                }
             }
             else
             {
