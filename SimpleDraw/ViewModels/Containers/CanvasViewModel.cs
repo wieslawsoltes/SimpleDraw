@@ -313,6 +313,395 @@ namespace SimpleDraw.ViewModels.Containers
             _decorators.Remove(_rectangleBounds);
         }
 
+        public bool ConnectPoint(ObservableCollection<ViewModelBase> items, PointViewModel selectedPoint, PointViewModel hitTestPoint)
+        {
+            foreach (var item in items)
+            {
+                switch (item)
+                {
+                    case GroupViewModel group:
+                        {
+                            if (ConnectPoint(group.Items, selectedPoint, hitTestPoint))
+                            {
+                                return true;
+                            }
+                        }
+                        break;
+                    case LineShapeViewModel lineShape:
+                        {
+                            if (lineShape.StartPoint == hitTestPoint
+                                && lineShape.Point != selectedPoint)
+                            {
+                                lineShape.StartPoint = selectedPoint;
+                                return true;
+                            }
+
+                            if (lineShape.Point == hitTestPoint
+                                && lineShape.StartPoint != selectedPoint)
+                            {
+                                lineShape.Point = selectedPoint;
+                                return true;
+                            }
+                        }
+                        break;
+                    case CubicBezierShapeViewModel cubicBezierShape:
+                        {
+                            if (cubicBezierShape.StartPoint == hitTestPoint
+                                && cubicBezierShape.Point1 != selectedPoint
+                                && cubicBezierShape.Point2 != selectedPoint
+                                && cubicBezierShape.Point3 != selectedPoint)
+                            {
+                                cubicBezierShape.StartPoint = selectedPoint;
+                                return true;
+                            }
+
+                            if (cubicBezierShape.Point1 == hitTestPoint
+                                && cubicBezierShape.StartPoint != selectedPoint
+                                && cubicBezierShape.Point2 != selectedPoint
+                                && cubicBezierShape.Point3 != selectedPoint)
+                            {
+                                cubicBezierShape.Point1 = selectedPoint;
+                                return true;
+                            }
+
+                            if (cubicBezierShape.Point2 == hitTestPoint
+                                && cubicBezierShape.StartPoint != selectedPoint
+                                && cubicBezierShape.Point1 != selectedPoint
+                                && cubicBezierShape.Point3 != selectedPoint)
+                            {
+                                cubicBezierShape.Point2 = selectedPoint;
+                                return true;
+                            }
+
+                            if (cubicBezierShape.Point3 == hitTestPoint
+                                && cubicBezierShape.StartPoint != selectedPoint
+                                && cubicBezierShape.Point1 != selectedPoint
+                                && cubicBezierShape.Point2 != selectedPoint)
+                            {
+                                cubicBezierShape.Point3 = selectedPoint;
+                                return true;
+                            }
+                        }
+                        break;
+                    case QuadraticBezierShapeViewModel quadraticBezierShape:
+                        {
+                            if (quadraticBezierShape.StartPoint == hitTestPoint
+                                && quadraticBezierShape.Control != selectedPoint
+                                && quadraticBezierShape.EndPoint != selectedPoint)
+                            {
+                                quadraticBezierShape.StartPoint = selectedPoint;
+                                return true;
+                            }
+
+                            if (quadraticBezierShape.Control == hitTestPoint
+                                && quadraticBezierShape.StartPoint != selectedPoint
+                                && quadraticBezierShape.EndPoint != selectedPoint)
+                            {
+                                quadraticBezierShape.Control = selectedPoint;
+                                return true;
+                            }
+
+                            if (quadraticBezierShape.EndPoint == hitTestPoint
+                                && quadraticBezierShape.StartPoint != selectedPoint
+                                && quadraticBezierShape.Control != selectedPoint)
+                            {
+                                quadraticBezierShape.EndPoint = selectedPoint;
+                                return true;
+                            }
+                        }
+                        break;
+                    case PathShapeViewModel pathShape:
+                        {
+                            foreach (var figure in pathShape.Figures)
+                            {
+                                if (ConnectPoint(figure.Segments, selectedPoint, hitTestPoint))
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                        break;
+                    case RectangleShapeViewModel rectangleShape:
+                        {
+                            if (rectangleShape.TopLeft == hitTestPoint
+                                && rectangleShape.BottomRight != selectedPoint)
+                            {
+                                rectangleShape.TopLeft = selectedPoint;
+                                return true;
+                            }
+
+                            if (rectangleShape.BottomRight == hitTestPoint
+                                && rectangleShape.TopLeft != selectedPoint)
+                            {
+                                rectangleShape.BottomRight = selectedPoint;
+                                return true;
+                            }
+                        }
+                        break;
+                    case EllipseShapeViewModel ellipseShape:
+                        {
+                            if (ellipseShape.TopLeft == hitTestPoint
+                                && ellipseShape.BottomRight != selectedPoint)
+                            {
+                                ellipseShape.TopLeft = selectedPoint;
+                                return true;
+                            }
+
+                            if (ellipseShape.BottomRight == hitTestPoint
+                                && ellipseShape.TopLeft != selectedPoint)
+                            {
+                                ellipseShape.BottomRight = selectedPoint;
+                                return true;
+                            }
+                        }
+                        break;
+                }
+            }
+
+            return false;
+        }
+
+        public void GetConnected(ObservableCollection<ViewModelBase> items, PointViewModel selectedPoint, List<ViewModelBase> connected)
+        {
+            foreach (var item in items)
+            {
+                switch (item)
+                {
+                    case GroupViewModel group:
+                        {
+                            GetConnected(group.Items, selectedPoint, connected);
+                        }
+                        break;
+                    case LineShapeViewModel lineShape:
+                        {
+                            if (lineShape.StartPoint == selectedPoint)
+                            {
+                                connected.Add(lineShape);
+                                break;
+                            }
+
+                            if (lineShape.Point == selectedPoint)
+                            {
+                                connected.Add(lineShape);
+                                break;
+                            }
+                        }
+                        break;
+                    case CubicBezierShapeViewModel cubicBezierShape:
+                        {
+                            if (cubicBezierShape.StartPoint == selectedPoint)
+                            {
+                                connected.Add(cubicBezierShape);
+                                break;
+                            }
+
+                            if (cubicBezierShape.Point1 == selectedPoint)
+                            {
+                                connected.Add(cubicBezierShape);
+                                break;
+                            }
+
+                            if (cubicBezierShape.Point2 == selectedPoint)
+                            {
+                                connected.Add(cubicBezierShape);
+                                break;
+                            }
+
+                            if (cubicBezierShape.Point3 == selectedPoint)
+                            {
+                                connected.Add(cubicBezierShape);
+                                break;
+                            }
+                        }
+                        break;
+                    case QuadraticBezierShapeViewModel quadraticBezierShape:
+                        {
+                            if (quadraticBezierShape.StartPoint == selectedPoint)
+                            {
+                                connected.Add(quadraticBezierShape);
+                                break;
+                            }
+
+                            if (quadraticBezierShape.Control == selectedPoint)
+                            {
+                                connected.Add(quadraticBezierShape);
+                                break;
+                            }
+
+                            if (quadraticBezierShape.EndPoint == selectedPoint)
+                            {
+                                connected.Add(quadraticBezierShape);
+                                break;
+                            }
+                        }
+                        break;
+                    case PathShapeViewModel pathShape:
+                        {
+                            foreach (var figure in pathShape.Figures)
+                            {
+                                GetConnected(figure.Segments, selectedPoint, connected);
+                            }
+                        }
+                        break;
+                    case RectangleShapeViewModel rectangleShape:
+                        {
+                            if (rectangleShape.TopLeft == selectedPoint)
+                            {
+                                connected.Add(rectangleShape);
+                                break;
+                            }
+
+                            if (rectangleShape.BottomRight == selectedPoint)
+                            {
+                                connected.Add(rectangleShape);
+                                break;
+                            }
+                        }
+                        break;
+                    case EllipseShapeViewModel ellipseShape:
+                        {
+                            if (ellipseShape.TopLeft == selectedPoint)
+                            {
+                                connected.Add(ellipseShape);
+                                break;
+                            }
+
+                            if (ellipseShape.BottomRight == selectedPoint)
+                            {
+                                connected.Add(ellipseShape);
+                                break;
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+
+        public PointViewModel DisconnectPoint(ObservableCollection<ViewModelBase> items, PointViewModel selectedPoint)
+        {
+            foreach (var item in items)
+            {
+                switch (item)
+                {
+                    case GroupViewModel group:
+                        {
+                            var result = DisconnectPoint(group.Items, selectedPoint);
+                            if (result != null)
+                            {
+                                return result;
+                            }
+                        }
+                        break;
+                    case LineShapeViewModel lineShape:
+                        {
+                            if (lineShape.StartPoint == selectedPoint)
+                            {
+                                lineShape.StartPoint = new PointViewModel(selectedPoint.X, selectedPoint.Y);
+                                return lineShape.StartPoint;
+                            }
+
+                            if (lineShape.Point == selectedPoint)
+                            {
+                                lineShape.Point = new PointViewModel(selectedPoint.X, selectedPoint.Y);
+                                return lineShape.Point;
+                            }
+                        }
+                        break;
+                    case CubicBezierShapeViewModel cubicBezierShape:
+                        {
+                            if (cubicBezierShape.StartPoint == selectedPoint)
+                            {
+                                cubicBezierShape.StartPoint = new PointViewModel(selectedPoint.X, selectedPoint.Y);
+                                return cubicBezierShape.StartPoint;
+                            }
+
+                            if (cubicBezierShape.Point1 == selectedPoint)
+                            {
+                                cubicBezierShape.Point1 = new PointViewModel(selectedPoint.X, selectedPoint.Y);
+                                return cubicBezierShape.Point1;
+                            }
+
+                            if (cubicBezierShape.Point2 == selectedPoint)
+                            {
+                                cubicBezierShape.Point2 = new PointViewModel(selectedPoint.X, selectedPoint.Y);
+                                return cubicBezierShape.Point2;
+                            }
+
+                            if (cubicBezierShape.Point3 == selectedPoint)
+                            {
+                                cubicBezierShape.Point3 = new PointViewModel(selectedPoint.X, selectedPoint.Y);
+                                return cubicBezierShape.Point3;
+                            }
+                        }
+                        break;
+                    case QuadraticBezierShapeViewModel quadraticBezierShape:
+                        {
+                            if (quadraticBezierShape.StartPoint == selectedPoint)
+                            {
+                                quadraticBezierShape.StartPoint = new PointViewModel(selectedPoint.X, selectedPoint.Y);
+                                return quadraticBezierShape.StartPoint;
+                            }
+
+                            if (quadraticBezierShape.Control == selectedPoint)
+                            {
+                                quadraticBezierShape.Control = new PointViewModel(selectedPoint.X, selectedPoint.Y);
+                                return quadraticBezierShape.Control;
+                            }
+
+                            if (quadraticBezierShape.EndPoint == selectedPoint)
+                            {
+                                quadraticBezierShape.EndPoint = new PointViewModel(selectedPoint.X, selectedPoint.Y);
+                                return quadraticBezierShape.EndPoint;
+                            }
+                        }
+                        break;
+                    case PathShapeViewModel pathShape:
+                        {
+                            foreach (var figure in pathShape.Figures)
+                            {
+                                var result = DisconnectPoint(figure.Segments, selectedPoint);
+                                {
+                                    return result;
+                                }
+                            }
+                        }
+                        break;
+                    case RectangleShapeViewModel rectangleShape:
+                        {
+                            if (rectangleShape.TopLeft == selectedPoint)
+                            {
+                                rectangleShape.TopLeft = new PointViewModel(selectedPoint.X, selectedPoint.Y);
+                                return rectangleShape.TopLeft;
+                            }
+
+                            if (rectangleShape.BottomRight == selectedPoint)
+                            {
+                                rectangleShape.BottomRight = new PointViewModel(selectedPoint.X, selectedPoint.Y);
+                                return rectangleShape.BottomRight;
+                            }
+                        }
+                        break;
+                    case EllipseShapeViewModel ellipseShape:
+                        {
+                            if (ellipseShape.TopLeft == selectedPoint)
+                            {
+                                ellipseShape.TopLeft = new PointViewModel(selectedPoint.X, selectedPoint.Y);
+                                return ellipseShape.TopLeft;
+                            }
+
+                            if (ellipseShape.BottomRight == selectedPoint)
+                            {
+                                ellipseShape.BottomRight = new PointViewModel(selectedPoint.X, selectedPoint.Y);
+                                return ellipseShape.BottomRight;
+                            }
+                        }
+                        break;
+                }
+            }
+
+            return null;
+        }
+
         public void Cut()
         {
             var shared = new Dictionary<ViewModelBase, ViewModelBase>();
