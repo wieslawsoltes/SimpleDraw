@@ -248,13 +248,16 @@ namespace SimpleDraw.ViewModels.Tools
                             _disconnected = TryToDisconnectPoints(canvas, x, y);
                         }
 
-                        double deltaX = x - _previousX;
-                        double deltaY = y - _previousY;
-                        canvas.MoveSelected(deltaX, deltaY);
-                        canvas.UpdateSelectionBounds();
-                        canvas.Invalidate();
-                        _previousX = x;
-                        _previousY = y;
+                        if (!keyModifiers.HasFlag(ToolKeyModifiers.Alt) || _disconnected == true)
+                        {
+                            double deltaX = x - _previousX;
+                            double deltaY = y - _previousY;
+                            canvas.MoveSelected(deltaX, deltaY);
+                            canvas.UpdateSelectionBounds();
+                            canvas.Invalidate();
+                            _previousX = x;
+                            _previousY = y;
+                        }
                     }
                     break;
                 case State.Move:
