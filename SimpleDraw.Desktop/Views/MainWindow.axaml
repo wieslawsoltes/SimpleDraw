@@ -65,7 +65,9 @@
                     </VisualBrush.Visual>
                 </VisualBrush>
             </Grid.Background>
-            <controls:SimpleCanvas x:Name="simpleCanvas" InputSource="{Binding #inputGrid}" Background="White" Width="{Binding Width}" Height="{Binding Height}"/>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <controls:SimpleCanvas x:Name="simpleCanvas" InputSource="{Binding #inputGrid}" Background="White" Width="{Binding Width}" Height="{Binding Height}"/>
+            </ScrollViewer>
         </Grid>
         <Grid ColumnDefinitions="Auto,*,Auto" Grid.Column="0" Grid.Row="2">
             <StackPanel Orientation="Horizontal" Grid.Column="0">
