@@ -102,6 +102,52 @@ namespace SimpleDraw.ViewModels.Tools
                             }
                             else
                             {
+                                if (keyModifiers == ToolKeyModifiers.Shift)
+                                {
+                                    if (result is PointViewModel hitTestPoint)
+                                    {
+                                        if (canvas.Selected.Count == 1 && canvas.Selected[0] is PointViewModel selectedPoint && selectedPoint != hitTestPoint)
+                                        {
+                                            var connected = canvas.ConnectPoint(canvas.Items, hitTestPoint, selectedPoint);
+                                            if (connected)
+                                            {
+                                                canvas.Selected.Clear();
+                                                canvas.UpdateSelectionBounds();
+                                                canvas.Invalidate();
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+#if false
+                                if (keyModifiers == ToolKeyModifiers.Alt)
+                                {
+                                    if (canvas.Selected.Count == 0 && result is PointViewModel hitTestPoint)
+                                    {
+                                        var resultDisconnect = canvas.DisconnectPoint(canvas.Items, hitTestPoint);
+                                        if (resultDisconnect != null)
+                                        {
+                                            canvas.Selected.Clear();
+                                            canvas.UpdateSelectionBounds();
+                                            canvas.Invalidate();
+                                            break;
+                                        }
+                                    }
+
+                                    if (canvas.Selected.Count == 1 && canvas.Selected[0] is PointViewModel selectedPoint && selectedPoint == result)
+                                    {
+                                        var resultDisconnect = canvas.DisconnectPoint(canvas.Items, selectedPoint);
+                                        if (resultDisconnect != null)
+                                        {
+                                            canvas.Selected.Clear();
+                                            canvas.UpdateSelectionBounds();
+                                            canvas.Invalidate();
+                                            break;
+                                        }
+                                    }
+                                }
+#endif
+
                                 if (!canvas.Selected.Contains(result))
                                 {
                                     canvas.Selected.Clear();
