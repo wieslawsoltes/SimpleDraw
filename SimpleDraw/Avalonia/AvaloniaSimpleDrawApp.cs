@@ -27,7 +27,8 @@ namespace SimpleDraw.Avalonia
                 new SelectionToolViewModel()
                 {
                     HitRadius = 6,
-                    TryToConnect = true
+                    TryToConnect = true,
+                    DisconnectRadius = 10
                 },
                 new LineToolViewModel()
                 {
