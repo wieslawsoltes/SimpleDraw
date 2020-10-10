@@ -82,6 +82,5 @@
                 <CheckBox Content="CustomDraw" IsChecked="{Binding #simpleCanvas.CustomDraw}" Padding="8,0,0,0" VerticalContentAlignment="Center"/>
             </StackPanel>
         </Grid>
-
     </Grid>
 </Window>
