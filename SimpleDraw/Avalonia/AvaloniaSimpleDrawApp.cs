@@ -16,8 +16,8 @@ namespace SimpleDraw.Avalonia
         {
             var canvas = new CanvasViewModel()
             {
-                Width = 840,
-                Height = 600,
+                Width = 810,
+                Height = 570,
                 Items = new ObservableCollection<ViewModelBase>()
             };
 
