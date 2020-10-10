@@ -108,7 +108,7 @@ namespace SimpleDraw.ViewModels.Tools
                                     {
                                         if (canvas.Selected.Count == 1 && canvas.Selected[0] is PointViewModel selectedPoint && selectedPoint != hitTestPoint)
                                         {
-                                            var connected = canvas.ConnectPoint(canvas.Items, hitTestPoint, selectedPoint);
+                                            var connected = canvas.ConnectPoint(canvas.Items, selectedPoint, hitTestPoint);
                                             if (connected)
                                             {
                                                 canvas.Selected.Clear();
