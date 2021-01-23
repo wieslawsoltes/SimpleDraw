@@ -32,7 +32,7 @@ namespace SimpleDraw
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()
-                .LogToDebug()
+                .LogToTrace()
                 .UseManagedSystemDialogs()
                 .UseSkia()
                 .With(new Win32PlatformOptions()
