@@ -19,10 +19,10 @@ namespace SimpleDraw
         {
             SimpleCanvas.App = new AvaloniaSimpleDrawApp();
 
+            var canvas = SimpleCanvas.App.Open("canvas.json") ?? SimpleCanvas.App.New();
+
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                var canvas = SimpleCanvas.App.Open("canvas.json") ?? SimpleCanvas.App.New();
-
                 desktop.MainWindow = new MainWindow
                 {
                     DataContext = canvas
@@ -30,9 +30,14 @@ namespace SimpleDraw
 
                 desktop.Exit += (sender, e) =>
                 {
-#if true
-                    SimpleCanvas.App.Save("canvas.json", desktop.MainWindow.DataContext as CanvasViewModel); 
-#endif
+                    SimpleCanvas.App.Save("canvas.json", desktop.MainWindow.DataContext as CanvasViewModel);
+                };
+            }
+            else if (ApplicationLifetime is ISingleViewApplicationLifetime single)
+            {
+                single.MainView = new MainView
+                {
+                    DataContext = canvas
                 };
             }
 

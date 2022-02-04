@@ -1,94 +1,13 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="clr-namespace:SimpleDraw.Controls"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:SimpleDraw.Views"
         mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="650"
         Width="1200" Height="670"
         WindowState="Maximized" WindowStartupLocation="CenterScreen"
         x:Class="SimpleDraw.Views.MainWindow"
         Icon="/Assets/icon.ico"
         Title="SimpleDraw">
-    <Grid ColumnDefinitions="*" RowDefinitions="Auto,*,Auto">
-        <Menu Grid.Column="0" Grid.Row="0">
-            <MenuItem Header="_File">
-                <MenuItem Header="_New" InputGesture="Ctrl+N" Command="{Binding #simpleCanvas.New}"/>
-                <Separator/>
-                <MenuItem Header="Open..." InputGesture="Ctrl+O" Command="{Binding #simpleCanvas.Open}"/>
-                <MenuItem Header="Save As..." InputGesture="Ctrl+S" Command="{Binding #simpleCanvas.Save}" CommandParameter="{Binding}"/>
-                <Separator/>
-                <MenuItem Header="_Export..." InputGesture="Ctrl+E" Command="{Binding #simpleCanvas.Export}" CommandParameter="{Binding}"/>
-                <Separator/>
-                <MenuItem Header="E_xit" InputGesture="Alt+F4" Command="{Binding #simpleCanvas.Exit}"/>
-            </MenuItem>
-            <MenuItem Header="_Edit">
-                <MenuItem Header="Cu_t" InputGesture="Ctrl+X" Command="{Binding Cut}"/>
-                <MenuItem Header="_Copy" InputGesture="Ctrl+C" Command="{Binding Copy}"/>
-                <MenuItem Header="_Paste" InputGesture="Ctrl+V" Command="{Binding Paste}"/>
-                <MenuItem Header="_Delete" InputGesture="Delete" Command="{Binding Delete}"/>
-                <Separator/>
-                <MenuItem Header="Select _All" InputGesture="Ctrl+A" Command="{Binding SelectAll}"/>
-            </MenuItem>
-            <MenuItem Header="_Object">
-                <MenuItem Header="_Group" InputGesture="Ctrl+G" Command="{Binding Group}"/>
-                <MenuItem Header="_Ungroup" InputGesture="Ctrl+U" Command="{Binding Ungroup}"/>
-            </MenuItem>
-            <MenuItem Header="_Tool">
-                <MenuItem Header="_None" InputGesture="N" Command="{Binding SetTool}" CommandParameter="None"/>
-                <Separator/>
-                <MenuItem Header="_Selection" InputGesture="S" Command="{Binding SetTool}" CommandParameter="Selection"/>
-                <Separator/>
-                <MenuItem Header="_Line" InputGesture="L" Command="{Binding SetTool}" CommandParameter="Line"/>
-                <MenuItem Header="_Cubic Bezier" InputGesture="C" Command="{Binding SetTool}" CommandParameter="CubicBezier"/>
-                <MenuItem Header="_Quadratic Bezier" InputGesture="Q" Command="{Binding SetTool}" CommandParameter="QuadraticBezier"/>
-                <Separator/>
-                <MenuItem Header="Pat_h" InputGesture="H" Command="{Binding SetTool}" CommandParameter="Path"/>
-                <Separator/>
-                <MenuItem Header="_Rectangle" InputGesture="R" Command="{Binding SetTool}" CommandParameter="Rectangle"/>
-                <MenuItem Header="_Ellipse" InputGesture="E" Command="{Binding SetTool}" CommandParameter="Ellipse"/>
-            </MenuItem>
-        </Menu>
-        <Grid x:Name="inputGrid" ClipToBounds="True" Grid.Column="0" Grid.Row="1">
-            <Grid.Background>
-                <VisualBrush TileMode="Tile" Stretch="None" AlignmentX="Left" AlignmentY="Top" SourceRect="0,0,20,20" DestinationRect="0,0,20,20">
-                    <VisualBrush.Visual>
-                        <StackPanel Orientation="Horizontal">
-                            <StackPanel Orientation="Vertical">
-                                <Rectangle Width="10" Height="10" Fill="DarkGray"/>
-                                <Rectangle Width="10" Height="10" Fill="LightGray"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Vertical">
-                                <Rectangle Width="10" Height="10" Fill="LightGray"/>
-                                <Rectangle Width="10" Height="10" Fill="DarkGray"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </VisualBrush.Visual>
-                </VisualBrush>
-            </Grid.Background>
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                <controls:SimpleCanvas x:Name="simpleCanvas" InputSource="{Binding #inputGrid}" Background="White" Width="{Binding Width}" Height="{Binding Height}"/>
-            </ScrollViewer>
-        </Grid>
-        <Grid ColumnDefinitions="Auto,*,Auto" Grid.Column="0" Grid.Row="2">
-            <StackPanel Orientation="Horizontal" Grid.Column="0">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Items:" VerticalAlignment="Center" Margin="2"/>
-                    <TextBlock Text="{Binding Items.Count}" VerticalAlignment="Center" Margin="2"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Selected:" VerticalAlignment="Center" Margin="2"/>
-                    <TextBlock Text="{Binding Selected.Count}" VerticalAlignment="Center" Margin="2"/>
-                </StackPanel>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="1">
-                <CheckBox Content="CustomDraw" IsChecked="{Binding #simpleCanvas.CustomDraw}" Margin="2" Padding="8,0,0,0" VerticalContentAlignment="Center"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Column="2">
-                <TextBlock Text="Width:" VerticalAlignment="Center" Margin="2"/>
-                <TextBox Text="{Binding Width}" Margin="2"/>
-                <TextBlock Text="Height:" VerticalAlignment="Center" Margin="2"/>
-                <TextBox Text="{Binding Height}" Margin="2"/>
-            </StackPanel>
-        </Grid>
-    </Grid>
+  <views:MainView />
 </Window>
