@@ -4,15 +4,18 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AnalysisLevel>latest</AnalysisLevel>
     <LangVersion>latest</LangVersion>
-</PropertyGroup>
+  </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
+    <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.7" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.7" />
-    <PackageReference Include="Avalonia.Skia" Version="0.10.7" />
+    <PackageReference Include="Avalonia" Version="0.10.12" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.12" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.12" Condition="'$(Configuration)' == 'Debug'" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.12" />
+    <PackageReference Include="Avalonia.Skia" Version="0.10.12" />
+    <PackageReference Include="SkiaSharp" Version="2.88.0-preview.178" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.0-preview.178" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="SkiaSharp" Version="2.84.0-preview.4" />
   </ItemGroup>
 </Project>
