@@ -4,57 +4,56 @@ using ReactiveUI;
 using SimpleDraw.ViewModels.Containers;
 using SimpleDraw.ViewModels.Tools.Shape;
 
-namespace SimpleDraw.ViewModels.Tools
+namespace SimpleDraw.ViewModels.Tools;
+
+[DataContract(IsReference = true)]
+public class QuadraticBezierToolViewModel : ToolBaseViewModel
 {
-    [DataContract(IsReference = true)]
-    public class QuadraticBezierToolViewModel : ToolBaseViewModel
+    private ShapeToolViewModel _shapeTool;
+
+    [DataMember(IsRequired = false, EmitDefaultValue = true)]
+    public ShapeToolViewModel ShapeTool
     {
-        private ShapeToolViewModel _shapeTool;
+        get => _shapeTool;
+        set => this.RaiseAndSetIfChanged(ref _shapeTool, value);
+    }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = true)]
-        public ShapeToolViewModel ShapeTool
+    [IgnoreDataMember]
+    public override string Name => "QuadraticBezier";
+
+    public override void Pressed(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
+    {
+        _shapeTool?.Pressed(canvas, x, y, pointerType, keyModifiers);
+    }
+
+    public override void Released(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
+    {
+        _shapeTool?.Released(canvas, x, y, pointerType, keyModifiers);
+    }
+
+    public override void Moved(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
+    {
+        _shapeTool?.Moved(canvas, x, y, pointerType, keyModifiers);
+    }
+
+    public override ToolBaseViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
+    {
+        if (shared.TryGetValue(this, out var value))
         {
-            get => _shapeTool;
-            set => this.RaiseAndSetIfChanged(ref _shapeTool, value);
+            return value as QuadraticBezierToolViewModel;
         }
 
-        [IgnoreDataMember]
-        public override string Name => "QuadraticBezier";
-
-        public override void Pressed(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
+        var copy = new QuadraticBezierToolViewModel()
         {
-            _shapeTool?.Pressed(canvas, x, y, pointerType, keyModifiers);
-        }
+            ShapeTool = _shapeTool?.CloneSelf(shared)
+        };
 
-        public override void Released(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
-        {
-            _shapeTool?.Released(canvas, x, y, pointerType, keyModifiers);
-        }
+        shared[this] = copy;
+        return copy;
+    }
 
-        public override void Moved(CanvasViewModel canvas, double x, double y, ToolPointerType pointerType, ToolKeyModifiers keyModifiers)
-        {
-            _shapeTool?.Moved(canvas, x, y, pointerType, keyModifiers);
-        }
-
-        public override ToolBaseViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
-        {
-            if (shared.TryGetValue(this, out var value))
-            {
-                return value as QuadraticBezierToolViewModel;
-            }
-
-            var copy = new QuadraticBezierToolViewModel()
-            {
-                ShapeTool = _shapeTool?.CloneSelf(shared)
-            };
-
-            shared[this] = copy;
-            return copy;
-        }
-
-        public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
-        {
-            return CloneSelf(shared);
-        }
+    public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
+    {
+        return CloneSelf(shared);
     }
 }

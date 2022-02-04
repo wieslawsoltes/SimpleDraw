@@ -1,9 +1,8 @@
-﻿namespace SimpleDraw.ViewModels.Media
+﻿namespace SimpleDraw.ViewModels.Media;
+
+public enum GradientSpreadMethod
 {
-    public enum GradientSpreadMethod
-    {
-        Pad = 0,
-        Reflect = 1,
-        Repeat = 2
-    }
+    Pad = 0,
+    Reflect = 1,
+    Repeat = 2
 }

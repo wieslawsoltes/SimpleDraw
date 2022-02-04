@@ -8,104 +8,104 @@ using SimpleDraw.ViewModels.Shapes;
 using SimpleDraw.ViewModels.Tools;
 using SimpleDraw.ViewModels.Tools.Shape;
 
-namespace SimpleDraw.Avalonia
-{
-    public class AvaloniaSimpleDrawApp : ISimpleDrawApplication
-    {
-        public CanvasViewModel New()
-        {
-            var canvas = new CanvasViewModel()
-            {
-                Width = 810,
-                Height = 570,
-                Items = new ObservableCollection<ViewModelBase>()
-            };
+namespace SimpleDraw.Avalonia;
 
-            canvas.Tools = new ObservableCollection<ToolBaseViewModel>()
+public class AvaloniaSimpleDrawApp : ISimpleDrawApplication
+{
+    public CanvasViewModel New()
+    {
+        var canvas = new CanvasViewModel()
+        {
+            Width = 810,
+            Height = 570,
+            Items = new ObservableCollection<ViewModelBase>()
+        };
+
+        canvas.Tools = new ObservableCollection<ToolBaseViewModel>()
+        {
+            new NoneToolViewModel(),
+            new SelectionToolViewModel()
             {
-                new NoneToolViewModel(),
-                new SelectionToolViewModel()
+                HitRadius = 6,
+                TryToConnect = true,
+                DisconnectRadius = 10
+            },
+            new LineToolViewModel()
+            {
+                ShapeTool = new LineShapeToolViewModel()
                 {
+                    Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
+                    IsStroked = true,
                     HitRadius = 6,
-                    TryToConnect = true,
-                    DisconnectRadius = 10
-                },
-                new LineToolViewModel()
-                {
-                    ShapeTool = new LineShapeToolViewModel()
-                    {
-                        Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
-                        IsStroked = true,
-                        HitRadius = 6,
-                        TryToConnect = true
-                    }
-                },
-                new CubicBezierToolViewModel()
-                {
-                    ShapeTool = new CubicBezierShapeToolViewModel()
-                    {
-                        Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
-                        Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
-                        IsStroked = true,
-                        IsFilled = false,
-                        HitRadius = 6,
-                        TryToConnect = true
-                    }
-                },
-                new QuadraticBezierToolViewModel()
-                {
-                    ShapeTool = new QuadraticBezierShapeToolViewModel()
-                    {
-                        Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
-                        Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
-                        IsStroked = true,
-                        IsFilled = false,
-                        HitRadius = 6,
-                        TryToConnect = true
-                    }
-                },
-                new PathToolViewModel()
+                    TryToConnect = true
+                }
+            },
+            new CubicBezierToolViewModel()
+            {
+                ShapeTool = new CubicBezierShapeToolViewModel()
                 {
                     Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
                     Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
                     IsStroked = true,
-                    IsFilled = true,
+                    IsFilled = false,
                     HitRadius = 6,
-                    FillRule = FillRule.EvenOdd,
-                    IsClosed = true,
-                    PreviousMode = PathToolMode.Line,
-                    Mode = PathToolMode.Line,
-                    TryToConnect = true,
-                    LineShapeTool = new LineShapeToolViewModel()
-                    {
-                        Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
-                        IsStroked = true,
-                        HitRadius = 6,
-                        TryToConnect = true
-                    },
-                    CubicBezierShapeTool = new CubicBezierShapeToolViewModel()
-                    {
-                        Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
-                        Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
-                        IsStroked = true,
-                        IsFilled = false,
-                        HitRadius = 6,
-                        TryToConnect = true
-                    },
-                    QuadraticBezierShapeTool = new QuadraticBezierShapeToolViewModel()
-                    {
-                        Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
-                        Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
-                        IsStroked = true,
-                        IsFilled = false,
-                        HitRadius = 6,
-                        TryToConnect = true
-                    }
-                },
-                new RectangleToolViewModel()
+                    TryToConnect = true
+                }
+            },
+            new QuadraticBezierToolViewModel()
+            {
+                ShapeTool = new QuadraticBezierShapeToolViewModel()
                 {
-#if true
                     Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
+                    Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
+                    IsStroked = true,
+                    IsFilled = false,
+                    HitRadius = 6,
+                    TryToConnect = true
+                }
+            },
+            new PathToolViewModel()
+            {
+                Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
+                Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
+                IsStroked = true,
+                IsFilled = true,
+                HitRadius = 6,
+                FillRule = FillRule.EvenOdd,
+                IsClosed = true,
+                PreviousMode = PathToolMode.Line,
+                Mode = PathToolMode.Line,
+                TryToConnect = true,
+                LineShapeTool = new LineShapeToolViewModel()
+                {
+                    Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
+                    IsStroked = true,
+                    HitRadius = 6,
+                    TryToConnect = true
+                },
+                CubicBezierShapeTool = new CubicBezierShapeToolViewModel()
+                {
+                    Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
+                    Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
+                    IsStroked = true,
+                    IsFilled = false,
+                    HitRadius = 6,
+                    TryToConnect = true
+                },
+                QuadraticBezierShapeTool = new QuadraticBezierShapeToolViewModel()
+                {
+                    Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
+                    Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
+                    IsStroked = true,
+                    IsFilled = false,
+                    HitRadius = 6,
+                    TryToConnect = true
+                }
+            },
+            new RectangleToolViewModel()
+            {
+#if true
+                Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
 #else
                     Brush = new LinearGradientBrushViewModel(
                         new ObservableCollection<GradientStopViewModel>()
@@ -117,63 +117,62 @@ namespace SimpleDraw.Avalonia
                         new RelativePointViewModel(0, 0, RelativeUnit.Relative),
                         new RelativePointViewModel(1, 1, RelativeUnit.Relative)),
 #endif
-                    Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
-                    IsStroked = true,
-                    IsFilled = true,
-                    RadiusX = 4,
-                    RadiusY = 4,
-                    HitRadius = 6,
-                    TryToConnect = true
-                },
-                new EllipseToolViewModel()
-                {
-                    Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
-                    Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
-                    IsStroked = true,
-                    IsFilled = true,
-                    HitRadius = 6,
-                    TryToConnect = true
-                }
-            };
-
-            canvas.Tool = canvas.Tools[1];
-
-            return canvas;
-        }
-
-        public CanvasViewModel Open(string path)
-        {
-            if (!File.Exists(path))
+                Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
+                IsStroked = true,
+                IsFilled = true,
+                RadiusX = 4,
+                RadiusY = 4,
+                HitRadius = 6,
+                TryToConnect = true
+            },
+            new EllipseToolViewModel()
             {
-                return null;
+                Brush = new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)),
+                Pen = new PenViewModel(new SolidColorBrushViewModel(new ColorViewModel(255, 0, 0, 0)), 2),
+                IsStroked = true,
+                IsFilled = true,
+                HitRadius = 6,
+                TryToConnect = true
             }
+        };
 
-            var json = File.ReadAllText(path);
+        canvas.Tool = canvas.Tools[1];
 
-            var canvas = JsonConvert.DeserializeObject<CanvasViewModel>(json, new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented,
-                TypeNameHandling = TypeNameHandling.Objects,
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-                NullValueHandling = NullValueHandling.Ignore,
-            });
+        return canvas;
+    }
 
-            return canvas;
-        }
-
-        public void Save(string path, CanvasViewModel canvas)
+    public CanvasViewModel Open(string path)
+    {
+        if (!File.Exists(path))
         {
-            var json = JsonConvert.SerializeObject(canvas, new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented,
-                TypeNameHandling = TypeNameHandling.Objects,
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-                NullValueHandling = NullValueHandling.Ignore,
-            });
-
-            File.WriteAllText(path, json);
+            return null;
         }
+
+        var json = File.ReadAllText(path);
+
+        var canvas = JsonConvert.DeserializeObject<CanvasViewModel>(json, new JsonSerializerSettings()
+        {
+            Formatting = Formatting.Indented,
+            TypeNameHandling = TypeNameHandling.Objects,
+            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+            ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+            NullValueHandling = NullValueHandling.Ignore,
+        });
+
+        return canvas;
+    }
+
+    public void Save(string path, CanvasViewModel canvas)
+    {
+        var json = JsonConvert.SerializeObject(canvas, new JsonSerializerSettings()
+        {
+            Formatting = Formatting.Indented,
+            TypeNameHandling = TypeNameHandling.Objects,
+            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+            ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+            NullValueHandling = NullValueHandling.Ignore,
+        });
+
+        File.WriteAllText(path, json);
     }
 }

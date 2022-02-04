@@ -2,11 +2,10 @@
 using System.Runtime.Serialization;
 using ReactiveUI;
 
-namespace SimpleDraw.ViewModels
+namespace SimpleDraw.ViewModels;
+
+[DataContract(IsReference = true)]
+public abstract class ViewModelBase : ReactiveObject
 {
-    [DataContract(IsReference = true)]
-    public abstract class ViewModelBase : ReactiveObject
-    {
-        public abstract ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared);
-    }
+    public abstract ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared);
 }

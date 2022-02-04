@@ -1,8 +1,7 @@
-﻿namespace SimpleDraw.ViewModels.Media
+﻿namespace SimpleDraw.ViewModels.Media;
+
+public enum RelativeUnit
 {
-    public enum RelativeUnit
-    {
-        Relative = 0,
-        Absolute = 1
-    }
+    Relative = 0,
+    Absolute = 1
 }

@@ -1,9 +1,8 @@
-﻿namespace SimpleDraw.ViewModels.Containers
+﻿namespace SimpleDraw.ViewModels.Containers;
+
+public interface ISimpleDrawApplication
 {
-    public interface ISimpleDrawApplication
-    {
-        CanvasViewModel New();
-        CanvasViewModel Open(string path);
-        void Save(string path, CanvasViewModel canvas);
-    }
+    CanvasViewModel New();
+    CanvasViewModel Open(string path);
+    void Save(string path, CanvasViewModel canvas);
 }

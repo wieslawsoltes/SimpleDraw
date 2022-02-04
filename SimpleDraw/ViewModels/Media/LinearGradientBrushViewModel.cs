@@ -3,69 +3,68 @@ using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using ReactiveUI;
 
-namespace SimpleDraw.ViewModels.Media
+namespace SimpleDraw.ViewModels.Media;
+
+[DataContract(IsReference = true)]
+public class LinearGradientBrushViewModel : GradientBrushViewModel
 {
-    [DataContract(IsReference = true)]
-    public class LinearGradientBrushViewModel : GradientBrushViewModel
+    private RelativePointViewModel _startPoint;
+    private RelativePointViewModel _endPoint;
+
+    [DataMember(IsRequired = false, EmitDefaultValue = true)]
+    public RelativePointViewModel StartPoint
     {
-        private RelativePointViewModel _startPoint;
-        private RelativePointViewModel _endPoint;
+        get => _startPoint;
+        set => this.RaiseAndSetIfChanged(ref _startPoint, value);
+    }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = true)]
-        public RelativePointViewModel StartPoint
+    [DataMember(IsRequired = false, EmitDefaultValue = true)]
+    public RelativePointViewModel EndPoint
+    {
+        get => _endPoint;
+        set => this.RaiseAndSetIfChanged(ref _endPoint, value);
+    }
+
+    public LinearGradientBrushViewModel()
+        : base()
+    {
+    }
+
+    public LinearGradientBrushViewModel(ObservableCollection<GradientStopViewModel> gradientStops, GradientSpreadMethod spreadMethod = GradientSpreadMethod.Pad, RelativePointViewModel startPoint = null, RelativePointViewModel endPoint = null)
+        : base(gradientStops, spreadMethod)
+    {
+        _startPoint = startPoint;
+        _endPoint = endPoint;
+    }
+
+    public override BrushViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
+    {
+        if (shared.TryGetValue(this, out var value))
         {
-            get => _startPoint;
-            set => this.RaiseAndSetIfChanged(ref _startPoint, value);
+            return value as LinearGradientBrushViewModel;
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = true)]
-        public RelativePointViewModel EndPoint
+        var gradientStops = new ObservableCollection<GradientStopViewModel>();
+
+        foreach (var gradientStop in _gradientStops)
         {
-            get => _endPoint;
-            set => this.RaiseAndSetIfChanged(ref _endPoint, value);
+            gradientStops.Add(gradientStop.CloneSelf(shared));
         }
 
-        public LinearGradientBrushViewModel()
-            : base()
+        var copy = new LinearGradientBrushViewModel()
         {
-        }
+            GradientStops = gradientStops,
+            SpreadMethod = _spreadMethod,
+            StartPoint = _startPoint?.CloneSelf(shared),
+            EndPoint = _endPoint?.CloneSelf(shared)
+        };
 
-        public LinearGradientBrushViewModel(ObservableCollection<GradientStopViewModel> gradientStops, GradientSpreadMethod spreadMethod = GradientSpreadMethod.Pad, RelativePointViewModel startPoint = null, RelativePointViewModel endPoint = null)
-            : base(gradientStops, spreadMethod)
-        {
-            _startPoint = startPoint;
-            _endPoint = endPoint;
-        }
+        shared[this] = copy;
+        return copy;
+    }
 
-        public override BrushViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
-        {
-            if (shared.TryGetValue(this, out var value))
-            {
-                return value as LinearGradientBrushViewModel;
-            }
-
-            var gradientStops = new ObservableCollection<GradientStopViewModel>();
-
-            foreach (var gradientStop in _gradientStops)
-            {
-                gradientStops.Add(gradientStop.CloneSelf(shared));
-            }
-
-            var copy = new LinearGradientBrushViewModel()
-            {
-                GradientStops = gradientStops,
-                SpreadMethod = _spreadMethod,
-                StartPoint = _startPoint?.CloneSelf(shared),
-                EndPoint = _endPoint?.CloneSelf(shared)
-            };
-
-            shared[this] = copy;
-            return copy;
-        }
-
-        public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
-        {
-            return CloneSelf(shared);
-        }
+    public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
+    {
+        return CloneSelf(shared);
     }
 }

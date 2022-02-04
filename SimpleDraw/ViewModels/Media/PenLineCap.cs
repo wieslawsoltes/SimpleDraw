@@ -1,9 +1,8 @@
-﻿namespace SimpleDraw.ViewModels.Media
+﻿namespace SimpleDraw.ViewModels.Media;
+
+public enum PenLineCap
 {
-    public enum PenLineCap
-    {
-        Flat = 0,
-        Round = 1,
-        Square = 2
-    }
+    Flat = 0,
+    Round = 1,
+    Square = 2
 }

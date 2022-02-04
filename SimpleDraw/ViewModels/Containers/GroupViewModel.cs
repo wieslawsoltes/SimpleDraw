@@ -3,46 +3,45 @@ using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using ReactiveUI;
 
-namespace SimpleDraw.ViewModels.Containers
+namespace SimpleDraw.ViewModels.Containers;
+
+[DataContract(IsReference = true)]
+public class GroupViewModel : ViewModelBase
 {
-    [DataContract(IsReference = true)]
-    public class GroupViewModel : ViewModelBase
+    private ObservableCollection<ViewModelBase> _items;
+
+    [DataMember(IsRequired = false, EmitDefaultValue = true)]
+    public ObservableCollection<ViewModelBase> Items
     {
-        private ObservableCollection<ViewModelBase> _items;
+        get => _items;
+        set => this.RaiseAndSetIfChanged(ref _items, value);
+    }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = true)]
-        public ObservableCollection<ViewModelBase> Items
+    public GroupViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
+    {
+        if (shared.TryGetValue(this, out var value))
         {
-            get => _items;
-            set => this.RaiseAndSetIfChanged(ref _items, value);
+            return value as GroupViewModel;
         }
 
-        public GroupViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
+        var items = new ObservableCollection<ViewModelBase>();
+
+        foreach (var item in _items)
         {
-            if (shared.TryGetValue(this, out var value))
-            {
-                return value as GroupViewModel;
-            }
-
-            var items = new ObservableCollection<ViewModelBase>();
-
-            foreach (var item in _items)
-            {
-                items.Add(item.Clone(shared));
-            }
-
-            var copy = new GroupViewModel()
-            {
-                Items = items
-            };
-
-            shared[this] = copy;
-            return copy;
+            items.Add(item.Clone(shared));
         }
 
-        public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
+        var copy = new GroupViewModel()
         {
-            return CloneSelf(shared);
-        }
+            Items = items
+        };
+
+        shared[this] = copy;
+        return copy;
+    }
+
+    public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
+    {
+        return CloneSelf(shared);
     }
 }

@@ -4,81 +4,80 @@ using System.Runtime.Serialization;
 using ReactiveUI;
 using SimpleDraw.ViewModels.Containers;
 
-namespace SimpleDraw.ViewModels.Shapes
+namespace SimpleDraw.ViewModels.Shapes;
+
+public enum FillRule
 {
-    public enum FillRule
+    EvenOdd = 0,
+    NonZero = 1
+}
+
+[DataContract(IsReference = true)]
+public class PathShapeViewModel : ShapeBaseViewModel
+{
+    private ObservableCollection<FigureViewModel> _figures;
+    private bool _isStroked;
+    private bool _isFilled;
+    private FillRule _fillRule;
+
+    [DataMember(IsRequired = false, EmitDefaultValue = true)]
+    public ObservableCollection<FigureViewModel> Figures
     {
-        EvenOdd = 0,
-        NonZero = 1
+        get => _figures;
+        set => this.RaiseAndSetIfChanged(ref _figures, value);
     }
 
-    [DataContract(IsReference = true)]
-    public class PathShapeViewModel : ShapeBaseViewModel
+    [DataMember(IsRequired = false, EmitDefaultValue = true)]
+    public bool IsStroked
     {
-        private ObservableCollection<FigureViewModel> _figures;
-        private bool _isStroked;
-        private bool _isFilled;
-        private FillRule _fillRule;
+        get => _isStroked;
+        set => this.RaiseAndSetIfChanged(ref _isStroked, value);
+    }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = true)]
-        public ObservableCollection<FigureViewModel> Figures
+    [DataMember(IsRequired = false, EmitDefaultValue = true)]
+    public bool IsFilled
+    {
+        get => _isFilled;
+        set => this.RaiseAndSetIfChanged(ref _isFilled, value);
+    }
+
+    [DataMember(IsRequired = false, EmitDefaultValue = true)]
+    public FillRule FillRule
+    {
+        get => _fillRule;
+        set => this.RaiseAndSetIfChanged(ref _fillRule, value);
+    }
+
+    public override ShapeBaseViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
+    {
+        if (shared.TryGetValue(this, out var value))
         {
-            get => _figures;
-            set => this.RaiseAndSetIfChanged(ref _figures, value);
+            return value as PathShapeViewModel;
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = true)]
-        public bool IsStroked
+        var figures = new ObservableCollection<FigureViewModel>();
+
+        foreach (var item in _figures)
         {
-            get => _isStroked;
-            set => this.RaiseAndSetIfChanged(ref _isStroked, value);
+            figures.Add(item.CloneSelf(shared));
         }
 
-        [DataMember(IsRequired = false, EmitDefaultValue = true)]
-        public bool IsFilled
+        var copy = new PathShapeViewModel()
         {
-            get => _isFilled;
-            set => this.RaiseAndSetIfChanged(ref _isFilled, value);
-        }
+            Brush = _brush?.CloneSelf(shared),
+            Pen = _pen?.CloneSelf(shared),
+            Figures = figures,
+            IsStroked = _isStroked,
+            IsFilled = _isFilled,
+            FillRule = _fillRule
+        };
 
-        [DataMember(IsRequired = false, EmitDefaultValue = true)]
-        public FillRule FillRule
-        {
-            get => _fillRule;
-            set => this.RaiseAndSetIfChanged(ref _fillRule, value);
-        }
+        shared[this] = copy;
+        return copy;
+    }
 
-        public override ShapeBaseViewModel CloneSelf(Dictionary<ViewModelBase, ViewModelBase> shared)
-        {
-            if (shared.TryGetValue(this, out var value))
-            {
-                return value as PathShapeViewModel;
-            }
-
-            var figures = new ObservableCollection<FigureViewModel>();
-
-            foreach (var item in _figures)
-            {
-                figures.Add(item.CloneSelf(shared));
-            }
-
-            var copy = new PathShapeViewModel()
-            {
-                Brush = _brush?.CloneSelf(shared),
-                Pen = _pen?.CloneSelf(shared),
-                Figures = figures,
-                IsStroked = _isStroked,
-                IsFilled = _isFilled,
-                FillRule = _fillRule
-            };
-
-            shared[this] = copy;
-            return copy;
-        }
-
-        public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
-        {
-            return CloneSelf(shared);
-        }
+    public override ViewModelBase Clone(Dictionary<ViewModelBase, ViewModelBase> shared)
+    {
+        return CloneSelf(shared);
     }
 }

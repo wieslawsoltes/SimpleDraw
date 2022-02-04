@@ -1,9 +1,8 @@
-﻿namespace SimpleDraw.ViewModels.Media
+﻿namespace SimpleDraw.ViewModels.Media;
+
+public enum PenLineJoin
 {
-    public enum PenLineJoin
-    {
-        Bevel = 0,
-        Miter = 1,
-        Round = 2
-    }
+    Bevel = 0,
+    Miter = 1,
+    Round = 2
 }
