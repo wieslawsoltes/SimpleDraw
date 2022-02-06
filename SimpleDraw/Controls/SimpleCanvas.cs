@@ -9,7 +9,7 @@ using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Rendering.SceneGraph;
 using Avalonia.Skia;
-using SimpleDraw.Avalonia;
+using SimpleDraw.Renderer;
 using SimpleDraw.Skia;
 using SimpleDraw.ViewModels.Containers;
 using SimpleDraw.ViewModels.Tools;

@@ -1,8 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using SimpleDraw.Avalonia;
 using SimpleDraw.Controls;
+using SimpleDraw.Renderer;
 using SimpleDraw.ViewModels.Containers;
 using SimpleDraw.Views;
 

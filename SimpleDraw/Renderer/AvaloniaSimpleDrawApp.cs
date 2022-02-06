@@ -8,7 +8,7 @@ using SimpleDraw.ViewModels.Shapes;
 using SimpleDraw.ViewModels.Tools;
 using SimpleDraw.ViewModels.Tools.Shape;
 
-namespace SimpleDraw.Avalonia;
+namespace SimpleDraw.Renderer;
 
 public class AvaloniaSimpleDrawApp : ISimpleDrawApplication
 {

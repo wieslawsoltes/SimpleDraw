@@ -9,8 +9,13 @@ using SimpleDraw.ViewModels.Shapes;
 using A = Avalonia;
 using AM = Avalonia.Media;
 using AMI = Avalonia.Media.Immutable;
+using FillRule = SimpleDraw.ViewModels.Shapes.FillRule;
+using GradientSpreadMethod = SimpleDraw.ViewModels.Media.GradientSpreadMethod;
+using PenLineCap = SimpleDraw.ViewModels.Media.PenLineCap;
+using PenLineJoin = SimpleDraw.ViewModels.Media.PenLineJoin;
+using RelativeUnit = SimpleDraw.ViewModels.Media.RelativeUnit;
 
-namespace SimpleDraw.Avalonia;
+namespace SimpleDraw.Renderer;
 
 internal static class AvaloniaRenderer
 {
