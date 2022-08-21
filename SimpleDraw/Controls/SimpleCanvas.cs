@@ -9,6 +9,7 @@ using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Rendering.SceneGraph;
 using Avalonia.Skia;
+using JetBrains.Annotations;
 using SimpleDraw.Renderer;
 using SimpleDraw.Skia;
 using SimpleDraw.ViewModels.Containers;
@@ -509,7 +510,8 @@ public class SimpleCanvas : Canvas
 
         public void Render(IDrawingContextImpl context)
         {
-            var skCanvas = (context as ISkiaDrawingContextImpl)?.SkCanvas;
+            using var lease = context.GetFeature<ISkiaSharpApiLeaseFeature>()?.Lease();
+            var skCanvas = lease?.SkCanvas;
             if (skCanvas == null)
             {
                 return;

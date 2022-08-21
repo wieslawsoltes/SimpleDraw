@@ -103,7 +103,7 @@ internal static class AvaloniaRenderer
                 var spreadMethod = ToGradientSpreadMethod(linearGradientBrush.SpreadMethod);
                 var startPoint = ToRelativePoint(linearGradientBrush.StartPoint);
                 var endPoint = ToRelativePoint(linearGradientBrush.EndPoint);
-                return new AMI.ImmutableLinearGradientBrush(gradientStops, 1, spreadMethod, startPoint, endPoint);
+                return new AMI.ImmutableLinearGradientBrush(gradientStops, 1, null, null, spreadMethod, startPoint, endPoint);
             }
             case RadialGradientBrushViewModel radialGradientBrush:
             {
@@ -111,7 +111,7 @@ internal static class AvaloniaRenderer
                 var spreadMethod = ToGradientSpreadMethod(radialGradientBrush.SpreadMethod);
                 var center = ToRelativePoint(radialGradientBrush.Center);
                 var gradientOrigin = ToRelativePoint(radialGradientBrush.GradientOrigin);
-                return new AMI.ImmutableRadialGradientBrush(gradientStops, 1, spreadMethod, center, gradientOrigin, radialGradientBrush.Radius);
+                return new AMI.ImmutableRadialGradientBrush(gradientStops, 1, null, null, spreadMethod, center, gradientOrigin, radialGradientBrush.Radius);
             }
             default:
                 return default;
